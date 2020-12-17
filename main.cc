@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <gpiod.h>
 
-int main(int argc, char **argv) {
+#include <nan.h> 
 
+NAN_METHOD(listChips) {
   struct gpiod_chip *chip = NULL;
 
   chip = gpiod_chip_open("/dev/gpiochip0");
@@ -14,10 +15,13 @@ int main(int argc, char **argv) {
 
     printf("hello, line 1 is %d\n",v);
   } else {
-    printf("Sem permissão pra abrir o chip!\n");
-    return 1;
+    printf("unable to open chip!\n");
   }
-
-
-  return 0;
 }
+
+NAN_MODULE_INIT(InitAll) {
+  Nan::Set(target, Nan::New("listChips").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<v8::FunctionTemplate>(listChips)).ToLocalChecked());
+}
+
+NODE_MODULE(NativeExtension, InitAll)
