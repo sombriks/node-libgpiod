@@ -1,4 +1,11 @@
 {
+  "name": "node-libgpiod",
+  "version": "0.0.1",
+  "author": {
+    "name": "Leonardo Silveira",
+    "email": "sombriks@gmail.com",
+    "url": "https://sombriks.com.br"
+  },
   "main": "index.js",
   "scripts": {
     "configure": "node-gyp configure",

@@ -15,7 +15,7 @@ and libgpiod library, utils and development headers
 
 ## status
 
-this is alpha release, willing to receive contributions
+this is pre-alpha release, not working yet, willing to receive contributions!
 
 ## known issues
 
