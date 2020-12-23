@@ -2,6 +2,8 @@
 
 Native nodejs binding for libgpiod
 
+![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)
+
 ## requirements
 
 - libgpiod
