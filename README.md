@@ -12,14 +12,16 @@ Native nodejs binding for libgpiod
 
 ## compiling
 
-you'll need node development headers, nan (already listed as project dependency)
-and libgpiod library, utils and development headers
+You'll need node development headers, nan, libgpiod library, utils and the 
+development headers
 
 ## status
 
-this is pre-alpha release, not working yet, willing to receive contributions!
+This is pre-alpha release, not working yet, willing to receive contributions!
 
 ## known issues
 
 - gpio character device needs special udev rules in order to belong to a special
   group so non-root users could access it freely
+- libgpiod must be installed in the system correctly with development headers
+  otherwise npm install will fail.

@@ -15,12 +15,25 @@ NAN_METHOD(getLine)
   Nan::Utf8String device(info[0]);
   unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
   bool active_low = Nan::To<bool>(info[2]).FromJust();
-  char *consumer = NULL;
+  Nan::Utf8String consumer(info[3]);
 
-  int value = gpiod_ctxless_get_value(*device, offset, active_low, consumer);
+  int value = gpiod_ctxless_get_value(*device, offset, active_low, *consumer);
 
   info.GetReturnValue().Set(Nan::New<v8::Integer>(value));
+}
 
+NAN_METHOD(setLine)
+{
+  Nan::Utf8String device(info[0]);
+  unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
+  unsigned int value = Nan::To<unsigned int>(info[2]).FromJust();
+  bool active_low = Nan::To<bool>(info[3]).FromJust();
+  Nan::Utf8String consumer(info[4]);
+
+  int result = gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL);
+
+  if(result == -1) info.GetReturnValue().Set(Nan::New<v8::Boolean>(false));
+  else info.GetReturnValue().Set(Nan::New<v8::Boolean>(true));
 }
 
 NAN_MODULE_INIT(InitAll)
@@ -29,6 +42,8 @@ NAN_MODULE_INIT(InitAll)
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(version)).ToLocalChecked());
   Nan::Set(target, Nan::New("getLine").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLine)).ToLocalChecked());
+  Nan::Set(target, Nan::New("setLine").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setLine)).ToLocalChecked());
 }
 
 NODE_MODULE(NativeExtension, InitAll)
