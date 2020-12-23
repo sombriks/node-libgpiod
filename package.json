@@ -1,6 +1,6 @@
 {
   "name": "node-libgpiod",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "Leonardo Silveira",
     "email": "sombriks@gmail.com",
