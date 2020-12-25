@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <gpiod.h>
-
-#include <nan.h>
+#include "node_libgpiod.hh"
 
 NAN_METHOD(version)
 {
@@ -10,7 +7,7 @@ NAN_METHOD(version)
                .ToLocalChecked());
 }
 
-NAN_METHOD(getLine)
+NAN_METHOD(getInstantLineValue)
 {
   Nan::Utf8String device(info[0]);
   unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
@@ -22,7 +19,7 @@ NAN_METHOD(getLine)
   info.GetReturnValue().Set(Nan::New<v8::Integer>(value));
 }
 
-NAN_METHOD(setLine)
+NAN_METHOD(setInstantLineValue)
 {
   Nan::Utf8String device(info[0]);
   unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
@@ -40,10 +37,10 @@ NAN_MODULE_INIT(InitAll)
 {
   Nan::Set(target, Nan::New("version").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(version)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLine").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLine)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setLine").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setLine)).ToLocalChecked());
+  Nan::Set(target, Nan::New("getInstantLineValue").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValue)).ToLocalChecked());
+  Nan::Set(target, Nan::New("setInstantLineValue").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValue)).ToLocalChecked());
 }
 
 NODE_MODULE(NativeExtension, InitAll)

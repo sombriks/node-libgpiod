@@ -1,2 +1,2 @@
 // entry point
-module.exports = require('bindings')('NativeExtension');
+module.exports = require('bindings')('node-libgpiod');
