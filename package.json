@@ -6,6 +6,13 @@
     "email": "sombriks@gmail.com",
     "url": "https://sombriks.com.br"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sombriks/node-libgpiod.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sombriks/node-libgpiod/issues"
+  },
   "main": "index.js",
   "scripts": {
     "configure": "node-gyp configure",

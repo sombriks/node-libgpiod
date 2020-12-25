@@ -1,7 +1,5 @@
 {
-  "editor.rulers": [
-  80, 120
-  ],
+  "editor.rulers": [80, 120],
   "files.associations": {
     "array": "cpp",
     "atomic": "cpp",
@@ -47,5 +45,6 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "typeinfo": "cpp"
-  }
+  },
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 2, ColumnLimit: 0}"
 }
