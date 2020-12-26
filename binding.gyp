@@ -2,7 +2,12 @@
     "targets": [
         {
             "target_name": "node-libgpiod",
-            "sources": [ "src/misc.cc", "src/chip.cc", "src/line.cc" ],
+            "sources": [ 
+                "src/main.cc", 
+                "src/misc.cc", 
+                "src/chip.cc", 
+                "src/line.cc" 
+            ],
             "include_dirs" : [
  	 			"<!(node -e \"require('nan')\")"
 			],

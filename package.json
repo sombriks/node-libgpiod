@@ -17,6 +17,7 @@
   "scripts": {
     "configure": "node-gyp configure",
     "build": "node-gyp build",
+    "clean": "node-gyp clean",
     "test": "mocha"
   },
   "devDependencies": {

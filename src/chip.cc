@@ -22,7 +22,7 @@ Chip::~Chip() {
 }
 
 NAN_METHOD(Chip::New) {
-   if (info.IsConstructCall()) {
+  if (info.IsConstructCall()) {
     Nan::Utf8String device(info[0]);
     Chip *obj = new Chip(*device);
     obj->Wrap(info.This());
@@ -36,4 +36,12 @@ NAN_METHOD(Chip::New) {
 }
 
 NAN_METHOD(Chip::getLine) {
+  Chip *chip = Nan::ObjectWrap::Unwrap<Chip>(Nan::To<v8::Object>(info.This()).ToLocalChecked());
+  unsigned int pin = Nan::To<unsigned int>(info[0]).FromJust();
+  Line *obj = new Line(chip, pin);
+  info.GetReturnValue().Set(obj->handle());
+}
+
+gpiod_chip *Chip::getNativeChip() {
+  return chip;
 }

@@ -1,4 +1,4 @@
-#include "node_libgpiod.hh"
+#include "node_libgpiod.hh" 
 
 NAN_METHOD(version) {
   info.GetReturnValue()
@@ -31,15 +31,3 @@ NAN_METHOD(setInstantLineValue) {
   else
     info.GetReturnValue().Set(Nan::New<v8::Boolean>(true));
 }
-
-NAN_MODULE_INIT(InitAll) {
-  Nan::Set(target, Nan::New("version").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(version)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getInstantLineValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValue)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setInstantLineValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValue)).ToLocalChecked());
-  Chip::Init(target);
-}
-
-NODE_MODULE(NativeExtension, InitAll)
