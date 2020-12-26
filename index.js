@@ -1,2 +1,4 @@
 // entry point
-module.exports = require('bindings')('node-libgpiod');
+const libgpiod = require('bindings')('node-libgpiod');
+
+module.exports = libgpiod;

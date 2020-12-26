@@ -1,4 +1,4 @@
-#ifndef LINE_HH  
+#ifndef LINE_HH
 #define LINE_HH
 
 #include <gpiod.h>
@@ -9,17 +9,19 @@
 class Line : public Nan::ObjectWrap {
  public:
   static NAN_MODULE_INIT(Init);
-  explicit Line(Chip *chip, unsigned int pin);
+  static NAN_METHOD(New);
+  gpiod_line *getNativeLine();
 
  private:
+  explicit Line(Chip *chip, unsigned int pin);
   ~Line();
 
-  static NAN_METHOD(New);
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
+
   static Nan::Persistent<v8::Function> constructor;
 
   gpiod_line *line;
-}; 
+};
 
-#endif // LINE_HH 
+#endif  // LINE_HH

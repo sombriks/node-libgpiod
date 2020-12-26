@@ -14,7 +14,6 @@ class Chip : public Nan::ObjectWrap {
   ~Chip();
 
   static NAN_METHOD(New);
-  static NAN_METHOD(getLine);
   static Nan::Persistent<v8::Function> constructor;
 
   gpiod_chip *chip;

@@ -16,6 +16,9 @@ NAN_MODULE_INIT(Line::Init) {
 
 Line::Line(Chip *chip, unsigned int pin) {
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
+  // std::cout << "Chip: " << chip << std::endl;
+  // std::cout << "pin: " << pin << std::endl;
+  // std::cout << "Line: " << line << std::endl;
 }
 
 Line::~Line() {
@@ -38,9 +41,17 @@ NAN_METHOD(Line::New) {
 }
 
 NAN_METHOD(Line::getValue) {
-
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  info.GetReturnValue().Set(gpiod_line_get_value(obj->getNativeLine()));
 }
 
 NAN_METHOD(Line::setValue) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
+  int ret = gpiod_line_set_value(obj->getNativeLine(), value);
+  info.GetReturnValue().Set(ret);
+}
 
+gpiod_line *Line::getNativeLine() {
+  return line;
 }

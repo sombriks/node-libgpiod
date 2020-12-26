@@ -7,14 +7,14 @@ NAN_MODULE_INIT(Chip::Init) {
   tpl->SetClassName(Nan::New("Chip").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-  Nan::SetPrototypeMethod(tpl, "getLine", getLine);
-
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("Chip").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Chip::Chip(const char *device) {
-  chip = gpiod_chip_open(device);
+  chip = gpiod_chip_open_lookup(device);
+  // std::cout << "Device: " << device << std::endl;
+  // std::cout << "Chip: " << chip << std::endl;
 }
 
 Chip::~Chip() {
@@ -33,13 +33,6 @@ NAN_METHOD(Chip::New) {
     v8::Local<v8::Function> cons = Nan::New(constructor);
     info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
-}
-
-NAN_METHOD(Chip::getLine) {
-  Chip *chip = Nan::ObjectWrap::Unwrap<Chip>(Nan::To<v8::Object>(info.This()).ToLocalChecked());
-  unsigned int pin = Nan::To<unsigned int>(info[0]).FromJust();
-  Line *obj = new Line(chip, pin);
-  info.GetReturnValue().Set(obj->handle());
 }
 
 gpiod_chip *Chip::getNativeChip() {
