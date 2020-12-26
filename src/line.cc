@@ -16,6 +16,7 @@ NAN_MODULE_INIT(Line::Init) {
 
 Line::Line(Chip *chip, unsigned int pin) {
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
+  if(!line) Nan::ThrowError("Unable to open gpio line ");
   // std::cout << "Chip: " << chip << std::endl;
   // std::cout << "pin: " << pin << std::endl;
   // std::cout << "Line: " << line << std::endl;
