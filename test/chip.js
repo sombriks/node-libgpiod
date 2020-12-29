@@ -15,6 +15,15 @@ describe("libgpiod chip bindings", function () {
     done();
   });
 
+  it("should set line value", (done) => {
+    const chip0 = new gpiod.Chip("gpiochip0");
+    console.log(chip0);
+    const line17 = new gpiod.Line(chip0, 17);
+    console.log(line17);
+    console.log(line17.setValue(1));
+    done();
+  });
+
   it("should get line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     console.log(chip0);
@@ -22,17 +31,5 @@ describe("libgpiod chip bindings", function () {
     console.log(line17);
     console.log(line17.getValue());
     done();
-  });
-
-  it("should set line value", (done) => {
-    const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
-    const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
-    console.log(line17.setValue(1));
-    setTimeout(() => {
-      console.log(line17.getValue());
-      done();
-    }, 500);
   });
 });
