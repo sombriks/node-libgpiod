@@ -19,6 +19,10 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
 
+  static NAN_METHOD(requestInput);
+  static NAN_METHOD(requestOutput);
+  static NAN_METHOD(requestBoth);
+
   static Nan::Persistent<v8::Function> constructor;
 
   gpiod_line *line;

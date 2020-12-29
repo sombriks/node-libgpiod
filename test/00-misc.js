@@ -29,6 +29,6 @@ describe("libgpiod miscellaneous bindings", function () {
         clearInterval(interval);
         done();
       }
-    }, 50);
+    }, 70);
   });
 });
