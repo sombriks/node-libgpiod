@@ -43,32 +43,35 @@ NAN_METHOD(Line::New) {
 
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  info.GetReturnValue().Set(gpiod_line_get_value(obj->getNativeLine()));
+  int ret = gpiod_line_get_value(obj->getNativeLine());
+  if(-1 == ret){
+    Nan::ThrowError("Unable to get value for this line");
+  } else info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
-  int ret = gpiod_line_set_value(obj->getNativeLine(), value);
-  info.GetReturnValue().Set(ret);
+  if(-1 == gpiod_line_set_value(obj->getNativeLine(), value))
+    Nan::ThrowError("Unable to set value for this line");
 }
 
 NAN_METHOD(Line::requestInputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), NULL)) 
-    Nan::ThrowError("Unable request input mode for this line");
+    Nan::ThrowError("Unable to request input mode for this line");
 }
 
 NAN_METHOD(Line::requestOutputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), NULL, 0)) 
-    Nan::ThrowError("Unable request output mode for this line");
+    Nan::ThrowError("Unable to request output mode for this line");
 }
 
 NAN_METHOD(Line::requestBothEdgesMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if (-1 == gpiod_line_request_both_edges_events(obj->getNativeLine(), NULL)) 
-    Nan::ThrowError("Unable request input/output mode for this line");
+    Nan::ThrowError("Unable to request input/output mode for this line");
 }
 
 gpiod_line *Line::getNativeLine() {
