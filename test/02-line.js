@@ -4,6 +4,7 @@ describe("libgpiod line bindings", () => {
   it("should get a line from the chip", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = new gpiod.Line(chip0, 17);
+    linne17.request
     done();
   });
 

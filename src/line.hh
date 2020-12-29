@@ -19,9 +19,9 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
 
-  static NAN_METHOD(requestInput);
-  static NAN_METHOD(requestOutput);
-  static NAN_METHOD(requestBoth);
+  static NAN_METHOD(requestInputMode);
+  static NAN_METHOD(requestOutputMode);
+  static NAN_METHOD(requestBothEdgesMode);
 
   static Nan::Persistent<v8::Function> constructor;
 
