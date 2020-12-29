@@ -17,9 +17,6 @@ NAN_MODULE_INIT(Line::Init) {
 Line::Line(Chip *chip, unsigned int pin) {
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
   if (!line) Nan::ThrowError("Unable to open gpio line ");
-  // std::cout << "Chip: " << chip << std::endl;
-  // std::cout << "pin: " << pin << std::endl;
-  // std::cout << "Line: " << line << std::endl;
 }
 
 Line::~Line() {
@@ -43,14 +40,20 @@ NAN_METHOD(Line::New) {
 
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  gpiod_line_request_input(obj->getNativeLine(),NULL); 
+  if (-1 == gpiod_line_request_input(obj->getNativeLine(), NULL)) {
+    Nan::ThrowError("Unable request input mode for this line");
+    return;
+  }
   info.GetReturnValue().Set(gpiod_line_get_value(obj->getNativeLine()));
 }
 
 NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
-  gpiod_line_request_output(obj->getNativeLine(), NULL, 0);
+  if (-1 == gpiod_line_request_output(obj->getNativeLine(), NULL, 0)) {
+    Nan::ThrowError("Unable request output mode for this line");
+    return;
+  }
   int ret = gpiod_line_set_value(obj->getNativeLine(), value);
   info.GetReturnValue().Set(ret);
 }
