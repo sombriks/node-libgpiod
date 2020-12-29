@@ -43,14 +43,14 @@ NAN_METHOD(Line::New) {
 
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  gpiod_line_request_output(obj->getNativeLine(), NULL, 0);
+  gpiod_line_request_input(obj->getNativeLine(),NULL); 
   info.GetReturnValue().Set(gpiod_line_get_value(obj->getNativeLine()));
 }
 
 NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
-  gpiod_line_request_input(obj->getNativeLine(),NULL); 
+  gpiod_line_request_output(obj->getNativeLine(), NULL, 0);
   int ret = gpiod_line_set_value(obj->getNativeLine(), value);
   info.GetReturnValue().Set(ret);
 }
