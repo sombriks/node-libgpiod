@@ -29,7 +29,7 @@ describe("libgpiod chip bindings", function () {
     console.log(chip0);
     const line17 = new gpiod.Line(chip0, 17);
     console.log(line17);
-    console.log(line17.setValue(0));
+    console.log(line17.setValue(1));
     setTimeout(() => {
       console.log(line17.getValue());
       done();
