@@ -21,6 +21,7 @@ describe("libgpiod chip bindings", function () {
     const line17 = new gpiod.Line(chip0, 17);
     console.log(line17);
     console.log(line17.setValue(1));
+    delete line17;
     done();
   });
 
