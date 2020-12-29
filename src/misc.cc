@@ -1,4 +1,4 @@
-#include "node_libgpiod.hh" 
+#include "node_libgpiod.hh"
 
 NAN_METHOD(version) {
   info.GetReturnValue()
@@ -12,7 +12,11 @@ NAN_METHOD(getInstantLineValue) {
   bool active_low = Nan::To<bool>(info[2]).FromJust();
   Nan::Utf8String consumer(info[3]);
 
-  int value = gpiod_ctxless_get_value(*device, offset, active_low, *consumer);
+  int value = -1;
+  if (-1 == (value = gpiod_ctxless_get_value(*device, offset, active_low, *consumer))) {
+    Nan::ThrowError("Unable to get instant value");
+    return;
+  }
 
   info.GetReturnValue().Set(Nan::New<v8::Integer>(value));
 }
@@ -24,10 +28,10 @@ NAN_METHOD(setInstantLineValue) {
   bool active_low = Nan::To<bool>(info[3]).FromJust();
   Nan::Utf8String consumer(info[4]);
 
-  int result = gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL);
+  if (-1 == gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL)) {
+    Nan::ThrowError("Unable to get instant value");
+    return;
+  }
 
-  if (result == -1)
-    info.GetReturnValue().Set(Nan::New<v8::Boolean>(false));
-  else
-    info.GetReturnValue().Set(Nan::New<v8::Boolean>(true));
+  info.GetReturnValue().Set(true);
 }

@@ -13,7 +13,7 @@ NAN_MODULE_INIT(Chip::Init) {
 
 Chip::Chip(const char *device) {
   chip = gpiod_chip_open_lookup(device);
-  if(!chip) Nan::ThrowError("Unable to open device");
+  if (!chip) Nan::ThrowError("Unable to open device");
 }
 
 Chip::~Chip() {

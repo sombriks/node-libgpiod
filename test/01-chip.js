@@ -1,49 +1,26 @@
 const gpiod = require("..");
 
 describe("libgpiod chip bindings", function () {
-  it("should 'create' a new chip", (done) => {
+  it("should 'create' a new chip by number", (done) => {
     const chip0 = new gpiod.Chip("0");
-    console.log(chip0);
     done();
   });
 
-  it("should get a line from the chip", (done) => {
+  it("should 'create' a new chip by name", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
-    const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
     done();
   });
 
-  it("should set line value", (done) => {
-    const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
-    const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
-    console.log(line17.setValue(1));
-    setTimeout(_=>{
+  it("should 'create' a new chip by path", (done) => {
+    const chip0 = new gpiod.Chip("/dev/gpiochip0");
+    done();
+  });
+
+  it("should NOT 'create' a chip because it does not exists", (done) => {
+    try {
+      const chip0 = new gpiod.Chip("/dev/gpiochippuden");
+    } catch(err){
       done();
-    },500);
-  });
-
-  it("should get line value", (done) => {
-    const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
-    const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
-    console.log(line17.getValue());
-    done();
-  });
-
-  it("should blink line value", (done) => {
-    const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
-    const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
-    console.log(line17.setValue(0));
-    setTimeout(_=>{
-      console.log(line17.setValue(1));
-      done();
-    },500)
+    }
   });
 });
