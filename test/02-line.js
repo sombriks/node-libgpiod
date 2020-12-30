@@ -10,29 +10,28 @@ describe("libgpiod line bindings", () => {
   it("should set line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = new gpiod.Line(chip0, 17);
+    line17.requestOutputMode();
     line17.setValue(1);
-    setTimeout((_) => {
+    setTimeout(() => {
       done();
     }, 500);
   });
 
   it("should get line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
     const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
+    line17.requestInputMode();
     console.log(line17.getValue());
     done();
   });
 
   it("should blink line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
-    console.log(chip0);
     const line17 = new gpiod.Line(chip0, 17);
-    console.log(line17);
-    console.log(line17.setValue(0));
-    setTimeout((_) => {
-      console.log(line17.setValue(1));
+    line17.requestOutputMode();
+    line17.setValue(0);
+    setTimeout(() => {
+      line17.setValue(1);
       done();
     }, 500);
   });
