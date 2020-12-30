@@ -11,7 +11,7 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
-  Nan::SetPrototypeMethod(tpl, "requestBothEdgesMode", requestBothEdgesMode);
+  Nan::SetPrototypeMethod(tpl, "release", release);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("Line").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
@@ -68,10 +68,10 @@ NAN_METHOD(Line::requestOutputMode) {
     Nan::ThrowError("Unable to request output mode for this line");
 }
 
-NAN_METHOD(Line::requestBothEdgesMode) {
+
+NAN_METHOD(Line::release) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (-1 == gpiod_line_request_both_edges_events(obj->getNativeLine(), NULL)) 
-    Nan::ThrowError("Unable to request input/output mode for this line");
+  gpiod_line_release(obj->getNativeLine());
 }
 
 gpiod_line *Line::getNativeLine() {
