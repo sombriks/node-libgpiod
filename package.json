@@ -14,6 +14,7 @@
     "url": "https://github.com/sombriks/node-libgpiod/issues"
   },
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "configure": "node-gyp configure",
     "build": "node-gyp build",

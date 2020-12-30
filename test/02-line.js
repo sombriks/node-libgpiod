@@ -1,9 +1,11 @@
 const gpiod = require("../");
 
+const assert = require("assert");
+
 describe("libgpiod line bindings", () => {
   it("should get a line from the chip", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
-    const line17 = new gpiod.Line(chip0, 17);
+    assert(chip0.getLine(17));
     done();
   });
   it("should NOT get a nonexistent line from the chip", (done) => {
@@ -28,7 +30,7 @@ describe("libgpiod line bindings", () => {
 
   it("should get line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
-    const line17 = new gpiod.Line(chip0, 17);
+    const line17 = chip0.getLine(17);
     line17.requestInputMode();
     console.log(line17.getValue());
     line17.release();
@@ -47,6 +49,6 @@ describe("libgpiod line bindings", () => {
         line17.release();
         clearInterval(interval);
       }
-    }, 800);
+    }, 600);
   });
 });
