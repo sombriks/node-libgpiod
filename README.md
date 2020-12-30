@@ -1,10 +1,8 @@
 # node-libgpiod
 
-Native nodejs bindings for libgpiod
+Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/)
 
 [![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
-
-[[TOC]]
 
 ## Requirements
 
@@ -39,21 +37,56 @@ let count = 10;
 console.log(version());
 line.requestOutputMode();
 
-const interval = setInterval(() => {
-  line.setValue(count-- % 2);
-  if(!count) {
-    clearInterval(interval);
-    line.release();
-  }
-}, 1000);
+const blink = () => {
+  if(count){
+    line.setValue(count-- % 2);
+    setTimeout(blink,1000);
+  } // else line.release(); 
+  // not needed, libgpiod releases resources on process exit  
+};
+
+setTimeout(blink,1000);
+```
+
+Another example:
+
+```javascript
+const { version, Chip, Line } = require("node-libgpiod");
+const express = require("express");
+
+const app = express();
+// avoid chip and line being gc-collected
+app.chip = new Chip(0);
+app.line = new Line(app.chip, 17); // led on GPIO17
+
+console.log(version());
+app.line.requestOutputMode();
+
+app.get("/on", (req,res) => {
+  app.line.setValue(1);
+  res.send("it's on");
+});
+
+app.get("/off", (req,res) => {
+  app.line.setValue(0);
+  res.send("it's off");
+});
+
+app.listen(3000);
+console.log("running");
 ```
 
 See our [testcases](/test) for more information
 
 ## known issues
 
-- gpio character device needs special udev rules in order to belong to a special
-  group so non-root users could access it freely
+- gpio character device needs 
+  [special udev rules](https://blog.oless.xyz/post/fedorarpigpio/#udev) in order
+  to belong to a special group so non-root users could access it freely
+  ```bash
+  # /etc/udev/rules.d/85-gpiochip.rules 
+  KERNEL=="gpiochip0", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
+  ```
 - libgpiod must be installed in the system correctly with development headers
   otherwise npm install will fail.
 
