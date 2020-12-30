@@ -39,11 +39,14 @@ describe("libgpiod line bindings", () => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = new gpiod.Line(chip0, 17);
     line17.requestOutputMode();
-    line17.setValue(0);
-    setTimeout(() => {
-      line17.setValue(1);
-      done();
-      line17.release();
-    }, 500);
+    let count = 7;
+    const interval = setInterval(() => {
+      line17.setValue(count-- % 2);
+      if (count == 0) {
+        done();
+        line17.release();
+        clearInterval(interval);
+      }
+    }, 800);
   });
 });
