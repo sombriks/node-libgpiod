@@ -40,8 +40,8 @@ console.log(version());
 line.requestOutputMode();
 
 const interval = setInterval(() => {
-      line.setValue(count-- % 2);
-  } if(!count) {
+  line.setValue(count-- % 2);
+  if(!count) {
     clearInterval(interval);
     line.release();
   }
