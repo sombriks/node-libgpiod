@@ -1,23 +1,56 @@
 # node-libgpiod
 
-Native nodejs binding for libgpiod
+Native nodejs bindings for libgpiod
 
 [![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
 
-## requirements
+[[TOC]]
 
-- libgpiod
-- nodejs
-- linux
+## Requirements
 
-## compiling
+- libgpiod (and devel headers)
+- nodejs (and devel headers)
+- linux (tested on fedora 33 running on raspberry pi model 3 B+)
+- c/c++ development tools
 
-You'll need node development headers, nan, libgpiod library, utils and the 
-development headers
+## Compiling
 
-## status
+Just add it as a regular nodejs dependency:
 
-This is pre-alpha release, not working yet, willing to receive contributions!
+```bash
+npm i node-libgpiod
+```
+
+[node-gyp](https://www.npmjs.com/package/node-gyp) will do the rest for you
+
+## Status
+
+We already are able to read and write pins!
+
+Here goes the sample blink led hello-world.js:
+
+```javascript
+const { version, Chip, Line } = require("node-libgpiod");
+
+const chip = new Chip(0);
+const line = new Line(chip, 17); // led on GPIO17
+let count = 10;
+
+console.log(version());
+line.requestOutputMode();
+
+const interval = setInterval(() => {
+  if(count-->0) {
+      line.setValue(count % 2);
+      setTimeout(blink, 500);
+  } else {
+    clearInterval(interval);
+    line.release();
+  }
+}, 1000);
+```
+
+See our testcases for more information
 
 ## known issues
 
@@ -25,3 +58,13 @@ This is pre-alpha release, not working yet, willing to receive contributions!
   group so non-root users could access it freely
 - libgpiod must be installed in the system correctly with development headers
   otherwise npm install will fail.
+
+## Roadmap
+
+- [X] basic read/write
+- [X] basic instant read/write
+- [X] Chip/Line abstractions
+- [ ] GPIO monitoring callbacks
+- [ ] Bulk read/write
+
+All features present on libgpiod eventually will be added to node bindings.
