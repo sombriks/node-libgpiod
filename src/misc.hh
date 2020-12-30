@@ -6,9 +6,6 @@
 #include <gpiod.h>
 #include <nan.h>
 
-#include "chip.hh"
-#include "line.hh"
-
 NAN_METHOD(version);
 NAN_METHOD(getInstantLineValue);
 NAN_METHOD(setInstantLineValue);

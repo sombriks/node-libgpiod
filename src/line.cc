@@ -1,4 +1,4 @@
-#include "node_libgpiod.hh"
+#include "line.hh"
 
 Nan::Persistent<v8::Function> Line::constructor;
 

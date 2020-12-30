@@ -1,5 +1,7 @@
 
-#include "node_libgpiod.hh"
+#include "misc.hh"
+#include "chip.hh"
+#include "line.hh"
 
 NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("version").ToLocalChecked(),

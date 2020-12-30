@@ -1,4 +1,4 @@
-#include "node_libgpiod.hh"
+#include "misc.hh"
 
 NAN_METHOD(version) {
   info.GetReturnValue()

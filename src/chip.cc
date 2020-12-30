@@ -1,4 +1,4 @@
-#include "node_libgpiod.hh"
+#include "chip.hh"
 
 Nan::Persistent<v8::Function> Chip::constructor;
 
