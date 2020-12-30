@@ -42,7 +42,6 @@ line.requestOutputMode();
 const interval = setInterval(() => {
   if(count-->0) {
       line.setValue(count % 2);
-      setTimeout(blink, 500);
   } else {
     clearInterval(interval);
     line.release();
