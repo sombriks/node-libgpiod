@@ -40,16 +40,15 @@ console.log(version());
 line.requestOutputMode();
 
 const interval = setInterval(() => {
-  if(count-->0) {
-      line.setValue(count % 2);
-  } else {
+      line.setValue(count-- % 2);
+  } if(!count) {
     clearInterval(interval);
     line.release();
   }
 }, 1000);
 ```
 
-See our testcases for more information
+See our [testcases](/test) for more information
 
 ## known issues
 
