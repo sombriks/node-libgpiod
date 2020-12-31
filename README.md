@@ -89,6 +89,46 @@ See our [testcases](/test) for more information
   ```
 - libgpiod must be installed in the system correctly with development headers
   otherwise npm install will fail.
+- node will garbage collect Chip and line too early on certain cases. When
+  writing the samples, sometimes the following error kept being thrown:
+  ```bash
+  /home/sombriks/git/sample-node-libgpiod/index2.js:12
+      line.setValue(count-- % 2);
+          ^
+
+  Error: Unable to set value for this line
+      at Timeout.blink [as _onTimeout] (/home/sombriks/git/sample-node-libgpiod/index2.js:12:10)
+      at listOnTimeout (internal/timers.js:554:17)
+      at processTimers (internal/timers.js:497:7)
+  ```
+  It occurs because main module body was already evaluated and finished while
+  interval/timeout function still active, but has no local reference for Chip or
+  Line instances.
+  Therefore, v8 thinks that those objects can be garbage-collected releasing the
+  underlying resources, giving us the error.
+  To avoid this, make sure your objects will be present on function scope:
+  ```javascript
+  const { version, Chip, Line } = require("node-libgpiod");
+
+  const chip = new Chip(0);
+  const line = new Line(chip, 17); // led on GPIO17
+  let count = 20;
+
+  console.log(version());
+  line.requestOutputMode();
+
+  const blink = function () {
+    // avoid early gc
+    this.chip = chip
+    this.line = line
+    if(count){
+      line.setValue(count-- % 2);
+      setTimeout(blink,500);
+    }
+  };
+
+  setTimeout(blink,500);
+  ``` 
 
 ## Roadmap
 
@@ -99,3 +139,7 @@ See our [testcases](/test) for more information
 - [ ] Bulk read/write
 
 All features present on libgpiod eventually will be added to node bindings.
+
+## Contributing
+
+This is open source, i am willing to evaluate PR's :sunglasses: 
