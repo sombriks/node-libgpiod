@@ -49,6 +49,6 @@ describe("libgpiod line bindings", () => {
         line17.release();
         clearInterval(interval);
       }
-    }, 600);
+    }, 200);
   });
 });
