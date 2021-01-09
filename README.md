@@ -78,6 +78,9 @@ console.log("running");
 
 See our [testcases](/test) for more information
 
+See [node-libgpiod-examples](https://github.com/sombriks/node-libgpiod-examples)
+for more sample code
+
 ## known issues
 
 - gpio character device needs 
