@@ -8,7 +8,7 @@ Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpi
 
 - libgpiod (and devel headers)
 - nodejs (and devel headers)
-- linux (tested on fedora 33 running on raspberry pi model 3 B+)
+- linux (tested on fedora 33 running on raspberry pi model 3 B+ and rasp pi os on zero w)
 - c/c++ development tools
 
 ## Compiling
