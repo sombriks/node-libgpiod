@@ -58,13 +58,23 @@ NAN_METHOD(Line::setValue) {
 
 NAN_METHOD(Line::requestInputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (-1 == gpiod_line_request_input(obj->getNativeLine(), NULL)) 
+  const char *consumer = NULL;
+  v8::Local<v8::Value> consumerName = info[0];
+  if (!consumerName->IsUndefined()) {
+  }
+  if (-1 == gpiod_line_request_input(obj->getNativeLine(), consumer))
     Nan::ThrowError("Unable to request input mode for this line");
 }
 
 NAN_METHOD(Line::requestOutputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (-1 == gpiod_line_request_output(obj->getNativeLine(), NULL, 0)) 
+  unsigned int value = 0;
+  v8::Local<v8::Value> defaultValue = info[0];
+  if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {
+    value = Nan::To<unsigned int>(defaultValue).FromJust();
+  }
+  Nan::Utf8String consumer(info[1]);
+  if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))
     Nan::ThrowError("Unable to request output mode for this line");
 }
 
