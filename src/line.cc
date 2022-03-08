@@ -71,7 +71,12 @@ NAN_METHOD(Line::requestOutputMode) {
   unsigned int value = 0;
   v8::Local<v8::Value> defaultValue = info[0];
   if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {
-    value = Nan::To<unsigned int>(defaultValue).FromJust();
+    unsigned int val = Nan::To<unsigned int>(defaultValue).FromJust();
+    if (val > 1) {
+      Nan::ThrowError("Default value can only be 0 or 1");
+      return;
+    }
+    value = val;
   }
   Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))

@@ -12,7 +12,7 @@ declare class Line {
 
   release(): void;
 
-  requestOutputMode(defaultValue?: number, consumer?: string): void;
+  requestOutputMode(defaultValue?: 0 | 1, consumer?: string): void;
 
   requestInputMode(consumer?: string): void;
 }
