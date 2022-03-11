@@ -19,7 +19,14 @@ Just add it as a regular nodejs dependency:
 npm i node-libgpiod
 ```
 
-[node-gyp](https://www.npmjs.com/package/node-gyp) will do the rest for you
+[node-gyp](https://www.npmjs.com/package/node-gyp) will do the rest for you.
+
+## Tested platforms
+
+- raspberry pi model 3 B+ (64 bits, 1GB ram) running fedora
+- raspberry pi zero w (32 bits, 512MB ram) running rasp pi os
+
+technically speaking it should work with any modern vanilla kernel and libgpio.
 
 ## Status
 
@@ -83,17 +90,20 @@ for more sample code
 
 ## known issues
 
-- gpio character device needs 
+- gpio character device needs
   [special udev rules](https://blog.oless.xyz/post/fedorarpigpio/#udev) in order
   to belong to a special group so non-root users could access it freely
+
   ```bash
   # /etc/udev/rules.d/85-gpiochip.rules 
   KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
   ```
+
 - libgpiod must be installed in the system correctly with development headers
   otherwise npm install will fail.
 - node will garbage collect Chip and line too early on certain cases. When
   writing the samples, sometimes the following error kept being thrown:
+
   ```bash
   /home/sombriks/git/sample-node-libgpiod/index2.js:12
       line.setValue(count-- % 2);
@@ -104,12 +114,14 @@ for more sample code
       at listOnTimeout (internal/timers.js:554:17)
       at processTimers (internal/timers.js:497:7)
   ```
+
   It occurs because main module body was already evaluated and finished while
   interval/timeout function still active, but has no local reference for Chip or
   Line instances.
   Therefore, v8 thinks that those objects can be garbage-collected releasing the
   underlying resources, giving us the error.
   To avoid this, make sure your objects will be present on function scope:
+
   ```javascript
   const { version, Chip, Line } = require("node-libgpiod");
 
@@ -131,7 +143,7 @@ for more sample code
   };
 
   setTimeout(blink,500);
-  ``` 
+  ```
 
 ## Roadmap
 
@@ -145,4 +157,4 @@ All features present on libgpiod eventually will be added to node bindings.
 
 ## Contributing
 
-This is open source, i am willing to evaluate PR's :sunglasses: 
+This is open source, i am willing to evaluate PR's :sunglasses:
