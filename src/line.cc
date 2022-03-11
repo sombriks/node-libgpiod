@@ -58,7 +58,7 @@ NAN_METHOD(Line::setValue) {
 
 NAN_METHOD(Line::requestInputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  Nan::Utf8String consumer(info[1]);
+  Nan::Utf8String consumer(info[0]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
     Nan::ThrowError("Unable to request input mode for this line");
 }
