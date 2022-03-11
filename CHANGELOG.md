@@ -4,6 +4,10 @@
 
 created the changelog file so we can properly track changes and contributions
 
+### 0.2.1
+
+Fixed argument index of consumer name on requestInputMode by [noctarius](https://github.com/noctarius)
+
 ## 2022-03-09
 
 ### 0.2.0
