@@ -17,13 +17,16 @@ Chip::Chip(const char *device) {
 }
 
 Chip::~Chip() {
+  if ( !chip) return;
   gpiod_chip_close(chip);
+  chip = NULL;
 }
 
 NAN_METHOD(Chip::New) {
   if (info.IsConstructCall()) {
     Nan::Utf8String device(info[0]);
     Chip *obj = new Chip(*device);
+    if ( !obj->chip) return;
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
   } else {

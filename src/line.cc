@@ -19,11 +19,13 @@ NAN_MODULE_INIT(Line::Init) {
 
 Line::Line(Chip *chip, unsigned int pin) {
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
-  if (!line) Nan::ThrowError("Unable to open gpio line ");
+  if (!line) Nan::ThrowError("Unable to open GPIO line ");
 }
 
 Line::~Line() {
+  if ( !line) return;
   gpiod_line_close_chip(line);
+  line = NULL;
 }
 
 NAN_METHOD(Line::New) {
@@ -31,6 +33,7 @@ NAN_METHOD(Line::New) {
     Chip *chip = Nan::ObjectWrap::Unwrap<Chip>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
     unsigned int pin = Nan::To<unsigned int>(info[1]).FromJust();
     Line *obj = new Line(chip, pin);
+    if ( !obj->line) return;
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
   } else {
@@ -43,47 +46,61 @@ NAN_METHOD(Line::New) {
 
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::getValue() for line==NULL");
+    return;  }
   int ret = gpiod_line_get_value(obj->getNativeLine());
   if(-1 == ret){
-    Nan::ThrowError("Unable to get value for this line");
+    Nan::ThrowError( "::getValue() failed");
   } else info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::setValue() for line==NULL");
+    return;  }
   unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
   if(-1 == gpiod_line_set_value(obj->getNativeLine(), value))
-    Nan::ThrowError("Unable to set value for this line");
+    Nan::ThrowError( "::setValue() failed");
 }
 
 NAN_METHOD(Line::requestInputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::requestInputMode() for line==NULL");
+    return;  }
   Nan::Utf8String consumer(info[0]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
-    Nan::ThrowError("Unable to request input mode for this line");
+    Nan::ThrowError( "::requestInputMode() failed");
 }
 
 NAN_METHOD(Line::requestOutputMode) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+      Nan::ThrowError( "::requestOutputMode() for line==NULL");
+      return;  }
   unsigned int value = 0;
   v8::Local<v8::Value> defaultValue = info[0];
   if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {
     unsigned int val = Nan::To<unsigned int>(defaultValue).FromJust();
     if (val > 1) {
-      Nan::ThrowError("Default value can only be 0 or 1");
+      Nan::ThrowError( "::requestOutputMode() value is not in {0,1} range");
       return;
     }
     value = val;
   }
   Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))
-    Nan::ThrowError("Unable to request output mode for this line");
+    Nan::ThrowError( "::requestOutputMode() failed");
 }
 
 
 NAN_METHOD(Line::release) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->getNativeLine()) return;
   gpiod_line_release(obj->getNativeLine());
+  obj->line = NULL;
 }
 
 gpiod_line *Line::getNativeLine() {
