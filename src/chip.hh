@@ -4,6 +4,14 @@
 #include <gpiod.h>
 #include <nan.h>
 
+#define USE_PRINTF 0
+
+#if USE_PRINTF
+#define DOUT(fmt,args...) printf(fmt,##args)
+#else
+#define DOUT(fmt,args...) 
+#endif
+
 class Chip : public Nan::ObjectWrap {
  public:
   static NAN_MODULE_INIT(Init);
