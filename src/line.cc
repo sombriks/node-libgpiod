@@ -18,33 +18,45 @@ NAN_MODULE_INIT(Line::Init) {
 }
 
 Line::Line(Chip *chip, unsigned int pin) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
+  DOUT( "%s %s():%d %p\n", __FILE__, __FUNCTION__, __LINE__, line);
   if (!line) Nan::ThrowError("Unable to open GPIO line ");
 }
 
 Line::~Line() {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   if ( !line) return;
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   gpiod_line_close_chip(line);
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   line = NULL;
 }
 
 NAN_METHOD(Line::New) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   if (info.IsConstructCall()) {
+    DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
     Chip *chip = Nan::ObjectWrap::Unwrap<Chip>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
     unsigned int pin = Nan::To<unsigned int>(info[1]).FromJust();
     Line *obj = new Line(chip, pin);
+    DOUT( "%s %s(%d):%d %p\n", __FILE__, __FUNCTION__, pin, __LINE__, obj);
     if ( !obj->line) return;
+    DOUT( "%s %s(%d):%d %p->%p\n", __FILE__, __FUNCTION__, pin, __LINE__, obj, obj->line);
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
   } else {
     const int argc = 1;
+    DOUT( "%s %s():%d !construct\n", __FILE__, __FUNCTION__, __LINE__);
     v8::Local<v8::Value> argv[argc] = {info[0]};
     v8::Local<v8::Function> cons = Nan::New(constructor);
     info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
 }
 
 NAN_METHOD(Line::getValue) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
     Nan::ThrowError( "::getValue() for line==NULL");
@@ -56,6 +68,7 @@ NAN_METHOD(Line::getValue) {
 }
 
 NAN_METHOD(Line::setValue) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
     Nan::ThrowError( "::setValue() for line==NULL");
@@ -66,6 +79,7 @@ NAN_METHOD(Line::setValue) {
 }
 
 NAN_METHOD(Line::requestInputMode) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
     Nan::ThrowError( "::requestInputMode() for line==NULL");
@@ -76,6 +90,7 @@ NAN_METHOD(Line::requestInputMode) {
 }
 
 NAN_METHOD(Line::requestOutputMode) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
       Nan::ThrowError( "::requestOutputMode() for line==NULL");
@@ -90,6 +105,7 @@ NAN_METHOD(Line::requestOutputMode) {
     }
     value = val;
   }
+  DOUT( "%s %s():%d %p\n", __FILE__, __FUNCTION__, __LINE__, obj);
   Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))
     Nan::ThrowError( "::requestOutputMode() failed");
@@ -98,11 +114,15 @@ NAN_METHOD(Line::requestOutputMode) {
 
 NAN_METHOD(Line::release) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   if ( !obj->getNativeLine()) return;
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   gpiod_line_release(obj->getNativeLine());
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   obj->line = NULL;
 }
 
 gpiod_line *Line::getNativeLine() {
+  DOUT( "%s %s():%d %p\n", __FILE__, __FUNCTION__, __LINE__, line);
   return line;
 }
