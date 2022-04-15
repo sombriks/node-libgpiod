@@ -1,5 +1,11 @@
 # changelog
 
+## 2022-04-15
+
+### 0.2.2
+
+Fix for double line instantiation on same process contributed by [dmitrydvorkin](https://github.com/dmitrydvorkin)
+
 ## 2022-03-11
 
 created the changelog file so we can properly track changes and contributions
