@@ -1,5 +1,18 @@
 # changelog
 
+## 2022-04-17
+
+### 0.3.0
+
+- Added Chip::getNumberOfLines which returns the number of available GPIO lines on the chip
+- Added Chip::getChipName which returns chip's name as represented by the kernel
+- Added Chip::getChipLabel which returns chip's label as represented by the kernel
+- Added Line::getLineOffset which returns line's offset number
+- Added Line::getLineName which returns line's name, if set, otherwise undefined
+- Added Line::getLineConsumer which returns line's consumer, if set, otherwise undefined
+- Extended the Typescript .d.ts file with the new methods and added jsdoc comments
+- Added a condition in the binding.gyp to prevent builds on non-Linux environments (aka development machines) 
+
 ## 2022-04-15
 
 ### 0.2.2

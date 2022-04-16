@@ -7,6 +7,9 @@ NAN_MODULE_INIT(Line::Init) {
   tpl->SetClassName(Nan::New("Line").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
+  Nan::SetPrototypeMethod(tpl, "getLineOffset", getLineOffset);
+  Nan::SetPrototypeMethod(tpl, "getLineName", getLineName);
+  Nan::SetPrototypeMethod(tpl, "getLineConsumer", getLineConsumer);
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
@@ -55,14 +58,52 @@ NAN_METHOD(Line::New) {
   DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
 }
 
+NAN_METHOD(Line::getLineOffset) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::getLineOffset() for line==NULL");
+    return;
+  }
+  int ret = gpiod_line_offset(obj->getNativeLine());
+  if(-1 == ret) {
+    Nan::ThrowError( "::getLineOffset() failed");
+  } else info.GetReturnValue().Set(ret);
+}
+
+NAN_METHOD(Line::getLineName) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::getLineName() for line==NULL");
+    return;
+  }
+  const char *name = gpiod_line_name(obj->getNativeLine());
+  if(!name) info.GetReturnValue().Set(Nan::Undefined());
+  else info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
+}
+
+NAN_METHOD(Line::getLineConsumer) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if ( !obj->line) {
+    Nan::ThrowError( "::getLineConsumer() for line==NULL");
+    return;
+  }
+  const char *name = gpiod_line_consumer(obj->getNativeLine());
+  if(!name) info.GetReturnValue().Set(Nan::Undefined());
+  else info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
+}
+
 NAN_METHOD(Line::getValue) {
   DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
     Nan::ThrowError( "::getValue() for line==NULL");
-    return;  }
+    return;
+  }
   int ret = gpiod_line_get_value(obj->getNativeLine());
-  if(-1 == ret){
+  if(-1 == ret) {
     Nan::ThrowError( "::getValue() failed");
   } else info.GetReturnValue().Set(ret);
 }
@@ -72,7 +113,8 @@ NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if ( !obj->line) {
     Nan::ThrowError( "::setValue() for line==NULL");
-    return;  }
+    return;
+  }
   unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
   if(-1 == gpiod_line_set_value(obj->getNativeLine(), value))
     Nan::ThrowError( "::setValue() failed");
@@ -81,9 +123,10 @@ NAN_METHOD(Line::setValue) {
 NAN_METHOD(Line::requestInputMode) {
   DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if ( !obj->line) {
+  if (!obj->line) {
     Nan::ThrowError( "::requestInputMode() for line==NULL");
-    return;  }
+    return;
+  }
   Nan::Utf8String consumer(info[0]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
     Nan::ThrowError( "::requestInputMode() failed");
@@ -92,9 +135,10 @@ NAN_METHOD(Line::requestInputMode) {
 NAN_METHOD(Line::requestOutputMode) {
   DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if ( !obj->line) {
+  if (!obj->line) {
       Nan::ThrowError( "::requestOutputMode() for line==NULL");
-      return;  }
+      return;
+    }
   unsigned int value = 0;
   v8::Local<v8::Value> defaultValue = info[0];
   if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {

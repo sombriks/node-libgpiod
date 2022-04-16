@@ -16,6 +16,10 @@ class Line : public Nan::ObjectWrap {
   explicit Line(Chip *chip, unsigned int pin);
   ~Line();
 
+  static NAN_METHOD(getLineOffset);
+  static NAN_METHOD(getLineName);
+  static NAN_METHOD(getLineConsumer);
+
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
 
