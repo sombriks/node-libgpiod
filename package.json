@@ -1,6 +1,6 @@
 {
-  "name": "@clevabit/node-libgpiod",
-  "version": "0.2.2",
+  "name": "node-libgpiod",
+  "version": "0.3.0",
   "author": {
     "name": "Leonardo Silveira",
     "email": "sombriks@gmail.com",
@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/clevabit/node-libgpiod.git"
+    "url": "https://github.com/sombriks/node-libgpiod.git"
   },
   "bugs": {
-    "url": "https://github.com/clevabit/node-libgpiod/issues"
+    "url": "https://github.com/sombriks/node-libgpiod/issues"
   },
   "main": "index.js",
   "license": "MIT",
