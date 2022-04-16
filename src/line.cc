@@ -78,7 +78,7 @@ NAN_METHOD(Line::getLineName) {
     Nan::ThrowError( "::getLineName() for line==NULL");
     return;
   }
-  const char *name = gpiod_chip_name(obj->getNativeLine());
+  const char *name = gpiod_line_name(obj->getNativeLine());
   if(!name) info.GetReturnValue().Set(Nan::Undefined());
   else info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
 }
@@ -90,7 +90,7 @@ NAN_METHOD(Line::getLineConsumer) {
     Nan::ThrowError( "::getLineConsumer() for line==NULL");
     return;
   }
-  const char *name = gpiod_chip_consumer(obj->getNativeLine());
+  const char *name = gpiod_line_consumer(obj->getNativeLine());
   if(!name) info.GetReturnValue().Set(Nan::Undefined());
   else info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
 }
