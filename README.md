@@ -25,6 +25,7 @@ npm i node-libgpiod
 
 - raspberry pi model 3 B+ (64 bits, 1GB ram) running fedora
 - raspberry pi zero w (32 bits, 512MB ram) running rasp pi os
+- [LTPPxG2](https://tibbo.com/store/tps/ltpp3g2.html) with sp7021 SoC (32 bits, 512MB ram) running Yocto
 
 technically speaking it should work with any modern vanilla kernel and libgpio.
 
