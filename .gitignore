@@ -5,3 +5,5 @@ build
 package-lock.json
 *~
 .idea
+coverage
+.nyc_output

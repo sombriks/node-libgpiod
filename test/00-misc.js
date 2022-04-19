@@ -3,6 +3,12 @@ const gpiod = require("..");
 const assert = require("assert");
 
 describe("libgpiod miscellaneous bindings", function () {
+
+  it("should check if libgpiod is available", function (done) {
+    console.log(gpiod.available())
+    done()
+  })
+
   it("should get libgpiod version", function (done) {
     console.log(gpiod.version());
     done();
@@ -24,11 +30,11 @@ describe("libgpiod miscellaneous bindings", function () {
   it("should blink line with instant value", function (done) {
     let count = 7;
     const interval = setInterval(() => {
-      gpiod.setInstantLineValue("/dev/gpiochip0", 17, count-- % 2);
+      gpiod.setInstantLineValue("/dev/gpiochip0", 19, count-- % 2);
       if (count == 0) {
         clearInterval(interval);
         done();
       }
-    }, 70);
+    }, 170);
   });
 });
