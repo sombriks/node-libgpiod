@@ -38,8 +38,8 @@ Here goes the sample blink led hello-world.js:
 ```javascript
 const { version, Chip, Line } = require("node-libgpiod");
 
-const chip = new Chip(0);
-const line = new Line(chip, 17); // led on GPIO17
+global.chip = new Chip(0);
+global.line = new Line(chip, 17); // led on GPIO17
 let count = 10;
 
 console.log(version());
@@ -144,7 +144,12 @@ for more sample code
   };
 
   setTimeout(blink,500);
-  ```
+```
+Or, probably it is even better to create you chip and line instances globally:
+```
+global.mychip = new Chip()
+global.line1 = new Line()
+```
 
 ## Roadmap
 
