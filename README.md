@@ -144,12 +144,13 @@ for more sample code
   };
 
   setTimeout(blink,500);
-```
-Or, probably it is even better to create you chip and line instances globally:
-```
-global.mychip = new Chip()
-global.line1 = new Line()
-```
+  ```
+
+  Or, probably it is even better to create you chip and line instances globally:
+  ```javascript
+  global.mychip = new Chip(0);
+  global.line1 = new Line(chip, 17);
+  ```
 
 ## Roadmap
 
