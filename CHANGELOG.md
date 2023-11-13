@@ -1,5 +1,16 @@
 # changelog
 
+## 2023-11-13
+
+### 0.3.1
+
+- Merged PR #12 from @khill-fbmc fixing errors in index.d.ts
+- Some dependency version bumps, it compiles again under node 18. 
+- Added GitHub Action to ease release process
+
+I'll try to streamline more the changes we receive, let me know if anything needs
+immediate attention.
+
 ## 2022-04-17
 
 ### 0.3.0
