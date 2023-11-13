@@ -3,6 +3,7 @@
 Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/)
 
 [![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 ## Requirements
 
@@ -147,6 +148,7 @@ for more sample code
   ```
 
   Or, probably it is even better to create you chip and line instances globally:
+
   ```javascript
   global.mychip = new Chip(0);
   global.line1 = new Line(chip, 17);
