@@ -21,7 +21,7 @@ jobs:
         run: |
           npm ci
           npm run build
-#          npm run test:coverage
+          # npm run test:coverage
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
