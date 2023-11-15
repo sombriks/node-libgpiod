@@ -11,8 +11,11 @@ if (os.type() === 'Linux') {
         return true;
     }
 
-    libgpiod.prototype.Pin = function Pin(n) {
-
+    libgpiod.Pin = function Pin(n) {
+        // defaults to chip 0
+        const chip = new libgpiod.Chip(0);
+        const line = chip.getLine(n);
+        return line;
     }
 
     module.exports = libgpiod;

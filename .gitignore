@@ -4,3 +4,5 @@ node_modules
 build
 *~
 .idea
+coverage
+.nyc_output

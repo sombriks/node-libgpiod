@@ -1,4 +1,4 @@
-name: Run tests
+name: Run Tests
 
 on:
   push:
@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ['14.x', '16.x', '18.x', '20.x']
+        # removing '14.x', for now
+        version: ['16.x', '18.x', '20.x']
     steps:
       - name: Install libgpiod
         run: | 
@@ -23,9 +24,9 @@ jobs:
           node-version: ${{ matrix.version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Run tests agains simulator
+      - name: Run tests against the simulator
         run: |
           npm ci
           npm run build
-          # npm run test:coverage
+          npm run test:coverage
           
