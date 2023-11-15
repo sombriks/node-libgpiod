@@ -4,10 +4,17 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Install libgpiod
+        run: | 
+          sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -21,7 +28,5 @@ jobs:
         run: |
           npm ci
           npm run build
-          # npm run test:coverage
+          npm run test:coverage
           npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
