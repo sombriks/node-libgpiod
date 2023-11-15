@@ -7,14 +7,18 @@ if (os.type() === 'Linux') {
         return new libgpiod.Line(this, n);
     };
 
-    libgpiod.available = function() {
+    libgpiod.available = function () {
         return true;
+    }
+
+    libgpiod.prototype.Pin = function Pin(n) {
+
     }
 
     module.exports = libgpiod;
 } else {
     const libgpiod = {
-        available: function() {
+        available: function () {
             return false;
         }
     }

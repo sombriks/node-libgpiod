@@ -4,16 +4,37 @@ Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpi
 
 [![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
 
-## Requirements
+## Requirements / Dependencies
 
-- libgpiod (and devel headers)
+- libgpiod **1.x** (and devel headers)
 - nodejs (and devel headers)
 - linux (tested on fedora 33 running on raspberry pi model 3 B+ and rasp pi os on zero w)
 - c/c++ development tools
 
-## Compiling
+## How to use into your project
 
-Just add it as a regular nodejs dependency:
+First install libgpiod and node development packages, if not installed yet:
+
+### RPM based
+
+```bash
+# fedora
+sudo dnf install libgpiod libgpiod-devel libgpiod-utils nodejs-devel
+```
+
+```bash
+# openSUSE
+sudo zypper in libgpiod libgpiod-devel libgpiod-utils nodejs-devel
+```
+
+### DEB based
+
+```bash
+# debian and its variants
+sudo apt install gpiod libgpiod2 libgpio-dev libnode-dev
+```
+
+Then just add it as a regular nodejs dependency:
 
 ```bash
 npm i node-libgpiod
@@ -26,8 +47,10 @@ npm i node-libgpiod
 - raspberry pi model 3 B+ (64 bits, 1GB ram) running fedora
 - raspberry pi zero w (32 bits, 512MB ram) running rasp pi os
 - [LTPPxG2](https://tibbo.com/store/tps/ltpp3g2.html) with sp7021 SoC (32 bits, 512MB ram) running Yocto
+- [ROCK 5A](https://docs.radxa.com/en/rock5/rock5a/hardware/rock5a-gpio)
 
-technically speaking it should work with any modern vanilla kernel and libgpio.
+Technically speaking it should work with any modern vanilla kernel and
+libgpio 1.x, we're still working on libgpio 2.x
 
 ## Status
 
@@ -91,6 +114,10 @@ for more sample code
 
 ## known issues
 
+- libgpio 2.x series is around the corner and it's API is incompatible with 1.x
+  the 2.x branch (under development) will handle 2.x while 0.x and 1.x will
+  support libgpiod 1.x series.
+
 - gpio character device needs
   [special udev rules](https://blog.oless.xyz/post/fedorarpigpio/#udev) in order
   to belong to a special group so non-root users could access it freely
@@ -102,7 +129,7 @@ for more sample code
 
 - libgpiod must be installed in the system correctly with development headers
   otherwise npm install will fail.
-- node will garbage collect Chip and line too early on certain cases. When
+- node will garbage collect Chip and Line too early on certain cases. When
   writing the samples, sometimes the following error kept being thrown:
 
   ```bash
@@ -147,6 +174,7 @@ for more sample code
   ```
 
   Or, probably it is even better to create you chip and line instances globally:
+
   ```javascript
   global.mychip = new Chip(0);
   global.line1 = new Line(chip, 17);

@@ -1,0 +1,31 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ "*" ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ['14.x', '16.x', '18.x', '20.x']
+    steps:
+      - name: Install libgpiod
+        run: | 
+          apt-get install gpiod libgpiod2 libgpio-dev libnode-dev -y 
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish tag on npm
+        run: |
+          npm ci
+          npm run build
+          # npm run test:coverage
+          
