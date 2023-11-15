@@ -31,7 +31,7 @@ sudo zypper in libgpiod libgpiod-devel libgpiod-utils nodejs-devel
 
 ```bash
 # debian and its variants
-sudo apt install gpiod libgpiod2 libgpio-dev libnode-dev
+sudo apt install gpiod libgpiod2 libgpiod-dev libnode-dev
 ```
 
 Then just add it as a regular nodejs dependency:

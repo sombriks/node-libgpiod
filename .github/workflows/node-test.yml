@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Install libgpiod
         run: | 
-          sudo apt-get install gpiod libgpiod2 libgpio-dev libnode-dev -y 
+          sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y 
       - name: Checkout
         uses: actions/checkout@v3
 
