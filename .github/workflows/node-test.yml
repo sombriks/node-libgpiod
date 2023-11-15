@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Publish tag on npm
+      - name: Run tests agains simulator
         run: |
           npm ci
           npm run build
