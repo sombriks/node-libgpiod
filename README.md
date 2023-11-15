@@ -4,6 +4,7 @@ Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpi
 
 [![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
 ![Build status](https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 ## Requirements / Dependencies
 
