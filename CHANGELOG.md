@@ -1,11 +1,19 @@
 # changelog
 
+## 2023-11-15
+
+### 0.3.2
+
+- added new `Pin(n)` as a syntax sugar to get a new `Line(n)` from `Chip(0)`.
+- put the workflow to run tests but mostly are ignored for the moment. i am
+  looking for a proper way to simulate a chip.
+
 ## 2023-11-13
 
 ### 0.3.1
 
 - Merged PR #12 from @khill-fbmc fixing errors in index.d.ts
-- Some dependency version bumps, it compiles again under node 18. 
+- Some dependency version bumps, it compiles again under node 18.
 - Added GitHub Action to ease release process
 
 I'll try to streamline more the changes we receive, let me know if anything needs
@@ -22,7 +30,7 @@ immediate attention.
 - Added Line::getLineName which returns line's name, if set, otherwise undefined
 - Added Line::getLineConsumer which returns line's consumer, if set, otherwise undefined
 - Extended the Typescript .d.ts file with the new methods and added jsdoc comments
-- Added a condition in the binding.gyp to prevent builds on non-Linux environments (aka development machines) 
+- Added a condition in the binding.gyp to prevent builds on non-Linux environments (aka development machines)
 
 ## 2022-04-15
 
