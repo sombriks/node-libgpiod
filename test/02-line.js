@@ -3,12 +3,13 @@ const gpiod = require("../");
 const assert = require("assert");
 
 describe("libgpiod line bindings", () => {
-  xit("should get a line from the chip", (done) => {
+  it("should get a line from the chip", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     assert(chip0.getLine(17));
     done();
   });
-  xit("should NOT get a nonexistent line from the chip", (done) => {
+  
+  it("should NOT get a nonexistent line from the chip", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     try {
       const line17 = new gpiod.Line(chip0, 1700);
@@ -17,7 +18,7 @@ describe("libgpiod line bindings", () => {
     }
   });
 
-  xit("should set line value", (done) => {
+  it("should set line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = new gpiod.Line(chip0, 17);
     line17.requestOutputMode();
@@ -28,7 +29,7 @@ describe("libgpiod line bindings", () => {
     }, 500);
   });
 
-  xit("should get line value", (done) => {
+  it("should get line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = chip0.getLine(17);
     line17.requestInputMode();
@@ -37,7 +38,7 @@ describe("libgpiod line bindings", () => {
     done();
   });
 
-  xit("should blink line value", (done) => {
+  it("should blink line value", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     const line17 = new gpiod.Line(chip0, 17);
     line17.requestOutputMode();

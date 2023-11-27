@@ -1,17 +1,17 @@
 const gpiod = require("..");
 
 describe("libgpiod chip bindings", function () {
-  xit("should 'create' a new chip by number", (done) => {
+  it("should 'create' a new chip by number", (done) => {
     const chip0 = new gpiod.Chip("0");
     done();
   });
 
-  xit("should 'create' a new chip by name", (done) => {
+  it("should 'create' a new chip by name", (done) => {
     const chip0 = new gpiod.Chip("gpiochip0");
     done();
   });
 
-  xit("should 'create' a new chip by path", (done) => {
+  it("should 'create' a new chip by path", (done) => {
     const chip0 = new gpiod.Chip("/dev/gpiochip0");
     done();
   });

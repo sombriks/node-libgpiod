@@ -8,12 +8,12 @@ describe("libgpiod miscellaneous bindings", function () {
     done();
   });
 
-  xit("should get line instant value", function (done) {
+  it("should get line instant value", function (done) {
     gpiod.getInstantLineValue(0, 17);
     done();
   });
 
-  xit("should NOT get line instant value due wrong chip name", function (done) {
+  it("should NOT get line instant value due wrong chip name", function (done) {
     try {
       const ret = gpiod.getInstantLineValue("/dev/gpiochipZero", 17);
     } catch (ex) {
@@ -21,7 +21,7 @@ describe("libgpiod miscellaneous bindings", function () {
     }
   });
 
-  xit("should blink line with instant value", function (done) {
+  it("should blink line with instant value", function (done) {
     let count = 7;
     const interval = setInterval(() => {
       gpiod.setInstantLineValue("/dev/gpiochip0", 17, count-- % 2);
