@@ -132,6 +132,19 @@ NAN_METHOD(Line::requestInputMode) {
     Nan::ThrowError( "::requestInputMode() failed");
 }
 
+NAN_METHOD(Line::requestInputModeFlags) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError( "::requestInputModeFlags() for line==NULL");
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError( "::requestInputModeFlags() failed");
+}
+
 NAN_METHOD(Line::requestOutputMode) {
   DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());

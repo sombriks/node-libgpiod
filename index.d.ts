@@ -118,6 +118,17 @@ declare module "node-libgpiod" {
      * @throws error if the line is already reserved
      */
     requestInputMode(consumer?: string): void;
+
+    /**
+     * Reserves the current line as an input with Flags.
+     *
+     * A consumer name can be given to assign a name to the reservation.
+     *
+     * @param consumer an optional consumer name to assign to the reservation
+     * @param flags GPIOD_LINE_REQUEST_FLAG_xxxx as defined in gpiod.h
+     * @throws error if the line is already reserved
+     */
+    requestInputModeFlags(consumer?: string, flags?: number): void;
   }
   
   /**
