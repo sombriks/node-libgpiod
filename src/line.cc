@@ -13,8 +13,18 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
+  Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
   Nan::SetPrototypeMethod(tpl, "release", release);
+
+  v8::Local<v8::Object> lineFlags = Nan::New<v8::Object>();
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_OPEN_DRAIN").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_OPEN_DRAIN));
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE));
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW));
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_BIAS_DISABLE").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_BIAS_DISABLE));
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN));
+  Nan::Set(lineFlags, Nan::New("GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_UP").ToLocalChecked(), Nan::New(GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_UP));
+  Nan::Set(target, Nan::New("LineFlags").ToLocalChecked(), lineFlags);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("Line").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
@@ -130,6 +140,19 @@ NAN_METHOD(Line::requestInputMode) {
   Nan::Utf8String consumer(info[0]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
     Nan::ThrowError( "::requestInputMode() failed");
+}
+
+NAN_METHOD(Line::requestInputModeFlags) {
+  DOUT( "%s %s():%d\n", __FILE__, __FUNCTION__, __LINE__);
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError( "::requestInputModeFlags() for line==NULL");
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError( "::requestInputModeFlags() failed");
 }
 
 NAN_METHOD(Line::requestOutputMode) {
