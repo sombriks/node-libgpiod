@@ -13,6 +13,7 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
+  Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
   Nan::SetPrototypeMethod(tpl, "release", release);
 
