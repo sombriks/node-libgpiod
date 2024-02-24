@@ -1,5 +1,15 @@
 # changelog
 
+## 2024-02-24
+
+## 0.4.0
+
+- Finally branched main into two distinct heads
+- code on main-2x will track new gpiod version
+- Still looking for a way to test the native part properly. There is gpio-sim,
+  **IF** i figure out how to use it.
+- This same log entry on main-1x will be different.
+
 ## 2023-11-15
 
 ### 0.3.2
