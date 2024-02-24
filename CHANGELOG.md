@@ -1,5 +1,16 @@
 # changelog
 
+## 2024-02-24
+
+## 0.4.0
+
+- Finally branched main into two distinct heads
+- Prepared a new virtual machine to be able to work with 1.x series
+- Still looking for a way to test the native part properly. Thre is gpiomock but
+  i can't find it built on any distro i tried (opensuse/fedora). for 2.x there
+  is gpio-sim, **IF** i figure out how to use it.
+- This same log entry on main-2x will be different.
+
 ## 2023-11-15
 
 ### 0.3.2
