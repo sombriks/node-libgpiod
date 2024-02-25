@@ -2,11 +2,11 @@ name: Run Tests
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ "main-2x" ]
 
 jobs:
   build-and-publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # TODO need an image with libgpiod 2.x
     strategy:
       matrix:
         # removing '14.x', for now
