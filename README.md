@@ -8,14 +8,14 @@ Native nodejs bindings for [libgpiod](https://git.kernel.org/pub/scm/libs/libgpi
 
 ## Requirements / Dependencies
 
-- libgpiod **1.x** (and devel headers)
+- libgpiod **2.x** (and devel headers)
 - nodejs (and devel headers)
 - linux (tested on fedora 33 running on raspberry pi model 3 B+ and rasp pi os on zero w)
 - c/c++ development tools
 
 ## How to use into your project
 
-First install libgpiod and node development packages, if not installed yet:
+First install libgpiod 2.x and node development packages, if not installed yet:
 
 ### RPM based
 
@@ -46,8 +46,8 @@ npm i node-libgpiod
 
 ## Tested platforms
 
-- raspberry pi model 3 B+ (64 bits, 1GB ram) running fedora
-- raspberry pi zero w (32 bits, 512MB ram) running rasp pi os
+- [raspberry pi model 3 B+](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-3-model-b) (64 bits, 1GB ram) running fedora
+- [raspberry pi zero w](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-zero-w) (32 bits, 512MB ram) running rasp pi os
 - [LTPPxG2](https://tibbo.com/store/tps/ltpp3g2.html) with sp7021 SoC (32 bits, 512MB ram) running Yocto
 - [ROCK 5A](https://docs.radxa.com/en/rock5/rock5a/hardware/rock5a-gpio)
 

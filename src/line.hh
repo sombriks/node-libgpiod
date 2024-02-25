@@ -10,7 +10,7 @@ class Line : public Nan::ObjectWrap {
  public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
-  gpiod_line *getNativeLine();
+  gpiod_line_info *getNativeLine();
 
  private:
   explicit Line(Chip *chip, unsigned int pin);
@@ -30,7 +30,7 @@ class Line : public Nan::ObjectWrap {
 
   static Nan::Persistent<v8::Function> constructor;
 
-  gpiod_line *line;
+  gpiod_line_info *line;
 };
 
 #endif  // LINE_HH
