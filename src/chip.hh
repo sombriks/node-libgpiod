@@ -4,14 +4,6 @@
 #include <gpiod.h>
 #include <nan.h>
 
-#define USE_PRINTF 0
-
-#if USE_PRINTF
-#define DOUT(fmt,args...) printf(fmt,##args)
-#else
-#define DOUT(fmt,args...)
-#endif
-
 class Chip : public Nan::ObjectWrap {
  public:
   static NAN_MODULE_INIT(Init);
@@ -28,7 +20,7 @@ class Chip : public Nan::ObjectWrap {
   static NAN_METHOD(New);
   static Nan::Persistent<v8::Function> constructor;
 
-  gpiod_chip *chip;
+  gpiod_chip* chip;
 };
 
-#endif // CHIP_HH
+#endif  // CHIP_HH
