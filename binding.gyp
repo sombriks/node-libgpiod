@@ -16,6 +16,12 @@
                     "libraries" : [
                         "-lgpiod"
                     ],
+                    "cflags": [
+                        "-O3"
+                    ],
+                    "lflags": [
+                        "-flto"
+                    ]
                 }]
             ]
         }

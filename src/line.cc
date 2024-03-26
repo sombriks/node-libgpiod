@@ -112,12 +112,13 @@ NAN_METHOD(Line::getValue) {
 NAN_METHOD(Line::setValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if (!obj->line) {
-    Nan::ThrowError("::setValue() for line==NULL");
-    return;
+    return Nan::ThrowError("setValue() called for null line.");
   }
-  unsigned int value = Nan::To<unsigned int>(info[0]).FromJust();
-  if (-1 == gpiod_line_set_value(obj->getNativeLine(), value))
-    Nan::ThrowError("::setValue() failed");
+
+  uint32_t value = Nan::To<uint32_t>(info[0]).FromJust();
+  if (gpiod_line_set_value(obj->line, value) == -1) {
+    return Nan::ThrowError("setValue() failed.");
+  }
 }
 
 NAN_METHOD(Line::requestInputMode) {
