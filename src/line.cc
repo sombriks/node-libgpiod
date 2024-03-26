@@ -110,7 +110,7 @@ NAN_METHOD(Line::getValue) {
 }
 
 NAN_METHOD(Line::setValue) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  Line *obj = ObjectWrap::Unwrap<Line>(info.Holder());
   v8::Local<v8::Context> context = Nan::GetCurrentContext();
   uint32_t value = info[0]->Uint32Value(context).FromJust();
   if (gpiod_line_set_value(obj->line, value) == -1) {
