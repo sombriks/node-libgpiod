@@ -4,7 +4,7 @@ declare module 'node-libgpiod' {
    * GPIO lines) on the Linux host. The number of GPIO chips depends on
    * the hardware available.
    */
-	declare class Chip {
+	export class Chip {
 		/**
      * Constructs a new Chip instance by its chip number.
      *
@@ -41,7 +41,7 @@ declare module 'node-libgpiod' {
    * Line instances represent direct access to a specific GPIO line on
    * the Linux host. Those lines can be reserved as input or output.
    */
-	declare class Line {
+	export class Line {
 		/**
      * Constructs a new Line instance for the given chip and line offset.
      *
@@ -135,7 +135,7 @@ declare module 'node-libgpiod' {
    * Those flags where introduced in libgpiod 1.5 and allows to fine tune how
    * line should behave.
    */
-	declare type LineFlags = {
+	export type LineFlags = {
 		GPIOD_LINE_REQUEST_FLAG_OPEN_DRAIN: 1;
 		GPIOD_LINE_REQUEST_FLAG_OPEN_SOURCE: 2;
 		GPIOD_LINE_REQUEST_FLAG_ACTIVE_LOW: 4;
@@ -149,5 +149,5 @@ declare module 'node-libgpiod' {
    * the current execution environment, otherwise false (for example
    * in non-Linux development environments).
    */
-	declare function available(): boolean;
+	export function available(): boolean;
 }
