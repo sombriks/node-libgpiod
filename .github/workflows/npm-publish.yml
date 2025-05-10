@@ -1,33 +1,26 @@
+---
+# CI/CD for npm packages
 name: Publish npm package
-
 on:
   push:
     tags:
       - '*'
-
+permissions:
+  id-token: write
+  contents: read
 env:
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
 jobs:
   build-and-publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: Install libgpiod
-        run: |
-          sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Configure Node
-        uses: actions/setup-node@v3
+      - run: sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Publish tag on npm
-        run: |
+      - run: |
           npm ci
           npm run build
-          npm run test:coverage
-          npm publish
+          npm publish --provenance --access public

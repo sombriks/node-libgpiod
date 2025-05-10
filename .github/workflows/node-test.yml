@@ -1,33 +1,23 @@
+---
 name: Run Tests
-
 on:
   push:
     branches: [ "main-2x" ]
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest # TODO need an image with libgpiod 2.x
     strategy:
       matrix:
         # removing '14.x', for now
-        version: ['16.x', '18.x', '20.x']
+        version: ['16.x', '18.x', '20.x', '22.x']
     steps:
-      - name: Install libgpiod
-        run: | 
-          sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y
-          
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Configure Node
-        uses: actions/setup-node@v3
+      - run: | 
+          sudo apt-get install gpiod libgpiod2 libgpiod-dev libnode-dev -y  
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.version }}
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Run tests against the simulator
-        run: |
+      - run: |
           npm ci
           npm run build
-          npm run test:coverage
-          

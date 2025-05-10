@@ -6,14 +6,11 @@
                 ["OS=='linux'", {
                     "sources": [
                         "src/main.cc",
-                        "src/misc.cc",
-                        "src/chip.cc",
-                        "src/line.cc"
                     ],
-                    "include_dirs" : [
+                    "include_dirs": [
                         "<!(node -e \"require('nan')\")"
                     ],
-                    "libraries" : [
+                    "libraries": [
                         "-lgpiod"
                     ],
                 }]
