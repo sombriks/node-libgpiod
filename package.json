@@ -10,8 +10,8 @@
     "libgpiod",
     "node",
     "linux",
-    "raspberrypi",
-    "raxdarock"
+    "raspberry-pi",
+    "raxda-rock"
   ],
   "repository": {
     "type": "git",
