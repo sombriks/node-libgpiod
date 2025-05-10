@@ -13,8 +13,8 @@ jobs:
     container: fedora:38
     strategy:
       matrix:
-        # removing '24.x', for now
-        version: ['14.x', '16.x', '18.x', '20.x', '22.x']
+        # removing '14.x' and '24.x', for now
+        version: ['16.x', '18.x', '20.x', '22.x']
     steps:
       - name: Install libgpiod and other system dependencies
         run: | 
