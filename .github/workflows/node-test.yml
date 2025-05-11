@@ -34,5 +34,5 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm run configure-gpio-sim
+          # npm run configure-gpio-sim
           # npm run test:coverage # unable to run in the simulator
