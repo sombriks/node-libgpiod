@@ -19,6 +19,7 @@
     "configure": "node-gyp configure",
     "build": "node-gyp build",
     "clean": "node-gyp clean",
+    "configure-gpio-sim": "sudo sh test/prepare-gpio-sim.sh",
     "test": "mocha",
     "test:coverage": "c8 npm run test"
   },

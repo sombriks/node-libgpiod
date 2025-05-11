@@ -67,7 +67,7 @@ We already are able to read and write pins!
 ## known issues
 
 - gpio character device needs
-  [special udev rules](https://blog.oless.xyz/post/fedorarpigpio/#udev) in order
+  [special udev rules][udev] in order
   to belong to a special group so non-root users could access it freely
 
   ```bash
@@ -94,3 +94,4 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 [rpi0]: https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-zero-w
 [ltppxg2]: https://tibbo.com/store/tps/ltpp3g2.html
 [rock5a]: https://docs.radxa.com/en/rock5/rock5a/download
+[udev]: https://blog.oless.xyz/post/fedorarpigpio/#udev
