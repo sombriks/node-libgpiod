@@ -11,7 +11,7 @@ Native nodejs bindings for [libgpiod][libgpiod]
 - libgpiod **1.x** (and devel headers)
 - nodejs (and devel headers)
 - linux (tested on fedora 33 running on raspberry pi model 3 B+ and rasp pi os on zero w)
-- c/c++ development tools
+- c development tools
 
 ## How to use into your project
 
@@ -200,7 +200,7 @@ for more sample code
 - [X] Chip/Line abstractions
 - [ ] GPIO monitoring callbacks
 - [ ] Bulk read/write
-- [ ] Complete API parity with underlying C/C++ library
+- [ ] Complete API parity with underlying C library
 
 All features present on libgpiod eventually will be added to node bindings, then
 the node package will finally enter in 1.x series.
@@ -212,25 +212,26 @@ details.
 
 This is the api parity table:
 
-| Description                                  | Scope         | C/C++                          | Node                  |
-|----------------------------------------------|---------------|--------------------------------|-----------------------|
-| get line's instant value                     | Miscellaneous | gpiod_ctxless_get_value        | getInstantLineValue   |
-| set line's instant value                     | Miscellaneous | gpiod_ctxless_set_value        | setInstantLineValue   |
-| get chip name                                | Chip          | gpiod_chip_name                | getChipName           |
-| get chip label                               | Chip          | gpiod_chip_label               | getChipLabel          |
-| get number of lines in a chip                | Chip          | gpiod_chip_num_lines           | getNumberOfLines      |
-| get all line names from chip                 | Chip          | -                              | getLineNames          |
-| get line by name or number                   | Chip          | -                              | getLine               |
-| get line/pin offset number                   | Line          | gpiod_line_offset              | getLineOffset         |
-| get line/pin name                            | Line          | gpiod_line_name                | getLineName           |
-| get line/pin value                           | Line          | gpiod_line_get_value           | getValue              |
-| set line/pin value                           | Line          | gpiod_line_set_value           | setValue              |
-| get line consumer                            | Line          | gpiod_line_consumer            | getLineConsumer       |
-| get line direction                           | Line          | gpiod_line_direction           | getLineDirection      |
-| set line for input (read)                    | Line          | gpiod_line_request_input       | requestInputMode      |
-| set line for input with [flags][input-flags] | Line          | gpiod_line_request_input_flags | requestInputModeFlags |
-| set line for output (write)                  | Line          | gpiod_line_request_output      | requestOutputMode     |
-| release the line                             | Line          | gpiod_line_release             | release               |
+| Description                                  | Scope | C                              | Node                  |
+|----------------------------------------------|-------|--------------------------------|-----------------------|
+| get line's instant value                     | Misc  | gpiod_ctxless_get_value        | getInstantLineValue   |
+| set line's instant value                     | Misc  | gpiod_ctxless_set_value        | setInstantLineValue   |
+| get chip name                                | Chip  | gpiod_chip_name                | getChipName           |
+| get chip label                               | Chip  | gpiod_chip_label               | getChipLabel          |
+| get number of lines in a chip                | Chip  | gpiod_chip_num_lines           | getNumberOfLines      |
+| get all line names from chip                 | Chip  | -                              | getLineNames          |
+| get line by name or number                   | Chip  | -                              | getLine               |
+| get line/pin offset number                   | Line  | gpiod_line_offset              | getLineOffset         |
+| get line/pin name                            | Line  | gpiod_line_name                | getLineName           |
+| get line/pin value                           | Line  | gpiod_line_get_value           | getValue              |
+| set line/pin value                           | Line  | gpiod_line_set_value           | setValue              |
+| get line consumer                            | Line  | gpiod_line_consumer            | getLineConsumer       |
+| get line direction                           | Line  | gpiod_line_direction           | getLineDirection      |
+| get line active state                        | Line  | gpiod_line_active_state        | getLineActiveState    |
+| set line for input (read)                    | Line  | gpiod_line_request_input       | requestInputMode      |
+| set line for input with [flags][input-flags] | Line  | gpiod_line_request_input_flags | requestInputModeFlags |
+| set line for output (write)                  | Line  | gpiod_line_request_output      | requestOutputMode     |
+| release the line                             | Line  | gpiod_line_release             | release               |
 
 ## Other implementations
 

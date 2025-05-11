@@ -11,6 +11,7 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "getLineName", getLineName);
   Nan::SetPrototypeMethod(tpl, "getLineConsumer", getLineConsumer);
   Nan::SetPrototypeMethod(tpl, "getLineDirection", getLineDirection);
+  Nan::SetPrototypeMethod(tpl, "getLineActiveState", getLineActiveState);
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
@@ -105,6 +106,16 @@ NAN_METHOD(Line::getLineDirection) {
   }
   int direction = gpiod_line_direction(obj->getNativeLine());
   info.GetReturnValue().Set(direction);
+}
+
+NAN_METHOD(Line::getLineActiveState) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineActiveState() for line==NULL"));
+    return;
+  }
+  int activeState = gpiod_line_active_state(obj->getNativeLine());
+  info.GetReturnValue().Set(activeState);
 }
 
 NAN_METHOD(Line::getValue) {

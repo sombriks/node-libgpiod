@@ -123,10 +123,24 @@ describe('libgpiod line bindings', () => {
 		expect(1).eq(line17.getLineDirection());
 		line17.release();
 
-		line17 = chip0.getLine(17)
-		line17.requestOutputMode();
-		expect(2).eq(line17.getLineDirection());
+		const line18 = chip0.getLine("GPIO18");
+		line18.requestOutputMode();
+		expect(2).eq(line18.getLineDirection());
+		line18.release();
+
+		done();
+	});
+
+	it("should get line active state", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+		let line17 = chip0.getLine(17);
+		expect(1).eq(line17.getLineActiveState());
 		line17.release();
+
+		const line18 = chip0.getLine("GPIO18");
+		expect(2).eq(line18.getLineActiveState());
+		line18.release();
+
 		done();
 	});
 });
