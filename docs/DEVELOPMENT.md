@@ -35,8 +35,8 @@ to compile against an older libgpiod version.
 Currently my recommendation is to setup a reasonable recent linux distro with
 the proper gpiod version being worked on (1.6).
 
-I have a Fedora 38 virtual machine just for that purpose at the moment, but i am
-thinking on other ways to work around this version issue.
+I have a **Fedora 38** virtual machine just for that purpose at the moment, but
+i am thinking on other ways to work around this version issue.
 
 ## Testing
 

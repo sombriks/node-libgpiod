@@ -2,8 +2,8 @@
 
 Native nodejs bindings for [libgpiod][libgpiod]
 
-[![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)](https://www.npmjs.com/package/node-libgpiod)
-[![Build Status](https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg?branch=main-1x)](https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml)
+[![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)][npm]
+![Build status](https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg)
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 ## Requirements / Dependencies
@@ -21,19 +21,23 @@ First install libgpiod and node development packages, if not installed yet:
 
 ```bash
 # fedora
-sudo dnf install libgpiod libgpiod-devel libgpiod-utils nodejs-devel
+sudo dnf install @development-tools g++ \
+ libgpiod libgpiod-devel libgpiod-utils \
+ nodejs nodejs-devel
 ```
 
 ```bash
 # openSUSE
-sudo zypper in libgpiod libgpiod-devel libgpiod-utils nodejs-devel
+sudo zypper in -t pattern devel_basis
+sudo zypper in libgpiod libgpiod-devel libgpiod-utils \ 
+ nodejs nodejs-devel
 ```
 
 ### DEB based
 
 ```bash
 # debian and its variants
-sudo apt install gpiod libgpiod2 libgpiod-dev libnode-dev
+sudo apt install build-essential gpiod libgpiod2 libgpiod-dev libnode-dev
 ```
 
 Then just add it as a regular nodejs dependency:
@@ -50,7 +54,7 @@ npm i node-libgpiod
 - [raspberry pi zero w][rpi3zw] (32 bits, 512MB ram) running rasp pi os
 - [LTPPxG2][LTPPx62] with sp7021 SoC (32 bits, 512MB ram) running Yocto
 - [ROCK 5A][ROCK5A] (64 bits, 2GB ram), running debian
-- [ROCK 3C][ROCK3C] (64 bits, 2GB ram), running d
+- [ROCK 3C][ROCK3C] (64 bits, 2GB ram), running debian
 
 Technically speaking it should work with [any modern vanilla kernel][libgpiod]
 and **libgpiod 1.x**.
@@ -201,7 +205,7 @@ for more sample code
 All features present on libgpiod eventually will be added to node bindings, then
 the node package will finally enter in 1.x series.
 
-Also see our [changelog][changelog] and [project updates][project-updates] for 
+Also see our [changelog][changelog] and [project updates][project-updates] for
 details.
 
 ## Functionality parity
@@ -231,11 +235,11 @@ Those are other notable libgpiod wrapper implementations:
 
 ### Official C++ binding
 
-- https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/cxx?h=v1.6.x
+- <https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/cxx?h=v1.6.x>
 
 ### Official Python binding
 
-- https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/python?h=v1.6.x
+- <https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/python?h=v1.6.x>
 
 ### Golang binding
 
@@ -247,6 +251,7 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 
 [repo]: https://github.com/sombriks/node-libgpiod
 [libgpiod]: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+[npm]: https://www.npmjs.com/package/node-libgpiod
 [node-gyp]: https://www.npmjs.com/package/node-gyp
 [rpi3b+]: https://www.raspberrypi.com/products/raspberry-pi-3-model-b-plus/
 [rpi3zw]: https://www.raspberrypi.com/products/raspberry-pi-zero-w/
