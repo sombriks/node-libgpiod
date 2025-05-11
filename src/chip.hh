@@ -13,9 +13,10 @@ class Chip : public Nan::ObjectWrap {
   explicit Chip(const char* device = "0");
   ~Chip();
 
-  static NAN_METHOD(getNumberOfLines);
   static NAN_METHOD(getChipName);
   static NAN_METHOD(getChipLabel);
+  static NAN_METHOD(getNumberOfLines);
+  static NAN_METHOD(getLineNames);
 
   static NAN_METHOD(New);
   static Nan::Persistent<v8::Function> constructor;

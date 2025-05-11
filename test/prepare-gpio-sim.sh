@@ -12,17 +12,15 @@
 # for gpio-sim
 # see https://docs.kernel.org/admin-guide/gpio/gpio-sim.html
 
-# for gpio-mockup
-# see https://docs.kernel.org/admin-guide/gpio/gpio-mockup.html
-
 modprobe gpio-sim
 # insmod /lib/modules/6.8.9-100.fc38.x86_64/kernel/drivers/gpio/gpio-sim.ko.xz
 
+echo 40 > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/num_lines
 for i in $(seq 1 40)
 do 
   mkdir -p /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line$i
 done
-echo 40 > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/num_lines
+echo "GPIO17" > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line17/name
 echo 1 > /sys/kernel/config/gpio-sim/fakegpio/live
 gpiodetect 
 gpioinfo

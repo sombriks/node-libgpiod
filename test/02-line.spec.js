@@ -3,9 +3,6 @@ const gpiod = require('..');
 
 describe('libgpiod line bindings', () => {
 
-	// undefined for our gpio-sim setup, GPIO17 for raspberry pi zero w
-	const lineName = process.env.LINE_NAME ?? undefined
-
 	it('should get a line from the chip', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		expect(chip0.getLine(17)).ok;
@@ -61,7 +58,7 @@ describe('libgpiod line bindings', () => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		const line17 = chip0.getLine(17);
 		const name = line17.getLineName();
-		expect(lineName).eq(name);
+		expect("GPIO17").eq(name);
 		line17.release();
 		done();
 	});
