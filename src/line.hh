@@ -13,6 +13,7 @@ class Line : public Nan::ObjectWrap {
   gpiod_line *getNativeLine();
 
  private:
+  explicit Line(Chip *chip, const char *name);
   explicit Line(Chip *chip, unsigned int pin);
   ~Line();
 

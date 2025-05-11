@@ -3,9 +3,15 @@ const gpiod = require('..');
 
 describe('libgpiod line bindings', () => {
 
-	it('should get a line from the chip', done => {
+	it('should get a line by number', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		expect(chip0.getLine(17)).ok;
+		done();
+	});
+
+	it('should get a line by name', done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+		expect(chip0.getLine("GPIO17")).ok;
 		done();
 	});
 

@@ -216,9 +216,11 @@ This is the api parity table:
 |----------------------------------------------|---------------|--------------------------------|-----------------------|
 | get line's instant value                     | Miscellaneous | gpiod_ctxless_get_value        | getInstantLineValue   |
 | set line's instant value                     | Miscellaneous | gpiod_ctxless_set_value        | setInstantLineValue   |
-| get number of lines in a chip                | Chip          | gpiod_chip_num_lines           | getNumberOfLines      |
 | get chip name                                | Chip          | gpiod_chip_name                | getChipName           |
 | get chip label                               | Chip          | gpiod_chip_label               | getChipLabel          |
+| get number of lines in a chip                | Chip          | gpiod_chip_num_lines           | getNumberOfLines      |
+| get all line names from chip                 | Chip          | -                              | getLineNames          |
+| get line by name or number                   | Chip          | -                              | getLine               |
 | get line/pin offset number                   | Line          | gpiod_line_offset              | getLineOffset         |
 | get line/pin name                            | Line          | gpiod_line_name                | getLineName           |
 | get line/pin value                           | Line          | gpiod_line_get_value           | getValue              |

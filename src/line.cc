@@ -28,6 +28,13 @@ Line::Line(Chip *chip, unsigned int pin) {
   if (!line) Nan::ThrowError(Nan::ErrnoException(errno, msg.c_str()));
 }
 
+Line::Line(Chip *chip, const char *name) {
+  line = gpiod_chip_find_line(chip->getNativeChip(), name);
+  std::string msg = "Line::new - Unable to open GPIO line ";
+  msg += name;
+  if (!line) Nan::ThrowError(Nan::ErrnoException(errno, msg.c_str()));
+}
+
 Line::~Line() {
   if (!line) return;
   gpiod_line_close_chip(line);
