@@ -20,6 +20,7 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(getLineOffset);
   static NAN_METHOD(getLineName);
   static NAN_METHOD(getLineConsumer);
+  static NAN_METHOD(getLineDirection);
 
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);

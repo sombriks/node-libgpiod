@@ -114,5 +114,19 @@ describe('libgpiod line bindings', () => {
 		line13.release();
 
 		done();
-	})
+	});
+
+	it("should get line direction", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+		let line17 = chip0.getLine(17);
+		line17.requestInputMode();
+		expect(1).eq(line17.getLineDirection());
+		line17.release();
+
+		line17 = chip0.getLine(17)
+		line17.requestOutputMode();
+		expect(2).eq(line17.getLineDirection());
+		line17.release();
+		done();
+	});
 });

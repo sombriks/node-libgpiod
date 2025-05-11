@@ -28,7 +28,7 @@ describe("Line double-definition issue (#4)", () => {
     }
   })
 
-  it("Should work fine on double definition", done => {
+  it("Should work fine with proper line release", done => {
 
     const chip0 = new Chip(0) // see prepare-gpio-sim.sh or real hardware
 
@@ -39,7 +39,7 @@ describe("Line double-definition issue (#4)", () => {
     l17.setValue(1)
     l17.release()
 
-    l17 = new Line(chip0, 17) // we didn't release the previous one
+    l17 = new Line(chip0, 17) // we must release the previous one
     l17.requestOutputMode()
     l17.setValue(1)
     l17.release()

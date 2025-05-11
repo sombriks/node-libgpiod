@@ -226,6 +226,7 @@ This is the api parity table:
 | get line/pin value                           | Line          | gpiod_line_get_value           | getValue              |
 | set line/pin value                           | Line          | gpiod_line_set_value           | setValue              |
 | get line consumer                            | Line          | gpiod_line_consumer            | getLineConsumer       |
+| get line direction                           | Line          | gpiod_line_direction           | getLineDirection      |
 | set line for input (read)                    | Line          | gpiod_line_request_input       | requestInputMode      |
 | set line for input with [flags][input-flags] | Line          | gpiod_line_request_input_flags | requestInputModeFlags |
 | set line for output (write)                  | Line          | gpiod_line_request_output      | requestOutputMode     |
