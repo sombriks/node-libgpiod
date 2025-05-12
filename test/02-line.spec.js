@@ -198,4 +198,25 @@ describe('libgpiod line bindings', () => {
 		done();
 	});
 
+	it("should update line info", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		try {
+			line17.update();
+			done();
+		} catch (e) {
+			done(e);
+		} finally {
+			line17.release();
+		}
+	});
+
+	it("should check if line 17 needs update", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		expect(false).eq(line17.needsUpdate());
+		line17.release();
+		done();
+	});
+
 });

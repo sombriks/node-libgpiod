@@ -16,6 +16,8 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "isLineUsed", isLineUsed);
   Nan::SetPrototypeMethod(tpl, "isLineOpenDrain", isLineOpenDrain);
   Nan::SetPrototypeMethod(tpl, "isLineOpenSource", isLineOpenSource);
+  Nan::SetPrototypeMethod(tpl, "update", update);
+  Nan::SetPrototypeMethod(tpl, "needsUpdate", needsUpdate);
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
@@ -160,6 +162,27 @@ NAN_METHOD(Line::isLineOpenSource) {
   }
   bool source = gpiod_line_is_open_source(obj->getNativeLine());
   info.GetReturnValue().Set(source);
+}
+
+NAN_METHOD(Line::update) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::update() for line==NULL"));
+    return;
+  }
+  if (gpiod_line_update(obj->getNativeLine()) < 0) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "line update failed"));
+  }
+}
+
+NAN_METHOD(Line::needsUpdate) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::needsUpdate() for line==NULL"));
+    return;
+  }
+  bool need = gpiod_line_needs_update(obj->getNativeLine());
+  info.GetReturnValue().Set(need);
 }
 
 NAN_METHOD(Line::getValue) {

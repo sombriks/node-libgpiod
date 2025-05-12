@@ -210,12 +210,13 @@ for more sample code
 
 ## Roadmap
 
-- [X] basic read/write
-- [X] basic instant read/write
+- [X] Basic read/write
+- [X] Basic instant read/write
 - [X] Chip/Line abstractions
+- [X] [Simulator configuration][sim-config]
 - [ ] GPIO monitoring callbacks
 - [ ] Bulk read/write
-- [ ] Complete API parity with underlying C library
+- [ ] Test cases covering entire gpiod API
 
 All features present on libgpiod eventually will be added to node bindings, then
 the node package will finally enter in 1.x series.
@@ -289,3 +290,4 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 [changelog]: docs/CHANGELOG.md
 [project-updates]: https://github.com/sombriks/node-libgpiod/discussions/31
 [input-flags]: ./lib/line-flags.js
+[sim-config]: ./test/prepare-gpio-sim.sh
