@@ -39,7 +39,6 @@ describe('libgpiod chip bindings', () => {
 	it('should get line names', done => {
 		const chip0 = new gpiod.Chip('0');
 		const result = chip0.getLineNames();
-		console.log(result);
 		expect(result).to.be.an('array');
 		expect(result.length).eq(numLines);
 		expect(result[17]).to.be.eq('GPIO17');

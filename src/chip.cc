@@ -17,10 +17,15 @@ NAN_MODULE_INIT(Chip::Init) {
 }
 
 Chip::Chip(const char *device) {
-  chip = gpiod_chip_open_lookup(device);
-  std::string msg = "Chip::new - Unable to open device ";
-  msg = msg + device;
-  if (!chip) Nan::ThrowError(Nan::ErrnoException(errno, msg.c_str()));
+  if (!device || strcmp(device, "undefined") == 0)
+    chip = gpiod_chip_open_by_number(0);
+  else
+    chip = gpiod_chip_open_lookup(device);
+  if (!chip) {
+    std::string msg = "Chip::new - Unable to open device ";
+    msg = msg + device;
+    Nan::ThrowError(Nan::ErrnoException(errno, msg.c_str()));
+  }
 }
 
 Chip::~Chip() {

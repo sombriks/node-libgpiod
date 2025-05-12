@@ -129,6 +129,21 @@ for more sample code
   the [2.x branch][libgpiod-2x] (under development) will handle 2.x while 0.x
   and 1.x will support libgpiod 1.x series.
 
+- lines should not be defined twice. if, for example, line 19 was defined in the
+  program already, then it shall not be redefined _unless_ it gets
+  [**released** first][line-release]:
+
+  ```javascript
+  // ...
+  let l17 = new Line(chip0, 17)
+  l17.requestOutputMode()
+  l17.setValue(1)
+
+  l17 = new Line(chip0, 17) // ERROR: we didn't release the previous one
+  l17.requestOutputMode()
+  l17.setValue(1)
+  ```
+
 - gpio character device needs [special udev rules][udev-rules] in order
   to belong to a special group so non-root users could access it freely
 
@@ -223,11 +238,15 @@ This is the api parity table:
 | get line by name or number                   | Chip  | -                              | getLine               |
 | get line/pin offset number                   | Line  | gpiod_line_offset              | getLineOffset         |
 | get line/pin name                            | Line  | gpiod_line_name                | getLineName           |
-| get line/pin value                           | Line  | gpiod_line_get_value           | getValue              |
-| set line/pin value                           | Line  | gpiod_line_set_value           | setValue              |
 | get line consumer                            | Line  | gpiod_line_consumer            | getLineConsumer       |
 | get line direction                           | Line  | gpiod_line_direction           | getLineDirection      |
 | get line active state                        | Line  | gpiod_line_active_state        | getLineActiveState    |
+| get line bias                                | Line  | gpiod_line_bias                | getLineBias           |
+| check if line is used                        | Line  | gpiod_line_is_used             | isLineUsed            |
+| check if line is open drain                  | Line  | gpiod_line_is_open_drain       | isLineOpenDrain       |
+| check if line is open source                 | Line  | gpiod_line_is_open_source      | isLineOpenSource      |
+| get line/pin value                           | Line  | gpiod_line_get_value           | getValue              |
+| set line/pin value                           | Line  | gpiod_line_set_value           | setValue              |
 | set line for input (read)                    | Line  | gpiod_line_request_input       | requestInputMode      |
 | set line for input with [flags][input-flags] | Line  | gpiod_line_request_input_flags | requestInputModeFlags |
 | set line for output (write)                  | Line  | gpiod_line_request_output      | requestOutputMode     |
@@ -263,7 +282,8 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 [ROCK5A]: https://radxa.com/products/rock5/5a
 [ROCK3C]: https://radxa.com/products/rock3/3c
 [libgpiod-2x]: https://github.com/sombriks/node-libgpiod/tree/main-2x
-[test-suite]: test
+[line-release]: ./test/issues/issue-4.spec.js
+[test-suite]: ./test
 [examples]: https://github.com/sombriks/node-libgpiod-examples
 [udev-rules]: https://blog.oless.xyz/post/fedorarpigpio/#udev
 [changelog]: docs/CHANGELOG.md

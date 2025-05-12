@@ -12,6 +12,10 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "getLineConsumer", getLineConsumer);
   Nan::SetPrototypeMethod(tpl, "getLineDirection", getLineDirection);
   Nan::SetPrototypeMethod(tpl, "getLineActiveState", getLineActiveState);
+  Nan::SetPrototypeMethod(tpl, "getLineBias", getLineBias);
+  Nan::SetPrototypeMethod(tpl, "isLineUsed", isLineUsed);
+  Nan::SetPrototypeMethod(tpl, "isLineOpenDrain", isLineOpenDrain);
+  Nan::SetPrototypeMethod(tpl, "isLineOpenSource", isLineOpenSource);
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
@@ -118,6 +122,46 @@ NAN_METHOD(Line::getLineActiveState) {
   info.GetReturnValue().Set(activeState);
 }
 
+NAN_METHOD(Line::getLineBias) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineBias() for line==NULL"));
+    return;
+  }
+  int bias = gpiod_line_bias(obj->getNativeLine());
+  info.GetReturnValue().Set(bias);
+}
+
+NAN_METHOD(Line::isLineUsed) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineUsed() for line==NULL"));
+    return;
+  }
+  bool used = gpiod_line_is_used(obj->getNativeLine());
+  info.GetReturnValue().Set(used);
+}
+
+NAN_METHOD(Line::isLineOpenDrain) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineOpenDrain() for line==NULL"));
+    return;
+  }
+  bool drain = gpiod_line_is_open_drain(obj->getNativeLine());
+  info.GetReturnValue().Set(drain);
+}
+
+NAN_METHOD(Line::isLineOpenSource) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineOpenSource() for line==NULL"));
+    return;
+  }
+  bool source = gpiod_line_is_open_source(obj->getNativeLine());
+  info.GetReturnValue().Set(source);
+}
+
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
   if (!obj->line) {
@@ -127,8 +171,9 @@ NAN_METHOD(Line::getValue) {
   int ret = gpiod_line_get_value(obj->getNativeLine());
   if (-1 == ret) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getValue"));
-  } else
+  } else {
     info.GetReturnValue().Set(ret);
+  }
 }
 
 NAN_METHOD(Line::setValue) {

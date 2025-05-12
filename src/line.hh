@@ -22,6 +22,10 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(getLineConsumer);
   static NAN_METHOD(getLineDirection);
   static NAN_METHOD(getLineActiveState);
+  static NAN_METHOD(getLineBias);
+  static NAN_METHOD(isLineUsed);
+  static NAN_METHOD(isLineOpenDrain);
+  static NAN_METHOD(isLineOpenSource);
 
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);

@@ -3,6 +3,7 @@
 
 #include <gpiod.h>
 #include <nan.h>
+#include <string.h>
 
 class Chip : public Nan::ObjectWrap {
  public:
@@ -10,7 +11,7 @@ class Chip : public Nan::ObjectWrap {
   gpiod_chip* getNativeChip();
 
  private:
-  explicit Chip(const char* device = "0");
+  explicit Chip(const char* device);
   ~Chip();
 
   static NAN_METHOD(getChipName);

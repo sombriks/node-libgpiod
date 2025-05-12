@@ -131,16 +131,71 @@ describe('libgpiod line bindings', () => {
 		done();
 	});
 
-	it("should get line active state", done => {
+	it("should get line 17 active state", done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		let line17 = chip0.getLine(17);
 		expect(1).eq(line17.getLineActiveState());
 		line17.release();
 
+		done();
+	});
+
+	it("should get line 18 active state", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
 		const line18 = chip0.getLine("GPIO18");
-		expect(2).eq(line18.getLineActiveState());
+		line18.requestOutputMode();
+		line18.setValue(1);
+		expect(1).eq(line18.getLineActiveState());
 		line18.release();
 
 		done();
 	});
+
+	it("should get line 18 bias", done => {
+		const chip0 = new gpiod.Chip();
+		const line18 = chip0.getLine("GPIO18");
+		line18.requestOutputMode();
+		line18.setValue(1);
+		expect(1).eq(line18.getLineBias());
+		line18.release();
+
+		done();
+	});
+
+	it("should check if line 17 is not used", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		expect(false).eq(line17.isLineUsed());
+		line17.release();
+
+		done();
+	});
+
+	it("should check if line 18 is used", done => {
+		const chip0 = new gpiod.Chip();
+		const line18 = chip0.getLine(18);
+		expect(true).eq(line18.isLineUsed());
+		line18.release();
+
+		done();
+	});
+
+	it("should check if line 17 is not open drain", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		expect(false).eq(line17.isLineOpenDrain());
+		line17.release();
+
+		done();
+	});
+
+	it("should check if line 17 is not open source", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		expect(false).eq(line17.isLineOpenSource());
+		line17.release();
+
+		done();
+	});
+
 });
