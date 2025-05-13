@@ -18,11 +18,15 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "isLineOpenSource", isLineOpenSource);
   Nan::SetPrototypeMethod(tpl, "update", update);
   Nan::SetPrototypeMethod(tpl, "needsUpdate", needsUpdate);
+
   Nan::SetPrototypeMethod(tpl, "getValue", getValue);
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
+
+  Nan::SetPrototypeMethod(tpl, "lineRequest", lineRequest);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
   Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
+
   Nan::SetPrototypeMethod(tpl, "release", release);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
@@ -45,7 +49,7 @@ Line::Line(Chip *chip, const char *name) {
 
 Line::~Line() {
   if (!line) return;
-  gpiod_line_close_chip(line);
+  gpiod_line_release(line);
   line = NULL;
 }
 
@@ -187,10 +191,6 @@ NAN_METHOD(Line::needsUpdate) {
 
 NAN_METHOD(Line::getValue) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getValue() for line==NULL"));
-    return;
-  }
   int ret = gpiod_line_get_value(obj->getNativeLine());
   if (-1 == ret) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getValue"));
@@ -205,6 +205,60 @@ NAN_METHOD(Line::setValue) {
   uint32_t value = info[0]->Uint32Value(context).FromJust();
   if (gpiod_line_set_value(obj->line, value) == -1) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::setValue"));
+  }
+}
+
+NAN_METHOD(Line::lineRequest) {
+  Line *obj = ObjectWrap::Unwrap<Line>(info.Holder());
+  if (!obj->line) {  // TODO null if line was released. need a better way.
+    Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest() for line==NULL"));
+    return;
+  }
+
+  v8::Local<v8::Context> context = Nan::GetCurrentContext();
+  struct gpiod_line_request_config config;
+  if (!info[0]->IsObject()) {
+    Nan::ThrowError(Nan::Error("::lineRequest config is not an object"));
+    return;
+  }
+  v8::Local<v8::Object> jsObj = info[0]->ToObject(context).ToLocalChecked();
+
+  v8::MaybeLocal<v8::Value> consumer = jsObj->Get(context, Nan::New("consumer").ToLocalChecked());
+  if (consumer.IsEmpty()) {
+    Nan::ThrowError(Nan::Error("::lineRequest config.consumer is not a string"));
+    return;
+  }
+  config.consumer = *Nan::Utf8String(consumer.ToLocalChecked());
+
+  v8::Local<v8::Value>
+      requestType = jsObj->Get(context, Nan::New("requestType").ToLocalChecked()).ToLocalChecked();
+  if (requestType.IsEmpty() || !requestType->IsNumber()) {
+    Nan::ThrowError(Nan::Error("::lineRequest config.requestType is not a number"));
+    return;
+  }
+  config.request_type = Nan::To<int>(requestType).FromJust();
+
+  config.flags = 0;
+  v8::Local<v8::Value> flags = jsObj->Get(context, Nan::New("flags").ToLocalChecked()).ToLocalChecked();
+  if (!flags.IsEmpty() && !flags->IsUndefined()) {
+    if (!flags->IsNumber()) {
+      Nan::ThrowError(Nan::Error("::lineRequest config.flags is not a number"));
+      return;
+    }
+    config.flags = Nan::To<int>(flags).FromJust();
+  }
+
+  int defaultValue = 0;
+  if (info[1]->IsNumber()) {
+    defaultValue = Nan::To<int>(info[1]).FromJust();
+  }
+
+  printf("lineRequest: consumer=%s, ", config.consumer);
+  printf("requestType=%d, flags=%d, defaultValue=%d\n",
+         config.request_type, config.flags, defaultValue);
+
+  if (gpiod_line_request(obj->getNativeLine(), &config, defaultValue) == -1) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest"));
   }
 }
 

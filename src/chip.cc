@@ -108,8 +108,8 @@ NAN_METHOD(Chip::getLineNames) {
       names->Set(info.GetIsolate()->GetCurrentContext(), i,  //
                  Nan::New<v8::String>(name).ToLocalChecked());
     }
-    // free(bulk.lines[i]); // TODO: check if this is needed
   }
+  gpiod_line_release_bulk(&bulk);
   info.GetReturnValue()
       .Set(names);
 }

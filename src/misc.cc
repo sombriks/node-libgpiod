@@ -18,7 +18,7 @@ NAN_METHOD(getInstantLineValue) {
     return;
   }
 
-  info.GetReturnValue().Set(Nan::New<v8::Integer>(value));
+  info.GetReturnValue().Set(value);
 }
 
 NAN_METHOD(setInstantLineValue) {
@@ -33,5 +33,5 @@ NAN_METHOD(setInstantLineValue) {
     return;
   }
 
-  info.GetReturnValue().Set(true);
+  info.GetReturnValue().Set(1);
 }

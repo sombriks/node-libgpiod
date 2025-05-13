@@ -29,6 +29,8 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(update);
   static NAN_METHOD(needsUpdate);
 
+  static NAN_METHOD(lineRequest);
+
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
 

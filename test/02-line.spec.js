@@ -219,4 +219,13 @@ describe('libgpiod line bindings', () => {
 		done();
 	});
 
+	it("should request line 17", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		// TODO need better scenarios 
+		line17.lineRequest({ consumer: "X", requestType: 1, flags: 0 }, 1)
+		line17.release();
+		done();
+	});
+
 });
