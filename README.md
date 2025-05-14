@@ -246,11 +246,14 @@ This is the api parity table:
 | check if line is used                        | Line  | gpiod_line_is_used             | isLineUsed            |
 | check if line is open drain                  | Line  | gpiod_line_is_open_drain       | isLineOpenDrain       |
 | check if line is open source                 | Line  | gpiod_line_is_open_source      | isLineOpenSource      |
+| update line info                             | Line  | gpiod_line_update              | update                |
+| check if line needs update                   | Line  | gpiod_line_needs_update        | isLineOpenSource      |
 | get line/pin value                           | Line  | gpiod_line_get_value           | getValue              |
 | set line/pin value                           | Line  | gpiod_line_set_value           | setValue              |
-| set line for input (read)                    | Line  | gpiod_line_request_input       | requestInputMode      |
-| set line for input with [flags][input-flags] | Line  | gpiod_line_request_input_flags | requestInputModeFlags |
-| set line for output (write)                  | Line  | gpiod_line_request_output      | requestOutputMode     |
+| request line (pass config options)           | Line  | gpiod_line_request             | lineRequest           |
+| request line for input (read)                | Line  | gpiod_line_request_input       | requestInputMode      |
+| request for input with [flags][input-flags]  | Line  | gpiod_line_request_input_flags | requestInputModeFlags |
+| request line for output (write)              | Line  | gpiod_line_request_output      | requestOutputMode     |
 | release the line                             | Line  | gpiod_line_release             | release               |
 
 ## Other implementations

@@ -200,7 +200,7 @@ NAN_METHOD(Line::getValue) {
 }
 
 NAN_METHOD(Line::setValue) {
-  Line *obj = ObjectWrap::Unwrap<Line>(info.Holder());
+  Line *obj = ObjectWrap::Unwrap<Line>(info.This());
   v8::Local<v8::Context> context = Nan::GetCurrentContext();
   uint32_t value = info[0]->Uint32Value(context).FromJust();
   if (gpiod_line_set_value(obj->line, value) == -1) {
@@ -209,7 +209,7 @@ NAN_METHOD(Line::setValue) {
 }
 
 NAN_METHOD(Line::lineRequest) {
-  Line *obj = ObjectWrap::Unwrap<Line>(info.Holder());
+  Line *obj = ObjectWrap::Unwrap<Line>(info.This());
   if (!obj->line) {  // TODO null if line was released. need a better way.
     Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest() for line==NULL"));
     return;
@@ -252,10 +252,6 @@ NAN_METHOD(Line::lineRequest) {
   if (info[1]->IsNumber()) {
     defaultValue = Nan::To<int>(info[1]).FromJust();
   }
-
-  printf("lineRequest: consumer=%s, ", config.consumer);
-  printf("requestType=%d, flags=%d, defaultValue=%d\n",
-         config.request_type, config.flags, defaultValue);
 
   if (gpiod_line_request(obj->getNativeLine(), &config, defaultValue) == -1) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest"));
