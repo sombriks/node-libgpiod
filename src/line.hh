@@ -29,15 +29,17 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(update);
   static NAN_METHOD(needsUpdate);
 
-  static NAN_METHOD(lineRequest);
-
   static NAN_METHOD(getValue);
   static NAN_METHOD(setValue);
 
+  static NAN_METHOD(lineRequest);
   static NAN_METHOD(requestInputMode);
-  static NAN_METHOD(requestInputModeFlags);
-
   static NAN_METHOD(requestOutputMode);
+  static NAN_METHOD(requestRisingEdgeEvents);
+  static NAN_METHOD(requestFallingEdgeEvents);
+  static NAN_METHOD(requestBothEdgesEvents);
+
+  static NAN_METHOD(requestInputModeFlags);
 
   static NAN_METHOD(release);
 

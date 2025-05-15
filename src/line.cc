@@ -24,8 +24,11 @@ NAN_MODULE_INIT(Line::Init) {
 
   Nan::SetPrototypeMethod(tpl, "lineRequest", lineRequest);
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
-  Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
+  Nan::SetPrototypeMethod(tpl, "requestRisingEdgeEvents", requestRisingEdgeEvents);
+  Nan::SetPrototypeMethod(tpl, "requestFallingEdgeEvents", requestFallingEdgeEvents);
+  Nan::SetPrototypeMethod(tpl, "requestBothEdgesEvents", requestBothEdgesEvents);
+  Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
 
   Nan::SetPrototypeMethod(tpl, "release", release);
 
@@ -224,10 +227,6 @@ NAN_METHOD(Line::lineRequest) {
   v8::Local<v8::Object> jsObj = info[0]->ToObject(context).ToLocalChecked();
 
   v8::MaybeLocal<v8::Value> consumer = jsObj->Get(context, Nan::New("consumer").ToLocalChecked());
-  if (consumer.IsEmpty()) {
-    Nan::ThrowError(Nan::Error("::lineRequest config.consumer is not a string"));
-    return;
-  }
   config.consumer = *Nan::Utf8String(consumer.ToLocalChecked());
 
   v8::Local<v8::Value>
@@ -264,21 +263,10 @@ NAN_METHOD(Line::requestInputMode) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputMode() for line==NULL"));
     return;
   }
+
   Nan::Utf8String consumer(info[0]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputMode"));
-}
-
-NAN_METHOD(Line::requestInputModeFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
-  if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags"));
 }
 
 NAN_METHOD(Line::requestOutputMode) {
@@ -287,6 +275,7 @@ NAN_METHOD(Line::requestOutputMode) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputMode() for line==NULL"));
     return;
   }
+
   unsigned int value = 0;
   v8::Local<v8::Value> defaultValue = info[0];
   if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {
@@ -301,6 +290,54 @@ NAN_METHOD(Line::requestOutputMode) {
   Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputMode"));
+}
+
+NAN_METHOD(Line::requestRisingEdgeEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEvents for line==NULL"));
+    return;
+  }
+
+  Nan::Utf8String consumer(info[0]);
+  if (-1 == gpiod_line_request_rising_edge_events(obj->getNativeLine(), *consumer))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEvents"));
+}
+
+NAN_METHOD(Line::requestFallingEdgeEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEvents for line==NULL"));
+    return;
+  }
+
+  Nan::Utf8String consumer(info[0]);
+  if (-1 == gpiod_line_request_falling_edge_events(obj->getNativeLine(), *consumer))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEvents"));
+}
+
+NAN_METHOD(Line::requestBothEdgesEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEvents for line==NULL"));
+    return;
+  }
+
+  Nan::Utf8String consumer(info[0]);
+  if (-1 == gpiod_line_request_both_edges_events(obj->getNativeLine(), *consumer))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEvents"));
+}
+
+NAN_METHOD(Line::requestInputModeFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags for line==NULL"));
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags"));
 }
 
 NAN_METHOD(Line::release) {

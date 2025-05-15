@@ -87,18 +87,19 @@ describe('libgpiod line bindings', () => {
 	it('should get line consumer', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 
-		let line13 = chip0.getLine(13);
-		expect(undefined).eq(line13.getLineConsumer());
+		const line18 = chip0.getLine(18);
+		expect("hog1").eq(line18.getLineConsumer());
+		line18.release();
 
-		line13.requestInputMode("foobar");
-		expect("foobar").eq(line13.getLineConsumer());
-		line13.release();
+		const line19 = chip0.getLine(19);
+		expect("hog2").eq(line19.getLineConsumer());
+		line19.release();
 
-		line13 = chip0.getLine(13);
-		line13.requestInputMode("quix");
-		consumer = line13.getLineConsumer();
-		expect("quix").eq(consumer);
-		line13.release();
+		const line17 = chip0.getLine(17);
+		line17.requestOutputMode(1, "X");
+		consumer = line17.getLineConsumer();
+		expect("X").eq(consumer);
+		line17.release();
 
 		done();
 	});
@@ -219,11 +220,35 @@ describe('libgpiod line bindings', () => {
 		done();
 	});
 
-	it("should request line 17", done => {
+	it("should request line 17 with config options", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
 		// TODO need better scenarios 
-		line17.lineRequest({ consumer: "X", requestType: 1, flags: 0 }, 1)
+		line17.lineRequest({ requestType: 1, consumer: "X", flags: 0 }, 1);
+		line17.release();
+		done();
+	});
+
+	it("should request rising edge events on line 17", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		line17.requestRisingEdgeEvents();
+		line17.release();
+		done();
+	});
+
+	it("should request falling edge events on line 17", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		line17.requestFallingEdgeEvents();
+		line17.release();
+		done();
+	});
+
+	it("should request both edges events on line 17", done => {
+		const chip0 = new gpiod.Chip(0);
+		const line17 = chip0.getLine(17);
+		line17.requestBothEdgesEvents();
 		line17.release();
 		done();
 	});
