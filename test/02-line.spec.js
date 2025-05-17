@@ -104,19 +104,6 @@ describe('libgpiod line bindings', () => {
 		done();
 	});
 
-	it("should request input mode with flags", done => {
-		const chip0 = new gpiod.Chip('gpiochip0');
-
-		let line13 = chip0.getLine(13);
-
-		line13.requestInputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN);
-		consumer = line13.getLineConsumer();
-		expect("foobar").eq(consumer);
-		line13.release();
-
-		done();
-	});
-
 	it("should get line direction", done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		let line17 = chip0.getLine(17);
@@ -250,6 +237,32 @@ describe('libgpiod line bindings', () => {
 		const line17 = chip0.getLine(17);
 		line17.requestBothEdgesEvents();
 		line17.release();
+		done();
+	});
+
+	it("should request input mode with flags", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+
+		let line13 = chip0.getLine(13);
+
+		line13.requestInputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN);
+		consumer = line13.getLineConsumer();
+		expect("foobar").eq(consumer);
+		line13.release();
+
+		done();
+	});
+
+	it("should request output mode with flags", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+
+		let line13 = chip0.getLine(13);
+
+		line13.requestOutputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
+		consumer = line13.getLineConsumer();
+		expect("foobar").eq(consumer);
+		line13.release();
+
 		done();
 	});
 

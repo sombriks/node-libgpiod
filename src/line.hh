@@ -33,6 +33,7 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(setValue);
 
   static NAN_METHOD(lineRequest);
+
   static NAN_METHOD(requestInputMode);
   static NAN_METHOD(requestOutputMode);
   static NAN_METHOD(requestRisingEdgeEvents);
@@ -40,6 +41,7 @@ class Line : public Nan::ObjectWrap {
   static NAN_METHOD(requestBothEdgesEvents);
 
   static NAN_METHOD(requestInputModeFlags);
+  static NAN_METHOD(requestOutputModeFlags);
 
   static NAN_METHOD(release);
 

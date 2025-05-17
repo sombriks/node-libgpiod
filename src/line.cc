@@ -23,12 +23,15 @@ NAN_MODULE_INIT(Line::Init) {
   Nan::SetPrototypeMethod(tpl, "setValue", setValue);
 
   Nan::SetPrototypeMethod(tpl, "lineRequest", lineRequest);
+
   Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
   Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
   Nan::SetPrototypeMethod(tpl, "requestRisingEdgeEvents", requestRisingEdgeEvents);
   Nan::SetPrototypeMethod(tpl, "requestFallingEdgeEvents", requestFallingEdgeEvents);
   Nan::SetPrototypeMethod(tpl, "requestBothEdgesEvents", requestBothEdgesEvents);
+
   Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
+  Nan::SetPrototypeMethod(tpl, "requestOutputModeFlags", requestOutputModeFlags);
 
   Nan::SetPrototypeMethod(tpl, "release", release);
 
@@ -338,6 +341,19 @@ NAN_METHOD(Line::requestInputModeFlags) {
   int flags = Nan::To<int>(info[1]).FromJust();
   if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags"));
+}
+
+NAN_METHOD(Line::requestOutputModeFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputModeFlags for line==NULL"));
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  int defaultValue = Nan::To<int>(info[2]).FromJust();
+  if (-1 == gpiod_line_request_output_flags(obj->getNativeLine(), *consumer, flags, defaultValue))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputModeFlags"));
 }
 
 NAN_METHOD(Line::release) {
