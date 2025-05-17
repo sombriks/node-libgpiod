@@ -228,33 +228,37 @@ details.
 
 This is the api parity table:
 
-| Description                                  | Scope | C                              | Node                  |
-|----------------------------------------------|-------|--------------------------------|-----------------------|
-| get line's instant value                     | Misc  | gpiod_ctxless_get_value        | getInstantLineValue   |
-| set line's instant value                     | Misc  | gpiod_ctxless_set_value        | setInstantLineValue   |
-| get chip name                                | Chip  | gpiod_chip_name                | getChipName           |
-| get chip label                               | Chip  | gpiod_chip_label               | getChipLabel          |
-| get number of lines in a chip                | Chip  | gpiod_chip_num_lines           | getNumberOfLines      |
-| get all line names from chip                 | Chip  | -                              | getLineNames          |
-| get line by name or number                   | Chip  | -                              | getLine               |
-| get line/pin offset number                   | Line  | gpiod_line_offset              | getLineOffset         |
-| get line/pin name                            | Line  | gpiod_line_name                | getLineName           |
-| get line consumer                            | Line  | gpiod_line_consumer            | getLineConsumer       |
-| get line direction                           | Line  | gpiod_line_direction           | getLineDirection      |
-| get line active state                        | Line  | gpiod_line_active_state        | getLineActiveState    |
-| get line bias                                | Line  | gpiod_line_bias                | getLineBias           |
-| check if line is used                        | Line  | gpiod_line_is_used             | isLineUsed            |
-| check if line is open drain                  | Line  | gpiod_line_is_open_drain       | isLineOpenDrain       |
-| check if line is open source                 | Line  | gpiod_line_is_open_source      | isLineOpenSource      |
-| update line info                             | Line  | gpiod_line_update              | update                |
-| check if line needs update                   | Line  | gpiod_line_needs_update        | isLineOpenSource      |
-| get line/pin value                           | Line  | gpiod_line_get_value           | getValue              |
-| set line/pin value                           | Line  | gpiod_line_set_value           | setValue              |
-| request line (pass config options)           | Line  | gpiod_line_request             | lineRequest           |
-| request line for input (read)                | Line  | gpiod_line_request_input       | requestInputMode      |
-| request for input with [flags][input-flags]  | Line  | gpiod_line_request_input_flags | requestInputModeFlags |
-| request line for output (write)              | Line  | gpiod_line_request_output      | requestOutputMode     |
-| release the line                             | Line  | gpiod_line_release             | release               |
+| Description                             | Scope | C                                      | Node                     |
+|-----------------------------------------|-------|----------------------------------------|--------------------------|
+| get line's instant value                | Misc  | gpiod_ctxless_get_value                | getInstantLineValue      |
+| set line's instant value                | Misc  | gpiod_ctxless_set_value                | setInstantLineValue      |
+| get chip name                           | Chip  | gpiod_chip_name                        | getChipName              |
+| get chip label                          | Chip  | gpiod_chip_label                       | getChipLabel             |
+| get number of lines in a chip           | Chip  | gpiod_chip_num_lines                   | getNumberOfLines         |
+| get all line names from chip            | Chip  | -                                      | getLineNames             |
+| get line by name or number              | Chip  | -                                      | getLine                  |
+| get line/pin offset number              | Line  | gpiod_line_offset                      | getLineOffset            |
+| get line/pin name                       | Line  | gpiod_line_name                        | getLineName              |
+| get line consumer                       | Line  | gpiod_line_consumer                    | getLineConsumer          |
+| get line direction                      | Line  | gpiod_line_direction                   | getLineDirection         |
+| get line active state                   | Line  | gpiod_line_active_state                | getLineActiveState       |
+| get line bias                           | Line  | gpiod_line_bias                        | getLineBias              |
+| check if line is used                   | Line  | gpiod_line_is_used                     | isLineUsed               |
+| check if line is open drain             | Line  | gpiod_line_is_open_drain               | isLineOpenDrain          |
+| check if line is open source            | Line  | gpiod_line_is_open_source              | isLineOpenSource         |
+| update line info                        | Line  | gpiod_line_update                      | update                   |
+| check if line needs update              | Line  | gpiod_line_needs_update                | isLineOpenSource         |
+| get line/pin value                      | Line  | gpiod_line_get_value                   | getValue                 |
+| set line/pin value                      | Line  | gpiod_line_set_value                   | setValue                 |
+| request line (pass config options)      | Line  | gpiod_line_request                     | lineRequest              |
+| request line for input                  | Line  | gpiod_line_request_input               | requestInputMode         |
+| request line for output                 | Line  | gpiod_line_request_output              | requestOutputMode        |
+| request rising edge events              | Line  | gpiod_line_request_rising_edge_events  | requestRisingEdgeEvents  |
+| request falling edge events             | Line  | gpiod_line_request_falling_edge_events | requestFallingEdgeEvents |
+| request both edges events               | Line  | gpiod_line_request_both_edges_events   | requestBothEdgesEvents   |
+| request input with [flags][line-flags]  | Line  | gpiod_line_request_input_flags         | requestInputModeFlags    |
+| request output with [flags][line-flags] | Line  | gpiod_line_request_output_flags        | requestOutputModeFlags   |
+| release the line                        | Line  | gpiod_line_release                     | release                  |
 
 ## Other implementations
 
@@ -292,5 +296,5 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 [udev-rules]: https://blog.oless.xyz/post/fedorarpigpio/#udev
 [changelog]: docs/CHANGELOG.md
 [project-updates]: https://github.com/sombriks/node-libgpiod/discussions/31
-[input-flags]: ./lib/line-flags.js
+[line-flags]: ./lib/line-flags.js
 [sim-config]: ./test/prepare-gpio-sim.sh
