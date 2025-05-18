@@ -246,7 +246,7 @@ describe('libgpiod line bindings', () => {
 		let line13 = chip0.getLine(13);
 
 		line13.requestInputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN);
-		consumer = line13.getLineConsumer();
+		const consumer = line13.getLineConsumer();
 		expect("foobar").eq(consumer);
 		line13.release();
 
@@ -259,7 +259,46 @@ describe('libgpiod line bindings', () => {
 		let line13 = chip0.getLine(13);
 
 		line13.requestOutputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
-		consumer = line13.getLineConsumer();
+		const consumer = line13.getLineConsumer();
+		expect("foobar").eq(consumer);
+		line13.release();
+
+		done();
+	});
+
+	it("should request rising edge events with flags", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+
+		let line13 = chip0.getLine(13);
+
+		line13.requestRisingEdgeEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
+		const consumer = line13.getLineConsumer();
+		expect("foobar").eq(consumer);
+		line13.release();
+
+		done();
+	});
+
+	it("should request falling edge events with flags", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+
+		let line13 = chip0.getLine(13);
+
+		line13.requestFallingEdgeEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
+		const consumer = line13.getLineConsumer();
+		expect("foobar").eq(consumer);
+		line13.release();
+
+		done();
+	});
+
+	it("should request both edges events with flags", done => {
+		const chip0 = new gpiod.Chip('gpiochip0');
+
+		let line13 = chip0.getLine(13);
+
+		line13.requestBothEdgesEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
+		const consumer = line13.getLineConsumer();
 		expect("foobar").eq(consumer);
 		line13.release();
 

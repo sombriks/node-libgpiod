@@ -32,6 +32,9 @@ NAN_MODULE_INIT(Line::Init) {
 
   Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
   Nan::SetPrototypeMethod(tpl, "requestOutputModeFlags", requestOutputModeFlags);
+  Nan::SetPrototypeMethod(tpl, "requestRisingEdgeEventFlags", requestRisingEdgeEventFlags);
+  Nan::SetPrototypeMethod(tpl, "requestFallingEdgeEventFlags", requestFallingEdgeEventFlags);
+  Nan::SetPrototypeMethod(tpl, "requestBothEdgesEventFlags", requestBothEdgesEventFlags);
 
   Nan::SetPrototypeMethod(tpl, "release", release);
 
@@ -354,6 +357,42 @@ NAN_METHOD(Line::requestOutputModeFlags) {
   int defaultValue = Nan::To<int>(info[2]).FromJust();
   if (-1 == gpiod_line_request_output_flags(obj->getNativeLine(), *consumer, flags, defaultValue))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputModeFlags"));
+}
+
+NAN_METHOD(Line::requestRisingEdgeEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEventFlags for line==NULL"));
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_rising_edge_events_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEventFlags"));
+}
+
+NAN_METHOD(Line::requestFallingEdgeEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEventFlags for line==NULL"));
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_falling_edge_events_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEventFlags"));
+}
+
+NAN_METHOD(Line::requestBothEdgesEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+  if (!obj->line) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEventFlags for line==NULL"));
+    return;
+  }
+  Nan::Utf8String consumer(info[0]);
+  int flags = Nan::To<int>(info[1]).FromJust();
+  if (-1 == gpiod_line_request_both_edges_events_flags(obj->getNativeLine(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEventFlags"));
 }
 
 NAN_METHOD(Line::release) {
