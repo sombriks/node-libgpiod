@@ -1,59 +1,59 @@
-const { expect } = require('chai');
-const gpiod = require('..');
+const { expect } = require('chai')
+const gpiod = require('..')
 
 describe('libgpiod chip bindings', () => {
 
-	// 40 for our gpio-sim setup, 54 for raspberry pi zero 
+	// 40 for our gpio-sim setup, 54 for raspberry pi zero , 32 for radxa rock-3c
 	const numLines = process.env.NUM_LINES ?? 40
 
 	it('should \'create\' a new chip by number', done => {
-		const chip0 = new gpiod.Chip('0');
-		expect(chip0.getNumberOfLines()).eq(numLines);
-		done();
-	});
+		const chip0 = new gpiod.Chip(0)
+		expect('gpiochip0').eq(chip0.name)
+		done()
+	})
 
 	it('should \'create\' a new chip by name', done => {
-		const chip0 = new gpiod.Chip('gpiochip0');
-		expect(chip0.getNumberOfLines()).eq(numLines);
-		done();
-	});
+		const chip0 = new gpiod.Chip('gpiochip0')
+		expect(chip0.numberOfLines).eq(numLines)
+		done()
+	})
 
 	it('should \'create\' a new chip by path', done => {
-		const chip0 = new gpiod.Chip('/dev/gpiochip0');
-		expect(chip0.getNumberOfLines()).eq(numLines);
-		done();
-	});
+		const chip0 = new gpiod.Chip('/dev/gpiochip0')
+		expect(chip0.numberOfLines).eq(numLines)
+		done()
+	})
 
 	it('should NOT \'create\' a chip because it does not exists', done => {
 		try {
-			const chip0 = new gpiod.Chip('/dev/gpiochippuden');
-			chip0.getNumberOfLines()
+			const chip0 = new gpiod.Chip('/dev/gpiochip-0')
+			expect(chip0.numberOfLines).eq(numLines)
 		} catch (e) {
 			expect(e.errno).eq(2)
 			expect(e.code).eq("ENOENT")
-			expect(e.syscall).eq("Chip::new - Unable to open device /dev/gpiochippuden")
-			done();
+			expect(e.syscall).eq("Chip::new - Unable to open device /dev/gpiochip-0")
+			done()
 		}
-	});
+	})
 
 	it('should get line names', done => {
-		const chip0 = new gpiod.Chip('0');
-		const result = chip0.getLineNames();
-		expect(result).to.be.an('array');
-		expect(result.length).eq(numLines);
-		expect(result[17]).to.be.eq('GPIO17');
-		done();
-	});
+		const chip0 = new gpiod.Chip('0')
+		const result = chip0.lineNames
+		expect(result).to.be.an('array')
+		expect(result.length).eq(numLines)
+		expect(result[17]).to.be.eq('GPIO17')
+		done()
+	})
 
 	it('should get line names many times', done => {
-		const chip0 = new gpiod.Chip('0');
-		let result;
-		let i = 100;
-		while (i-- > 0) result = chip0.getLineNames();
-		expect(result).to.be.an('array');
-		expect(result.length).eq(numLines);
-		expect(result[17]).to.be.eq('GPIO17');
-		done();
-	});
+		const chip0 = new gpiod.Chip('0')
+		let result
+		let i = 1000
+		while (i-- > 0) result = chip0.lineNames
+		expect(result).to.be.an('array')
+		expect(result.length).eq(numLines)
+		expect(result[17]).to.be.eq('GPIO17')
+		done()
+	})
 
-});
+})

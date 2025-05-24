@@ -6,12 +6,6 @@ NAN_MODULE_INIT(Chip::Init) {
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
   tpl->SetClassName(Nan::New("Chip").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
-  Nan::SetPrototypeMethod(tpl, "getChipName", getChipName);
-  Nan::SetPrototypeMethod(tpl, "getChipLabel", getChipLabel);
-  Nan::SetPrototypeMethod(tpl, "getNumberOfLines", getNumberOfLines);
-  Nan::SetPrototypeMethod(tpl, "getLineNames", getLineNames);
-
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("Chip").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
@@ -49,25 +43,18 @@ NAN_METHOD(Chip::New) {
   }
 }
 
-NAN_METHOD(Chip::getChipName) {
-  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info.This());
-  if (!obj->chip) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getChipName() for chip==NULL"));
-    return;
-  }
+NAN_METHOD(getChipName) {
+  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *name = gpiod_chip_name(obj->getNativeChip());
   if (!name) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getChipName() failed"));
-  } else
+  } else {
     info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
+  }
 }
 
-NAN_METHOD(Chip::getChipLabel) {
-  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info.This());
-  if (!obj->chip) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getChipLabel() for chip==NULL"));
-    return;
-  }
+NAN_METHOD(getChipLabel) {
+  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *label = gpiod_chip_label(obj->getNativeChip());
   if (!label) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getChipLabel() failed"));
@@ -75,25 +62,18 @@ NAN_METHOD(Chip::getChipLabel) {
     info.GetReturnValue().Set(Nan::New<v8::String>(label).ToLocalChecked());
 }
 
-NAN_METHOD(Chip::getNumberOfLines) {
-  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info.This());
-  if (!obj->chip) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getNumberOfLines() for chip==NULL"));
-    return;
-  }
+NAN_METHOD(getNumberOfLines) {
+  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int ret = gpiod_chip_num_lines(obj->getNativeChip());
   if (-1 == ret) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getNumberOfLines() failed"));
-  } else
+  } else {
     info.GetReturnValue().Set(ret);
+  }
 }
 
-NAN_METHOD(Chip::getLineNames) {
-  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info.This());
-  if (!obj->chip) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineNames() for chip==NULL"));
-    return;
-  }
+NAN_METHOD(getLineNames) {
+  Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   struct gpiod_line_bulk bulk;
   gpiod_line_bulk_init(&bulk);
   if (gpiod_chip_get_all_lines(obj->getNativeChip(), &bulk) < 0) {
@@ -110,8 +90,7 @@ NAN_METHOD(Chip::getLineNames) {
     }
   }
   gpiod_line_release_bulk(&bulk);
-  info.GetReturnValue()
-      .Set(names);
+  info.GetReturnValue().Set(names);
 }
 
 gpiod_chip *Chip::getNativeChip() {
