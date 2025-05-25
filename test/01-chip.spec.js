@@ -5,6 +5,7 @@ describe('libgpiod chip bindings', () => {
 
 	// 40 for our gpio-sim setup, 54 for raspberry pi zero , 32 for radxa rock-3c
 	const numLines = process.env.NUM_LINES ?? 40
+	const chipLabel = process.env.LABEL ?? 'gpio-sim.0-node0'
 
 	it('should \'create\' a new chip by number', done => {
 		const chip0 = new gpiod.Chip(0)
@@ -20,7 +21,7 @@ describe('libgpiod chip bindings', () => {
 
 	it('should \'create\' a new chip by path', done => {
 		const chip0 = new gpiod.Chip('/dev/gpiochip0')
-		expect(chip0.numberOfLines).eq(numLines)
+		expect(chip0.label).eq(chipLabel)
 		done()
 	})
 
@@ -53,6 +54,14 @@ describe('libgpiod chip bindings', () => {
 		expect(result).to.be.an('array')
 		expect(result.length).eq(numLines)
 		expect(result[17]).to.be.eq('GPIO17')
+		done()
+	})
+
+	it('should get line', done => {
+		const chip0 = new gpiod.Chip('gpiochip0')
+		const line17 = chip0.getLine(17)
+		expect(line17).to.be.an('object')
+		line17.release && line17.release()
 		done()
 	})
 
