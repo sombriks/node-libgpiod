@@ -1,15 +1,5 @@
 #include "chip.hh"
 
-Nan::Persistent<v8::Function> Chip::constructor;
-
-NAN_MODULE_INIT(Chip::Init) {
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("Chip").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
-  Nan::Set(target, Nan::New("Chip").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
-}
-
 Chip::Chip(const char *device) {
   if (!device || strcmp(device, "undefined") == 0)
     chip = gpiod_chip_open_by_number(0);
@@ -26,6 +16,20 @@ Chip::~Chip() {
   if (!chip) return;
   gpiod_chip_close(chip);
   chip = NULL;
+}
+
+gpiod_chip *Chip::getNativeChip() {
+  return chip;
+}
+
+Nan::Persistent<v8::Function> Chip::constructor;
+
+NAN_MODULE_INIT(Chip::Init) {
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("Chip").ToLocalChecked());
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+  Nan::Set(target, Nan::New("Chip").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 NAN_METHOD(Chip::New) {
@@ -91,8 +95,4 @@ NAN_METHOD(getLineNames) {
   }
   gpiod_line_release_bulk(&bulk);
   info.GetReturnValue().Set(names);
-}
-
-gpiod_chip *Chip::getNativeChip() {
-  return chip;
 }
