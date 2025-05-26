@@ -7,6 +7,7 @@
                     "sources": [
                         "src/main.cc",
                         "src/misc.cc",
+                        "src/bulk.cc",
                         "src/chip.cc",
                         "src/line.cc"
                     ],

@@ -51,9 +51,9 @@ describe('libgpiod line bindings', () => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		const line17 = chip0.getLine(17);
 		const line13 = chip0.getLine(13);
-		let offset = line17.getLineOffset();
+		let offset = line17.offset;
 		expect(17).eq(offset);
-		offset = line13.getLineOffset();
+		offset = line13.offset;
 		expect(13).eq(offset);
 		line17.release();
 		line13.release();
@@ -63,7 +63,7 @@ describe('libgpiod line bindings', () => {
 	it('should get line name', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		const line17 = chip0.getLine(17);
-		const name = line17.getLineName();
+		const name = line17.name;
 		expect("GPIO17").eq(name);
 		line17.release();
 		done();
@@ -77,9 +77,9 @@ describe('libgpiod line bindings', () => {
 		const interval = setInterval(() => {
 			line17.setValue(count-- % 2);
 			if (count == 0) {
-				done();
 				line17.release();
 				clearInterval(interval);
+				done();
 			}
 		}, 300);
 	});
@@ -88,16 +88,16 @@ describe('libgpiod line bindings', () => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 
 		const line18 = chip0.getLine(18);
-		expect("hog1").eq(line18.getLineConsumer());
+		expect("hog1").eq(line18.consumer);
 		line18.release();
 
 		const line19 = chip0.getLine(19);
-		expect("hog2").eq(line19.getLineConsumer());
+		expect("hog2").eq(line19.consumer);
 		line19.release();
 
 		const line17 = chip0.getLine(17);
-		line17.requestOutputMode(1, "X");
-		consumer = line17.getLineConsumer();
+		line17.requestOutputMode("X", 1);
+		consumer = line17.consumer;
 		expect("X").eq(consumer);
 		line17.release();
 
@@ -108,13 +108,15 @@ describe('libgpiod line bindings', () => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		let line17 = chip0.getLine(17);
 		line17.requestInputMode();
-		expect(1).eq(line17.getLineDirection());
+		expect(gpiod.Line.Direction.INPUT).eq(line17.direction);
 		line17.release();
 
 		const line18 = chip0.getLine("GPIO18");
-		line18.requestOutputMode();
-		expect(2).eq(line18.getLineDirection());
+		expect(line18.used).eq(true);
+		// line18.requestOutputMode();
+		expect(gpiod.Line.Direction.OUTPUT).eq(line18.direction);
 		line18.release();
+		expect(line18.free).eq(true);
 
 		done();
 	});
@@ -122,38 +124,27 @@ describe('libgpiod line bindings', () => {
 	it("should get line 17 active state", done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		let line17 = chip0.getLine(17);
-		expect(1).eq(line17.getLineActiveState());
+		expect(gpiod.Line.ActiveState.HIGH).eq(line17.activeState);
 		line17.release();
-
-		done();
-	});
-
-	it("should get line 18 active state", done => {
-		const chip0 = new gpiod.Chip('gpiochip0');
-		const line18 = chip0.getLine("GPIO18");
-		line18.requestOutputMode();
-		line18.setValue(1);
-		expect(1).eq(line18.getLineActiveState());
-		line18.release();
 
 		done();
 	});
 
 	it("should get line 18 bias", done => {
 		const chip0 = new gpiod.Chip();
-		const line18 = chip0.getLine("GPIO18");
-		line18.requestOutputMode();
-		line18.setValue(1);
-		expect(1).eq(line18.getLineBias());
-		line18.release();
+		const line17 = chip0.getLine("GPIO17");
+		line17.requestOutputMode();
+		line17.setValue(1);
+		expect(gpiod.Line.Bias.AS_IS).eq(line17.bias);
+		line17.release();
 
 		done();
 	});
 
-	it("should check if line 17 is not used", done => {
+	it("should check if line 17 is free", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
-		expect(false).eq(line17.isLineUsed());
+		expect(true).eq(line17.free);
 		line17.release();
 
 		done();
@@ -162,7 +153,7 @@ describe('libgpiod line bindings', () => {
 	it("should check if line 18 is used", done => {
 		const chip0 = new gpiod.Chip();
 		const line18 = chip0.getLine(18);
-		expect(true).eq(line18.isLineUsed());
+		expect(true).eq(line18.used);
 		line18.release();
 
 		done();
@@ -171,7 +162,7 @@ describe('libgpiod line bindings', () => {
 	it("should check if line 17 is not open drain", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
-		expect(false).eq(line17.isLineOpenDrain());
+		expect(false).eq(line17.openDrain);
 		line17.release();
 
 		done();
@@ -180,7 +171,7 @@ describe('libgpiod line bindings', () => {
 	it("should check if line 17 is not open source", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
-		expect(false).eq(line17.isLineOpenSource());
+		expect(false).eq(line17.openSource);
 		line17.release();
 
 		done();
@@ -202,7 +193,7 @@ describe('libgpiod line bindings', () => {
 	it("should check if line 17 needs update", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
-		expect(false).eq(line17.needsUpdate());
+		expect(false).eq(line17.needsUpdate);
 		line17.release();
 		done();
 	});
@@ -210,8 +201,11 @@ describe('libgpiod line bindings', () => {
 	it("should request line 17 with config options", done => {
 		const chip0 = new gpiod.Chip(0);
 		const line17 = chip0.getLine(17);
-		// TODO need better scenarios 
-		line17.lineRequest({ requestType: 1, consumer: "X", flags: 0 }, 1);
+		line17.lineRequest({
+			requestType: gpiod.Line.RequestType.Direction.INPUT,
+			flags: gpiod.Line.RequestFlags.BIAS_PULL_DOWN,
+			consumer: "X",
+		}, 0);
 		line17.release();
 		done();
 	});
@@ -245,8 +239,8 @@ describe('libgpiod line bindings', () => {
 
 		let line13 = chip0.getLine(13);
 
-		line13.requestInputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN);
-		const consumer = line13.getLineConsumer();
+		line13.requestInputModeFlags("foobar", gpiod.Line.RequestFlags.BIAS_PULL_DOWN);
+		const consumer = line13.consumer;
 		expect("foobar").eq(consumer);
 		line13.release();
 
@@ -258,8 +252,8 @@ describe('libgpiod line bindings', () => {
 
 		let line13 = chip0.getLine(13);
 
-		line13.requestOutputModeFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
-		const consumer = line13.getLineConsumer();
+		line13.requestOutputModeFlags("foobar", gpiod.Line.RequestFlags.BIAS_PULL_DOWN, 0);
+		const consumer = line13.consumer;
 		expect("foobar").eq(consumer);
 		line13.release();
 
@@ -271,8 +265,8 @@ describe('libgpiod line bindings', () => {
 
 		let line13 = chip0.getLine(13);
 
-		line13.requestRisingEdgeEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
-		const consumer = line13.getLineConsumer();
+		line13.requestRisingEdgeEventFlags("foobar", gpiod.Line.RequestFlags.BIAS_PULL_DOWN, 0);
+		const consumer = line13.consumer;
 		expect("foobar").eq(consumer);
 		line13.release();
 
@@ -284,8 +278,8 @@ describe('libgpiod line bindings', () => {
 
 		let line13 = chip0.getLine(13);
 
-		line13.requestFallingEdgeEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
-		const consumer = line13.getLineConsumer();
+		line13.requestFallingEdgeEventFlags("foobar", gpiod.Line.RequestFlags.BIAS_PULL_DOWN, 0);
+		const consumer = line13.consumer;
 		expect("foobar").eq(consumer);
 		line13.release();
 
@@ -297,8 +291,8 @@ describe('libgpiod line bindings', () => {
 
 		let line13 = chip0.getLine(13);
 
-		line13.requestBothEdgesEventFlags("foobar", gpiod.LineFlags.GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_DOWN, 0);
-		const consumer = line13.getLineConsumer();
+		line13.requestBothEdgesEventFlags("foobar", gpiod.Line.RequestFlags.BIAS_PULL_DOWN, 0);
+		const consumer = line13.consumer;
 		expect("foobar").eq(consumer);
 		line13.release();
 

@@ -3,7 +3,7 @@ const gpiod = require('..');
 
 describe('libgpiod Pin sugar', () => {
 	it('should create a Pin for line 10', done => {
-		const pin = new gpiod.Pin(10);
+		const pin = gpiod.Pin(10);
 		assert(pin instanceof gpiod.Line);
 		pin.release();
 		done();

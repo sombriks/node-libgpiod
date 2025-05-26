@@ -1,47 +1,5 @@
 #include "line.hh"
 
-Nan::Persistent<v8::Function> Line::constructor;
-
-NAN_MODULE_INIT(Line::Init) {
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("Line").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
-  Nan::SetPrototypeMethod(tpl, "getLineOffset", getLineOffset);
-  Nan::SetPrototypeMethod(tpl, "getLineName", getLineName);
-  Nan::SetPrototypeMethod(tpl, "getLineConsumer", getLineConsumer);
-  Nan::SetPrototypeMethod(tpl, "getLineDirection", getLineDirection);
-  Nan::SetPrototypeMethod(tpl, "getLineActiveState", getLineActiveState);
-  Nan::SetPrototypeMethod(tpl, "getLineBias", getLineBias);
-  Nan::SetPrototypeMethod(tpl, "isLineUsed", isLineUsed);
-  Nan::SetPrototypeMethod(tpl, "isLineOpenDrain", isLineOpenDrain);
-  Nan::SetPrototypeMethod(tpl, "isLineOpenSource", isLineOpenSource);
-  Nan::SetPrototypeMethod(tpl, "update", update);
-  Nan::SetPrototypeMethod(tpl, "needsUpdate", needsUpdate);
-
-  Nan::SetPrototypeMethod(tpl, "getValue", getValue);
-  Nan::SetPrototypeMethod(tpl, "setValue", setValue);
-
-  Nan::SetPrototypeMethod(tpl, "lineRequest", lineRequest);
-
-  Nan::SetPrototypeMethod(tpl, "requestInputMode", requestInputMode);
-  Nan::SetPrototypeMethod(tpl, "requestOutputMode", requestOutputMode);
-  Nan::SetPrototypeMethod(tpl, "requestRisingEdgeEvents", requestRisingEdgeEvents);
-  Nan::SetPrototypeMethod(tpl, "requestFallingEdgeEvents", requestFallingEdgeEvents);
-  Nan::SetPrototypeMethod(tpl, "requestBothEdgesEvents", requestBothEdgesEvents);
-
-  Nan::SetPrototypeMethod(tpl, "requestInputModeFlags", requestInputModeFlags);
-  Nan::SetPrototypeMethod(tpl, "requestOutputModeFlags", requestOutputModeFlags);
-  Nan::SetPrototypeMethod(tpl, "requestRisingEdgeEventFlags", requestRisingEdgeEventFlags);
-  Nan::SetPrototypeMethod(tpl, "requestFallingEdgeEventFlags", requestFallingEdgeEventFlags);
-  Nan::SetPrototypeMethod(tpl, "requestBothEdgesEventFlags", requestBothEdgesEventFlags);
-
-  Nan::SetPrototypeMethod(tpl, "release", release);
-
-  constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
-  Nan::Set(target, Nan::New("Line").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
-}
-
 Line::Line(Chip *chip, unsigned int pin) {
   line = gpiod_chip_get_line(chip->getNativeChip(), pin);
   std::string msg = "Line::new - Unable to open GPIO line ";
@@ -57,149 +15,132 @@ Line::Line(Chip *chip, const char *name) {
 }
 
 Line::~Line() {
-  if (!line) return;
   gpiod_line_release(line);
   line = NULL;
+}
+
+gpiod_line *Line::getNativeLine() {
+  return line;
+}
+
+Nan::Persistent<v8::Function> Line::constructor;
+
+NAN_MODULE_INIT(Line::Init) {
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("Line").ToLocalChecked());
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+  Nan::Set(target, Nan::New("Line").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 NAN_METHOD(Line::New) {
   if (info.IsConstructCall()) {
     Chip *chip = Nan::ObjectWrap::Unwrap<Chip>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
-    unsigned int pin = Nan::To<unsigned int>(info[1]).FromJust();
-    Line *obj = new Line(chip, pin);
-    if (!obj->line) return;
+    Line *obj;
+    if (info[1]->IsNumber()) {
+      unsigned int pin = Nan::To<unsigned int>(info[1]).FromJust();
+      obj = new Line(chip, pin);
+    } else {
+      Nan::Utf8String name(info[1]);
+      obj = new Line(chip, *name);
+    }
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
   } else {
-    const int argc = 1;
-    v8::Local<v8::Value> argv[argc] = {info[0]};
+    const int argc = 2;
+    v8::Local<v8::Value> argv[argc] = {info[0], info[1]};
     v8::Local<v8::Function> cons = Nan::New(constructor);
     info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
 
-NAN_METHOD(Line::getLineOffset) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineOffset() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineOffset) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int ret = gpiod_line_offset(obj->getNativeLine());
   if (-1 == ret) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getLineOffset"));
-  } else
+  } else {
     info.GetReturnValue().Set(ret);
+  }
 }
 
-NAN_METHOD(Line::getLineName) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineName() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineName) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *name = gpiod_line_name(obj->getNativeLine());
-  if (!name)
+  if (!name) {
     info.GetReturnValue().Set(Nan::Undefined());
-  else
+  } else {
     info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
+  }
 }
 
-NAN_METHOD(Line::getLineConsumer) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineConsumer() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineConsumer) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *name = gpiod_line_consumer(obj->getNativeLine());
-  if (!name)
+  if (!name) {
     info.GetReturnValue().Set(Nan::Undefined());
-  else
+  } else {
     info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
+  }
 }
 
-NAN_METHOD(Line::getLineDirection) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineDirection() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineDirection) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int direction = gpiod_line_direction(obj->getNativeLine());
   info.GetReturnValue().Set(direction);
 }
 
-NAN_METHOD(Line::getLineActiveState) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineActiveState() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineActiveState) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int activeState = gpiod_line_active_state(obj->getNativeLine());
   info.GetReturnValue().Set(activeState);
 }
 
-NAN_METHOD(Line::getLineBias) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineBias() for line==NULL"));
-    return;
-  }
+NAN_METHOD(getLineBias) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int bias = gpiod_line_bias(obj->getNativeLine());
   info.GetReturnValue().Set(bias);
 }
 
-NAN_METHOD(Line::isLineUsed) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineUsed() for line==NULL"));
-    return;
-  }
+NAN_METHOD(isLineUsed) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   bool used = gpiod_line_is_used(obj->getNativeLine());
   info.GetReturnValue().Set(used);
 }
 
-NAN_METHOD(Line::isLineOpenDrain) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineOpenDrain() for line==NULL"));
-    return;
-  }
+NAN_METHOD(isLineFree) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  bool free = gpiod_line_is_free(obj->getNativeLine());
+  info.GetReturnValue().Set(free);
+}
+
+NAN_METHOD(isLineOpenDrain) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   bool drain = gpiod_line_is_open_drain(obj->getNativeLine());
   info.GetReturnValue().Set(drain);
 }
 
-NAN_METHOD(Line::isLineOpenSource) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::isLineOpenSource() for line==NULL"));
-    return;
-  }
+NAN_METHOD(isLineOpenSource) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   bool source = gpiod_line_is_open_source(obj->getNativeLine());
   info.GetReturnValue().Set(source);
 }
 
-NAN_METHOD(Line::update) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::update() for line==NULL"));
-    return;
-  }
+NAN_METHOD(update) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   if (gpiod_line_update(obj->getNativeLine()) < 0) {
     Nan::ThrowError(Nan::ErrnoException(errno, "line update failed"));
   }
 }
 
-NAN_METHOD(Line::needsUpdate) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::needsUpdate() for line==NULL"));
-    return;
-  }
+NAN_METHOD(needsUpdate) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   bool need = gpiod_line_needs_update(obj->getNativeLine());
   info.GetReturnValue().Set(need);
 }
 
-NAN_METHOD(Line::getValue) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
+NAN_METHOD(getValue) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int ret = gpiod_line_get_value(obj->getNativeLine());
   if (-1 == ret) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getValue"));
@@ -208,33 +149,29 @@ NAN_METHOD(Line::getValue) {
   }
 }
 
-NAN_METHOD(Line::setValue) {
-  Line *obj = ObjectWrap::Unwrap<Line>(info.This());
+NAN_METHOD(setValue) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   v8::Local<v8::Context> context = Nan::GetCurrentContext();
-  uint32_t value = info[0]->Uint32Value(context).FromJust();
-  if (gpiod_line_set_value(obj->line, value) == -1) {
+  uint32_t value = info[1]->Uint32Value(context).FromJust();
+  if (gpiod_line_set_value(obj->getNativeLine(), value) == -1) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::setValue"));
   }
 }
 
-NAN_METHOD(Line::lineRequest) {
-  Line *obj = ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {  // TODO null if line was released. need a better way.
-    Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest() for line==NULL"));
-    return;
-  }
-
+NAN_METHOD(lineRequest) {
   v8::Local<v8::Context> context = Nan::GetCurrentContext();
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(context).ToLocalChecked());
+
   struct gpiod_line_request_config config;
-  if (!info[0]->IsObject()) {
+  if (!info[1]->IsObject()) {
     Nan::ThrowError(Nan::Error("::lineRequest config is not an object"));
     return;
   }
-  v8::Local<v8::Object> jsObj = info[0]->ToObject(context).ToLocalChecked();
-
+  v8::Local<v8::Object> jsObj = info[1]->ToObject(context).ToLocalChecked();
   v8::MaybeLocal<v8::Value> consumer = jsObj->Get(context, Nan::New("consumer").ToLocalChecked());
-  config.consumer = *Nan::Utf8String(consumer.ToLocalChecked());
-
+  Nan::Utf8String consumerStr(consumer.ToLocalChecked());
+  config.consumer = *consumerStr;
+  
   v8::Local<v8::Value>
       requestType = jsObj->Get(context, Nan::New("requestType").ToLocalChecked()).ToLocalChecked();
   if (requestType.IsEmpty() || !requestType->IsNumber()) {
@@ -254,36 +191,32 @@ NAN_METHOD(Line::lineRequest) {
   }
 
   int defaultValue = 0;
-  if (info[1]->IsNumber()) {
-    defaultValue = Nan::To<int>(info[1]).FromJust();
+  if (info[2]->IsNumber()) {
+    defaultValue = Nan::To<int>(info[2]).FromJust();
   }
+
+  printf("Line::lineRequest: consumer=%s, request_type=%d, flags=%d, defaultValue=%d\n",
+         config.consumer, config.request_type, config.flags, defaultValue);
 
   if (gpiod_line_request(obj->getNativeLine(), &config, defaultValue) == -1) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::lineRequest"));
   }
 }
 
-NAN_METHOD(Line::requestInputMode) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputMode() for line==NULL"));
-    return;
-  }
+NAN_METHOD(requestInputMode) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
-  Nan::Utf8String consumer(info[0]);
+  Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_input(obj->getNativeLine(), *consumer))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputMode"));
 }
 
-NAN_METHOD(Line::requestOutputMode) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputMode() for line==NULL"));
-    return;
-  }
+NAN_METHOD(requestOutputMode) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
+  Nan::Utf8String consumer(info[1]);
   unsigned int value = 0;
-  v8::Local<v8::Value> defaultValue = info[0];
+  v8::Local<v8::Value> defaultValue = info[2];
   if (!defaultValue->IsUndefined() && defaultValue->IsNumber()) {
     unsigned int val = Nan::To<unsigned int>(defaultValue).FromJust();
     if (val > 1) {
@@ -293,115 +226,74 @@ NAN_METHOD(Line::requestOutputMode) {
     value = val;
   }
 
-  Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_output(obj->getNativeLine(), *consumer, value))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputMode"));
 }
 
-NAN_METHOD(Line::requestRisingEdgeEvents) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEvents for line==NULL"));
-    return;
-  }
+NAN_METHOD(requestRisingEdgeEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
-  Nan::Utf8String consumer(info[0]);
+  Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_rising_edge_events(obj->getNativeLine(), *consumer))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEvents"));
 }
 
-NAN_METHOD(Line::requestFallingEdgeEvents) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEvents for line==NULL"));
-    return;
-  }
-
-  Nan::Utf8String consumer(info[0]);
+NAN_METHOD(requestFallingEdgeEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_falling_edge_events(obj->getNativeLine(), *consumer))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEvents"));
 }
 
-NAN_METHOD(Line::requestBothEdgesEvents) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEvents for line==NULL"));
-    return;
-  }
-
-  Nan::Utf8String consumer(info[0]);
+NAN_METHOD(requestBothEdgesEvents) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
   if (-1 == gpiod_line_request_both_edges_events(obj->getNativeLine(), *consumer))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEvents"));
 }
 
-NAN_METHOD(Line::requestInputModeFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
+NAN_METHOD(requestInputModeFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  int flags = Nan::To<int>(info[2]).FromJust();
   if (-1 == gpiod_line_request_input_flags(obj->getNativeLine(), *consumer, flags))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestInputModeFlags"));
 }
 
-NAN_METHOD(Line::requestOutputModeFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputModeFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
-  int defaultValue = Nan::To<int>(info[2]).FromJust();
+NAN_METHOD(requestOutputModeFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  int flags = Nan::To<int>(info[2]).FromJust();
+  int defaultValue = Nan::To<int>(info[3]).FromJust();
   if (-1 == gpiod_line_request_output_flags(obj->getNativeLine(), *consumer, flags, defaultValue))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestOutputModeFlags"));
 }
 
-NAN_METHOD(Line::requestRisingEdgeEventFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEventFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
+NAN_METHOD(requestRisingEdgeEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  int flags = Nan::To<int>(info[2]).FromJust();
   if (-1 == gpiod_line_request_rising_edge_events_flags(obj->getNativeLine(), *consumer, flags))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestRisingEdgeEventFlags"));
 }
 
-NAN_METHOD(Line::requestFallingEdgeEventFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEventFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
+NAN_METHOD(requestFallingEdgeEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  int flags = Nan::To<int>(info[2]).FromJust();
   if (-1 == gpiod_line_request_falling_edge_events_flags(obj->getNativeLine(), *consumer, flags))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestFallingEdgeEventFlags"));
 }
 
-NAN_METHOD(Line::requestBothEdgesEventFlags) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->line) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEventFlags for line==NULL"));
-    return;
-  }
-  Nan::Utf8String consumer(info[0]);
-  int flags = Nan::To<int>(info[1]).FromJust();
+NAN_METHOD(requestBothEdgesEventFlags) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  int flags = Nan::To<int>(info[2]).FromJust();
   if (-1 == gpiod_line_request_both_edges_events_flags(obj->getNativeLine(), *consumer, flags))
     Nan::ThrowError(Nan::ErrnoException(errno, "::requestBothEdgesEventFlags"));
 }
 
-NAN_METHOD(Line::release) {
-  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info.This());
-  if (!obj->getNativeLine()) return;
+NAN_METHOD(release) {
+  Line *obj = Nan::ObjectWrap::Unwrap<Line>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   gpiod_line_release(obj->getNativeLine());
-  obj->line = NULL;
-}
-
-gpiod_line *Line::getNativeLine() {
-  return line;
 }

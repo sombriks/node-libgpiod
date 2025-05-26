@@ -13,7 +13,6 @@ Chip::Chip(const char *device) {
 }
 
 Chip::~Chip() {
-  if (!chip) return;
   gpiod_chip_close(chip);
   chip = NULL;
 }
