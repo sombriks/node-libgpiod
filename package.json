@@ -29,13 +29,15 @@
     "configure-gpio-sim": "sudo sh test/prepare-gpio-sim.sh",
     "test": "mocha test/*.spec.js test/**/*.spec.js",
     "test:coverage": "nyc npm run test",
-    "lint": "xo --fix"
+    "lint": "xo --fix",
+    "types": "rm index.{d.ts,d.ts.map} lib/*.{ts,map} ; tsc"
   },
   "devDependencies": {
     "chai": "^4.4.1",
     "mocha": "10.8.2",
     "node-gyp": "^11.2.0",
     "nyc": "^15.1.0",
+    "typescript": "^5.8.3",
     "xo": "^0.58.0"
   },
   "dependencies": {
