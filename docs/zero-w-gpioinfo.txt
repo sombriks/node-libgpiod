@@ -1,0 +1,110 @@
+gpiochip0 - 54 lines:
+	line   0:     "ID_SDA"       unused   input  active-high 
+	line   1:     "ID_SCL"       unused   input  active-high 
+	line   2:      "GPIO2"       unused   input  active-high 
+	line   3:      "GPIO3"       unused   input  active-high 
+	line   4:      "GPIO4"       unused   input  active-high 
+	line   5:      "GPIO5"       unused   input  active-high 
+	line   6:      "GPIO6"       unused   input  active-high 
+	line   7:      "GPIO7"       unused   input  active-high 
+	line   8:      "GPIO8"       unused   input  active-high 
+	line   9:      "GPIO9"       unused   input  active-high 
+	line  10:     "GPIO10"       unused   input  active-high 
+	line  11:     "GPIO11"       unused   input  active-high 
+	line  12:     "GPIO12"       unused   input  active-high 
+	line  13:     "GPIO13"       unused   input  active-high 
+	line  14:     "GPIO14"       unused   input  active-high 
+	line  15:     "GPIO15"       unused   input  active-high 
+	line  16:     "GPIO16"       unused  output  active-high 
+	line  17:     "GPIO17"       unused   input  active-high 
+	line  18:     "GPIO18"       unused   input  active-high 
+	line  19:     "GPIO19"       unused   input  active-high 
+	line  20:     "GPIO20"       unused  output  active-high 
+	line  21:     "GPIO21"       unused  output  active-high 
+	line  22:     "GPIO22"       unused   input  active-high 
+	line  23:     "GPIO23"       unused   input  active-high 
+	line  24:     "GPIO24"       unused   input  active-high 
+	line  25:     "GPIO25"       unused   input  active-high 
+	line  26:     "GPIO26"       unused   input  active-high 
+	line  27:     "GPIO27"       unused   input  active-high 
+	line  28:       "SDA0"       unused   input  active-high 
+	line  29:       "SCL0"       unused   input  active-high 
+	line  30:       "CTS0"       unused   input  active-high 
+	line  31:       "RTS0"       unused   input  active-high 
+	line  32:       "TXD0"       unused   input  active-high 
+	line  33:       "RXD0"       unused   input  active-high 
+	line  34:    "SD1_CLK"       unused   input  active-high 
+	line  35:    "SD1_CMD"       unused   input  active-high 
+	line  36:  "SD1_DATA0"       unused   input  active-high 
+	line  37:  "SD1_DATA1"       unused   input  active-high 
+	line  38:  "SD1_DATA2"       unused   input  active-high 
+	line  39:  "SD1_DATA3"       unused   input  active-high 
+	line  40:  "CAM_GPIO1"       unused  output  active-high 
+	line  41:      "WL_ON"       unused  output  active-high 
+	line  42:         "NC"       unused   input  active-high 
+	line  43:   "WIFI_CLK"       unused   input  active-high 
+	line  44:  "CAM_GPIO0" "cam1_regulator" output active-high [used]
+	line  45:      "BT_ON"   "shutdown"  output  active-high [used]
+	line  46: "HDMI_HPD_N"        "hpd"   input   active-low [used]
+	line  47: "STATUS_LED_N" "ACT" output active-low [used]
+	line  48:   "SD_CLK_R"       unused   input  active-high 
+	line  49:   "SD_CMD_R"       unused   input  active-high 
+	line  50: "SD_DATA0_R"       unused   input  active-high 
+	line  51: "SD_DATA1_R"       unused   input  active-high 
+	line  52: "SD_DATA2_R"       unused   input  active-high 
+	line  53: "SD_DATA3_R"       unused   input  active-high 
+gpiochip0 - 54 lines:
+	line   0:     "ID_SDA"       unused   input  active-high 
+	line   1:     "ID_SCL"       unused   input  active-high 
+	line   2:      "GPIO2"       unused   input  active-high 
+	line   3:      "GPIO3"       unused   input  active-high 
+	line   4:      "GPIO4"       unused   input  active-high 
+	line   5:      "GPIO5"       unused   input  active-high 
+	line   6:      "GPIO6"       unused   input  active-high 
+	line   7:      "GPIO7"       unused   input  active-high 
+	line   8:      "GPIO8"       unused   input  active-high 
+	line   9:      "GPIO9"       unused   input  active-high 
+	line  10:     "GPIO10"       unused   input  active-high 
+	line  11:     "GPIO11"       unused   input  active-high 
+	line  12:     "GPIO12"       unused   input  active-high 
+	line  13:     "GPIO13"       unused   input  active-high 
+	line  14:     "GPIO14"       unused   input  active-high 
+	line  15:     "GPIO15"       unused   input  active-high 
+	line  16:     "GPIO16"       unused  output  active-high 
+	line  17:     "GPIO17"       unused   input  active-high 
+	line  18:     "GPIO18"       unused   input  active-high 
+	line  19:     "GPIO19"       unused   input  active-high 
+	line  20:     "GPIO20"       unused  output  active-high 
+	line  21:     "GPIO21"       unused  output  active-high 
+	line  22:     "GPIO22"       unused   input  active-high 
+	line  23:     "GPIO23"       unused   input  active-high 
+	line  24:     "GPIO24"       unused   input  active-high 
+	line  25:     "GPIO25"       unused   input  active-high 
+	line  26:     "GPIO26"       unused   input  active-high 
+	line  27:     "GPIO27"       unused   input  active-high 
+	line  28:       "SDA0"       unused   input  active-high 
+	line  29:       "SCL0"       unused   input  active-high 
+	line  30:       "CTS0"       unused   input  active-high 
+	line  31:       "RTS0"       unused   input  active-high 
+	line  32:       "TXD0"       unused   input  active-high 
+	line  33:       "RXD0"       unused   input  active-high 
+	line  34:    "SD1_CLK"       unused   input  active-high 
+	line  35:    "SD1_CMD"       unused   input  active-high 
+	line  36:  "SD1_DATA0"       unused   input  active-high 
+	line  37:  "SD1_DATA1"       unused   input  active-high 
+	line  38:  "SD1_DATA2"       unused   input  active-high 
+	line  39:  "SD1_DATA3"       unused   input  active-high 
+	line  40:  "CAM_GPIO1"       unused  output  active-high 
+	line  41:      "WL_ON"       unused  output  active-high 
+	line  42:         "NC"       unused   input  active-high 
+	line  43:   "WIFI_CLK"       unused   input  active-high 
+	line  44:  "CAM_GPIO0" "cam1_regulator" output active-high [used]
+	line  45:      "BT_ON"   "shutdown"  output  active-high [used]
+	line  46: "HDMI_HPD_N"        "hpd"   input   active-low [used]
+	line  47: "STATUS_LED_N" "ACT" output active-low [used]
+	line  48:   "SD_CLK_R"       unused   input  active-high 
+	line  49:   "SD_CMD_R"       unused   input  active-high 
+	line  50: "SD_DATA0_R"       unused   input  active-high 
+	line  51: "SD_DATA1_R"       unused   input  active-high 
+	line  52: "SD_DATA2_R"       unused   input  active-high 
+	line  53: "SD_DATA3_R"       unused   input  active-high 
