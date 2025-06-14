@@ -7,6 +7,14 @@ describe('libgpiod miscellaneous bindings', () => {
 		done()
 	})
 
+	it('should get chip names', done => {
+		const result = gpiod.getChipNames()
+		expect(result).to.be.an('array')
+		expect(result.length).to.be.greaterThan(0)
+		expect(result[0]).to.be.a('string')
+		done()
+	})
+
 	it('should get line instant value', done => {
 		const value = gpiod.getInstantLineValue(0, 17)
 		expect(value).to.eq(0)

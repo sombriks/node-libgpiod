@@ -1,5 +1,10 @@
 export const version: string;
 /**
+ * Get the names of all available chips
+ * @returns {Array<string>} - An array of chip names
+ */
+export function getChipNames(): Array<string>;
+/**
  * Get instant line value
  * @param {number} chipNumber - The chip number
  * @param {number} lineNumber - The line number

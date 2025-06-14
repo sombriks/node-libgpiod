@@ -230,6 +230,8 @@ This is the api parity table:
 
 | Description                            | Scope | C                                            | Node                         |
 |----------------------------------------|-------|----------------------------------------------|------------------------------|
+| get gpiod version                      | Misc  | gpiod_version_string                         | version                      |
+| get chip names                         | Misc  | -                                            | getChipNames                 |
 | get line's instant value               | Misc  | gpiod_ctxless_get_value                      | getInstantLineValue          |
 | set line's instant value               | Misc  | gpiod_ctxless_set_value                      | setInstantLineValue          |
 | get chip name                          | Chip  | gpiod_chip_name                              | getChipName                  |
