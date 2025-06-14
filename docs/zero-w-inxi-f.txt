@@ -1,0 +1,36 @@
+System:
+  Host: peewee Kernel: 6.12.25+rpt-rpi-v6 arch: armv6l bits: 32 Console: pty pts/1 Distro: Raspbian
+    GNU/Linux 12 (bookworm)
+Machine:
+  Type: ARM System: Raspberry Pi Zero W Rev 1.1 details: BCM2835 rev: 9000c1
+    serial: 0000000036d5b361
+CPU:
+  Info: single core model: ARMv6-compatible v6l variant: arm1176jzf-s bits: 32 type: UP
+  Speed (MHz): 1000 min/max: 700/1000 core: 1: 1000
+Graphics:
+  Device-1: bcm2835-hdmi driver: vc4_hdmi v: N/A
+  Device-2: bcm2835-vc4 driver: vc4_drm v: N/A
+  Display: server: No display server data found. Headless machine? tty: 138x30
+  API: OpenGL Message: GL data unavailable in console. Try -G --display
+Audio:
+  Device-1: bcm2835-hdmi driver: vc4_hdmi
+  API: ALSA v: k6.12.25+rpt-rpi-v6 status: kernel-api
+Network:
+  Device-1: bcm2835-mmc driver: mmc_bcm2835
+  IF: wlan0 state: up mac: b8:27:eb:80:e6:34
+Bluetooth:
+  Device-1: pl011 driver: uart_pl011
+  Report: hciconfig ID: hci0 state: up address: B8:27:EB:7F:19:CB bt-v: 2.1
+Drives:
+  Local Storage: total: 30 GiB used: 2.9 GiB (9.7%)
+  ID-1: /dev/mmcblk0 type: Removable model: USD size: 30 GiB
+Partition:
+  ID-1: / size: 28.99 GiB used: 2.8 GiB (9.7%) fs: ext4 dev: /dev/mmcblk0p2
+Swap:
+  ID-1: swap-1 type: file size: 512 MiB used: 20 MiB (3.9%) file: /var/swap
+Sensors:
+  System Temperatures: cpu: 43.3 C mobo: N/A
+  Fan Speeds (RPM): N/A
+Info:
+  Processes: 96 Uptime: 2h 9m Memory: 491.7 MiB used: 171.2 MiB (34.8%) gpu: 64 MiB Init: systemd
+  target: multi-user (3) Shell: Bash inxi: 3.3.26

@@ -2,6 +2,15 @@
 
 Noteworthy changes
 
+## 2025-06-14
+
+Finally a decent and more realistic autocomplete is implemented. I've got the
+typescript configuration done right, added a (thin) javascript layer to receive
+jsdocs and boom! proper autocomplete, documentation snippets and so on.
+
+Still facing trouble to test on proper real hardware, all my boards are dead or
+dying, but gpio-sim on (virtualized) fedora 38 is holding things together.
+
 ## 2024-06-30
 
 - closed the oldest issue, issue #4, covered it with a specific test case

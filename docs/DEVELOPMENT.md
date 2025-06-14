@@ -23,8 +23,10 @@ The 1.5 version introduced new functionality still present in 1.6, 1.4 can be
 considered the last in the "old" libgpiod still present on many systems out
 there.
 
-The 2.0 is a brand new API with a very distinct way to work with chips and lines
-and requests.
+I decided to give up 1.4 series for now.
+
+The 2.0 is a brand 'new' (several years old now) API with a very distinct way to
+work with chips and lines and requests.
 
 ### Your openSUSE Tumbleweed daily driver might not be suitable for that work
 
