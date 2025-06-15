@@ -145,11 +145,18 @@ for more sample code
   ```
 
 - gpio character device needs [special udev rules][udev-rules] in order
-  to belong to a special group so non-root users could access it freely
+  to belong to a special group, so non-root users could access it freely
 
   ```bash
   # /etc/udev/rules.d/85-gpiochip.rules 
   KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0660", GROUP="wheel"
+  ```
+
+  Another approach, if your system creates the **gpio** group, is to add the
+  user into this group:
+
+  ```bash
+  sudo usermod -aG gpio $USER
   ```
 
 - libgpiod must be installed in the system correctly with development headers
