@@ -1,1 +1,1 @@
-{"version":3,"file":"bulk.d.ts","sourceRoot":"","sources":["bulk.js"],"names":[],"mappings":"AAGA;;;GAGG;AACH;IAEE;;;;OAIG;IACH,kBAHW,IAAI,eACJ,QAAQ,EAIlB;IADC,cAA6D;CAGhE"}
+{"version":3,"file":"bulk.d.ts","sourceRoot":"","sources":["bulk.js"],"names":[],"mappings":"AAGA;;;GAGG;AACH;IACE;;;;;;OAMG;IACH,kBALW,IAAI,UACJ,QAAQ,GAAC,QAAQ,EAM3B;IADC,cAAuD;CAwB1D"}

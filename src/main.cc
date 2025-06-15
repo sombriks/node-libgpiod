@@ -82,6 +82,8 @@ NAN_MODULE_INIT(InitAll) {
 
   Nan::Set(target, Nan::New("release").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(release)).ToLocalChecked());
+
+  Bulk::Init(target);
 }
 
 NODE_MODULE(NativeExtension, InitAll);

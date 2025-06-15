@@ -1,8 +1,8 @@
 // Entry point
-const { version, getChipNames, getInstantLineValue, setInstantLineValue } = require('./lib/misc')
-const { Chip } = require('./lib/chip')
-const { Bulk } = require('./lib/bulk')
-const { Line, Pin } = require('./lib/line')
+const {version, getChipNames, getInstantLineValue, setInstantLineValue} = require('./lib/misc');
+const {Chip} = require('./lib/chip');
+const {Bulk} = require('./lib/bulk');
+const {Line, Pin} = require('./lib/line');
 
 /**
  * @module libgpiod
@@ -16,5 +16,5 @@ module.exports = {
 	Chip,
 	Bulk,
 	Line,
-	Pin
-}
+	Pin,
+};

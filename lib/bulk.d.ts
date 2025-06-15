@@ -6,9 +6,11 @@ export class Bulk {
     /**
      * @constructor
      * @param {Chip} chip - The chip to request the line bulk
-     * @param {Number[]} lineNumbers which lines to request from the chip
+     * @param {Number[]|String[]} [lines] which lines to request from the chip.
+     * Either pass the names or the pin numbers. If no list is passed, or the list
+     * is empty, all lines from the chip will be requested.
      */
-    constructor(chip: Chip, lineNumbers: number[]);
+    constructor(chip: Chip, lines?: number[] | string[]);
     _handler: any;
 }
 import { Chip } from "./chip";

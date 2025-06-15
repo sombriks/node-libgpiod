@@ -1,49 +1,45 @@
-const { expect } = require("chai")
+const {expect} = require('chai');
+const {Chip, Line} = require('../../');
 
-const { Chip, Line } = require("../../")
+describe('Line double-definition issue (#4)', () => {
+	it('Should fail on double definition', done => {
+		const chip0 = new Chip(0); // See prepare-gpio-sim.sh or real hardware
 
-describe("Line double-definition issue (#4)", () => {
+		expect(chip0).to.be.ok;
+		let l17 = new Line(chip0, 17);
 
-  it("Should fail on double definition", done => {
+		try {
+			l17.requestOutputMode();
+			l17.setValue(1);
 
-    const chip0 = new Chip(0) // see prepare-gpio-sim.sh or real hardware
+			l17 = new Line(chip0, 17); // We didn't release the previous one
+			l17.requestOutputMode();
+			l17.setValue(1);
+		} catch (error) {
+			expect(error).to.be.ok;
+			expect(error.code).to.eq('EBUSY');
+			expect(error.syscall).to.eq('::requestOutputMode');
+			done();
+		} finally {
+			l17.release();
+		}
+	});
 
-    expect(chip0).to.be.ok
-    let l17 = new Line(chip0, 17)
+	it('Should work fine with proper line release', done => {
+		const chip0 = new Chip(0); // See prepare-gpio-sim.sh or real hardware
 
-    try {
-      l17.requestOutputMode()
-      l17.setValue(1)
+		expect(chip0).to.be.ok;
 
-      l17 = new Line(chip0, 17) // we didn't release the previous one
-      l17.requestOutputMode()
-      l17.setValue(1)
-    } catch (e) {
-      expect(e).to.be.ok
-      expect(e.code).to.eq('EBUSY')
-      expect(e.syscall).to.eq('::requestOutputMode')
-      done()
-    } finally {
-      l17.release()
-    }
-  })
+		let l17 = new Line(chip0, 17);
+		l17.requestOutputMode();
+		l17.setValue(1);
+		l17.release();
 
-  it("Should work fine with proper line release", done => {
+		l17 = new Line(chip0, 17); // We must release the previous one
+		l17.requestOutputMode();
+		l17.setValue(1);
+		l17.release();
 
-    const chip0 = new Chip(0) // see prepare-gpio-sim.sh or real hardware
-
-    expect(chip0).to.be.ok
-
-    let l17 = new Line(chip0, 17)
-    l17.requestOutputMode()
-    l17.setValue(1)
-    l17.release()
-
-    l17 = new Line(chip0, 17) // we must release the previous one
-    l17.requestOutputMode()
-    l17.setValue(1)
-    l17.release()
-
-    done()
-  })
-})
+		done();
+	});
+});
