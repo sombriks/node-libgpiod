@@ -84,6 +84,17 @@ NAN_MODULE_INIT(InitAll) {
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(release)).ToLocalChecked());
 
   Bulk::Init(target);
+  Nan::Set(target, Nan::New("getValues").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getValues)).ToLocalChecked());
+  Nan::Set(target, Nan::New("setValues").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setValues)).ToLocalChecked());
+
+  Nan::Set(target, Nan::New("requestBulkInputMode").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputMode)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkOutputMode").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkOutputMode)).ToLocalChecked());
+  Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
 }
 
 NODE_MODULE(NativeExtension, InitAll);

@@ -22,15 +22,16 @@ class Bulk : public Nan::ObjectWrap {
   gpiod_line_bulk bulk;
 };
 
-// gpiod_chip_get_all_lines
-// gpiod_chip_find_lines
+NAN_METHOD(getValues);
+NAN_METHOD(setValues);
 
-// gpiod_line_get_value_bulk
-// gpiod_line_set_value_bulk
+NAN_METHOD(requestBulkInputMode);
+NAN_METHOD(requestBulkOutputMode);
+
+NAN_METHOD(releaseBulk);
 
 // gpiod_line_request_bulk
-// gpiod_line_request_bulk_input
-// gpiod_line_request_bulk_output
+
 // gpiod_line_request_bulk_rising_edge_events
 // gpiod_line_request_bulk_falling_edge_events
 // gpiod_line_request_bulk_both_edges_events

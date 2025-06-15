@@ -43,6 +43,9 @@ export class Line {
         /** < The internal pull-up bias is enabled. */
         PULL_DOWN: number;
     };
+    /**
+     * Possible request types for line request
+     */
     static RequestType: {
         readonly Direction: {
             INPUT: number;
