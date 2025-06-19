@@ -216,6 +216,45 @@ NAN_METHOD(requestBulkBothEdgesEvents) {
   }
 }
 
+NAN_METHOD(requestBulkDirectionInput) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  if (0 > gpiod_line_set_direction_input_bulk(bulk)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk direction to input"));
+  }
+}
+
+NAN_METHOD(requestBulkDirectionOutput) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  const int *values = NULL;
+  if (!info[1]->IsUndefined() && !info[1]->IsNull() && info[1]->IsArray()) {
+    v8::Local<v8::Array> arr = info[1].As<v8::Array>();
+    if (arr->Length() != bulk->num_lines) {
+      Nan::ThrowError("Array length does not match the number of lines in the bulk");
+      return;
+    }
+    unsigned int *valuesArray = new unsigned int[bulk->num_lines];
+    v8::Local<v8::Context> context = Nan::GetCurrentContext();
+    for (unsigned int i = 0; i < bulk->num_lines; i++) {
+      v8::Local<v8::Value> value = arr->Get(context, i).ToLocalChecked();
+      if (!value->IsUint32()) {
+        delete[] valuesArray;
+        Nan::ThrowTypeError("Array elements must be integers");
+        return;
+      }
+      valuesArray[i] = value.As<v8::Uint32>()->Value();
+    }
+    values = (const int *)valuesArray;
+  }
+  if (0 > gpiod_line_set_direction_output_bulk(bulk, values)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk direction to output"));
+  }
+  if (values != NULL) {
+    delete[] values; 
+  }
+}
+
 NAN_METHOD(releaseBulk) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_release_bulk(obj->getNativeBulk());

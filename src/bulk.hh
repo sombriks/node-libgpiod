@@ -32,6 +32,9 @@ NAN_METHOD(requestBulkRisingEdgeEvents);
 NAN_METHOD(requestBulkFallingEdgeEvents);
 NAN_METHOD(requestBulkBothEdgesEvents);
 
+NAN_METHOD(requestBulkDirectionInput);
+NAN_METHOD(requestBulkDirectionOutput);
+
 NAN_METHOD(releaseBulk);
 
 // gpiod_line_request_bulk
@@ -44,8 +47,5 @@ NAN_METHOD(releaseBulk);
 
 // gpiod_line_set_config_bulk
 // gpiod_line_set_flags_bulk
-
-// gpiod_line_set_direction_input_bulk
-// gpiod_line_set_direction_output_bulk
 
 #endif  // BULK_HH

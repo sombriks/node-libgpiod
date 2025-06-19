@@ -101,6 +101,11 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("requestBulkBothEdgesEvents").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEvents)).ToLocalChecked());
 
+  Nan::Set(target, Nan::New("requestBulkDirectionInput").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionInput)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkDirectionOutput").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionOutput)).ToLocalChecked());
+
   Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
 }
