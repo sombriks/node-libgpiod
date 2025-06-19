@@ -20,34 +20,41 @@
 
 modprobe gpio-sim
 
-mkdir -p  /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0
-echo 0  > /sys/kernel/config/gpio-sim/fakegpio/live
-rm -rf    /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0
-echo 54 > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/num_lines
+declare fakechip="/sys/kernel/config/gpio-sim/fakegpio"
+declare bank0="$fakechip/gpio-bank0"
+
+mkdir -p  $bank0
+echo 0  > $fakechip/live
+rm -rf    $bank0
+mkdir -p  $bank0
+echo 54 > $bank0/num_lines
 
 # mimic lines from raspberry pi zero w
 for i in $(seq 0 53)
 do 
-  mkdir -p /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line$i
+  mkdir -p $bank0/line$i
 done
 for i in $(seq 2 27)
 do 
-  echo "GPIO0$i" > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line$i/name
+  echo "GPIO$i" > $bank0/line$i/name
 done
 
 # custom oins setup
 
-echo "GPIO18"      > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line18/name
-mkdir -p             /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line18/hog
-echo "hog1"        > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line18/hog/name
-echo "output-high" > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line18/hog/direction
+echo "ID_SDA" > $bank0/line0/name
+echo "ID_SCL" > $bank0/line1/name
+echo "SDA0"   > $bank0/line28/name
+echo "SCL0"   > $bank0/line29/name
 
-echo "GPIO19"      > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line19/name
-mkdir -p             /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line19/hog
-echo "hog2"        > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line19/hog/name
-echo "output-low"  > /sys/kernel/config/gpio-sim/fakegpio/gpio-bank0/line19/hog/direction
+mkdir -p             $bank0/line18/hog
+echo "hog1"        > $bank0/line18/hog/name
+echo "output-high" > $bank0/line18/hog/direction
 
-echo 1 > /sys/kernel/config/gpio-sim/fakegpio/live
+mkdir -p             $bank0/line19/hog
+echo "hog2"        > $bank0/line19/hog/name
+echo "output-low"  > $bank0/line19/hog/direction
+
+echo 1 > $fakechip/live
 
 gpiodetect 
 gpioinfo

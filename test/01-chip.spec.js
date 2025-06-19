@@ -2,8 +2,8 @@ const {expect} = require('chai');
 const gpiod = require('..');
 
 describe('libgpiod chip bindings', () => {
-	// 40 for our gpio-sim setup, 54 for raspberry pi zero , 32 for radxa rock-3c
-	const numberLines = process.env.NUM_LINES ?? 40;
+	// 54 for raspberry pi zero w, 32 for radxa rock-3c
+	const numberLines = process.env.NUM_LINES ?? 54;
 	const chipLabel = process.env.LABEL ?? 'gpio-sim.0-node0';
 
 	it('should \'create\' a new chip by number', done => {

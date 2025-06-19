@@ -93,6 +93,14 @@ NAN_MODULE_INIT(InitAll) {
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputMode)).ToLocalChecked());
   Nan::Set(target, Nan::New("requestBulkOutputMode").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkOutputMode)).ToLocalChecked());
+
+  Nan::Set(target, Nan::New("requestBulkRisingEdgeEvents").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkRisingEdgeEvents)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkFallingEdgeEvents").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkFallingEdgeEvents)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkBothEdgesEvents").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEvents)).ToLocalChecked());
+
   Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
 }

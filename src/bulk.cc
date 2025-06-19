@@ -93,7 +93,7 @@ NAN_METHOD(Bulk::New) {
 }
 
 NAN_METHOD(getValues) {
-  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_bulk *bulk = obj->getNativeBulk();
   unsigned int *values = new unsigned int[bulk->num_lines];
   int result = gpiod_line_get_value_bulk(bulk, (int *)values);
@@ -112,7 +112,7 @@ NAN_METHOD(getValues) {
 
 NAN_METHOD(setValues) {
   v8::Local<v8::Context> ctx = Nan::GetCurrentContext();
-  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(info[0]->ToObject(ctx).ToLocalChecked());
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_bulk *bulk = obj->getNativeBulk();
   v8::Local<v8::Array> arr = info[1].As<v8::Array>();
   if (arr->Length() != bulk->num_lines) {
@@ -183,8 +183,40 @@ NAN_METHOD(requestBulkOutputMode) {
   }
 }
 
+NAN_METHOD(requestBulkRisingEdgeEvents) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  Nan::Utf8String consumer(info[1]);
+  int result = gpiod_line_request_bulk_rising_edge_events(bulk, *consumer);
+  if (result < 0) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk rising edge events"));
+    return;
+  }
+}
+
+NAN_METHOD(requestBulkFallingEdgeEvents) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  Nan::Utf8String consumer(info[1]);
+  int result = gpiod_line_request_bulk_falling_edge_events(bulk, *consumer);
+  if (result < 0) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk falling edge events"));
+    return;
+  }
+}
+
+NAN_METHOD(requestBulkBothEdgesEvents) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  Nan::Utf8String consumer(info[1]);
+  int result = gpiod_line_request_bulk_both_edges_events(bulk, *consumer);
+  if (result < 0) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk both edges events"));
+    return;
+  }
+}
+
 NAN_METHOD(releaseBulk) {
-  v8::Local<v8::Context> ctx = Nan::GetCurrentContext();
-  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(info[0]->ToObject(ctx).ToLocalChecked());
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_release_bulk(obj->getNativeBulk());
 }

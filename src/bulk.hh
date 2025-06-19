@@ -28,13 +28,13 @@ NAN_METHOD(setValues);
 NAN_METHOD(requestBulkInputMode);
 NAN_METHOD(requestBulkOutputMode);
 
+NAN_METHOD(requestBulkRisingEdgeEvents);
+NAN_METHOD(requestBulkFallingEdgeEvents);
+NAN_METHOD(requestBulkBothEdgesEvents);
+
 NAN_METHOD(releaseBulk);
 
 // gpiod_line_request_bulk
-
-// gpiod_line_request_bulk_rising_edge_events
-// gpiod_line_request_bulk_falling_edge_events
-// gpiod_line_request_bulk_both_edges_events
 
 // gpiod_line_request_bulk_input_flags
 // gpiod_line_request_bulk_output_flags
