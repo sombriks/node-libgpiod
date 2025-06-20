@@ -35,17 +35,16 @@ NAN_METHOD(requestBulkBothEdgesEvents);
 NAN_METHOD(requestBulkDirectionInput);
 NAN_METHOD(requestBulkDirectionOutput);
 
-NAN_METHOD(releaseBulk);
+NAN_METHOD(requestBulk);
+NAN_METHOD(setConfigBulk);
+NAN_METHOD(setFlagsBulk);
 
-// gpiod_line_request_bulk
+NAN_METHOD(releaseBulk);
 
 // gpiod_line_request_bulk_input_flags
 // gpiod_line_request_bulk_output_flags
 // gpiod_line_request_bulk_rising_edge_events_flags
 // gpiod_line_request_bulk_falling_edge_events_flags
 // gpiod_line_request_bulk_both_edges_events_flags
-
-// gpiod_line_set_config_bulk
-// gpiod_line_set_flags_bulk
 
 #endif  // BULK_HH

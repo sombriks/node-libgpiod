@@ -106,6 +106,13 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("requestBulkDirectionOutput").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionOutput)).ToLocalChecked());
 
+  Nan::Set(target, Nan::New("requestBulk").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulk)).ToLocalChecked());
+  Nan::Set(target, Nan::New("setConfigBulk").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setConfigBulk)).ToLocalChecked());
+  Nan::Set(target, Nan::New("setFlagsBulk").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setFlagsBulk)).ToLocalChecked());
+
   Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
 }

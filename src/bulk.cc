@@ -251,7 +251,122 @@ NAN_METHOD(requestBulkDirectionOutput) {
     Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk direction to output"));
   }
   if (values != NULL) {
-    delete[] values; 
+    delete[] values;
+  }
+}
+
+NAN_METHOD(requestBulk) {
+  v8::Local<v8::Context> context = Nan::GetCurrentContext();
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  if (!info[1]->IsObject()) {
+    Nan::ThrowTypeError("missing config object");
+    return;
+  }
+  v8::Local<v8::Object> configObj = info[1].As<v8::Object>();
+  struct gpiod_line_request_config config;
+  v8::Local<v8::String> consumerProp = Nan::New("consumer").ToLocalChecked();
+  if (configObj->HasOwnProperty(context, consumerProp).ToChecked()) {
+    v8::MaybeLocal<v8::Value> consumer = configObj->Get(context, consumerProp);
+    config.consumer = *Nan::Utf8String(consumer.ToLocalChecked());
+  } else {
+    config.consumer = "";
+  }
+  v8::Local<v8::String> typeProp = Nan::New("requestType").ToLocalChecked();
+  if (configObj->HasOwnProperty(context, typeProp).ToChecked()) {
+    v8::MaybeLocal<v8::Value> type = configObj->Get(context, typeProp);
+    config.request_type = Nan::To<int>(type.ToLocalChecked()).FromJust();
+  } else {
+    Nan::ThrowTypeError("missing request type in config object");
+    return;
+  }
+  v8::Local<v8::String> flagsProp = Nan::New("flags").ToLocalChecked();
+  if (configObj->HasOwnProperty(context, flagsProp).ToChecked()) {
+    v8::MaybeLocal<v8::Value> flags = configObj->Get(context, flagsProp);
+    config.flags = Nan::To<int>(flags.ToLocalChecked()).FromJust();
+  } else {
+    Nan::ThrowTypeError("missing flags in config object");
+    return;
+  }
+  // only relevant if config direction is output
+  const int *default_vals = nullptr;
+  if (info[2]->IsArray()) {
+    v8::Local<v8::Array> arr = info[2].As<v8::Array>();
+    if (arr->Length() != bulk->num_lines) {
+      Nan::ThrowError("Array length does not match the number of lines in the bulk");
+      return;
+    }
+    unsigned int *values = new unsigned int[bulk->num_lines];
+    for (unsigned int i = 0; i < bulk->num_lines; i++) {
+      v8::Local<v8::Value> value = arr->Get(context, i).ToLocalChecked();
+      if (!value->IsUint32()) {
+        delete[] values;
+        Nan::ThrowTypeError("Array elements must be integers");
+        return;
+      }
+      values[i] = value.As<v8::Uint32>()->Value();
+    }
+    default_vals = (const int *)values;
+  }
+  if (0 > gpiod_line_request_bulk(bulk, &config, default_vals)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk lines"));
+  }
+  if (default_vals != nullptr) {
+    delete[] default_vals;
+  }
+}
+
+NAN_METHOD(setConfigBulk) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  if (!info[1]->IsUint32()) {
+    Nan::ThrowTypeError("direction must be an integer (Line.RequestType.Direction)");
+    return;
+  }
+  unsigned int direction = Nan::To<unsigned int>(info[1]).FromJust();
+  if (!info[2]->IsUint32()) {
+    Nan::ThrowTypeError("flags must be an integer (Line.RequestFlags)");
+    return;
+  }
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  const int *default_vals = nullptr;
+  if (info[3]->IsArray()) {
+    v8::Local<v8::Array> arr = info[3].As<v8::Array>();
+    if (arr->Length() != bulk->num_lines) {
+      Nan::ThrowError("Array length does not match the number of lines in the bulk");
+      return;
+    }
+    v8::Local<v8::Context> context = Nan::GetCurrentContext();
+    unsigned int *values = new unsigned int[bulk->num_lines];
+    for (unsigned int i = 0; i < bulk->num_lines; i++) {
+      v8::Local<v8::Value> value = arr->Get(context, i).ToLocalChecked();
+      if (!value->IsUint32()) {
+        delete[] values;
+        Nan::ThrowTypeError("Array elements must be integers");
+        return;
+      }
+      values[i] = value.As<v8::Uint32>()->Value();
+    }
+    default_vals = (const int *)values;
+  }
+  if (0 > gpiod_line_set_config_bulk(bulk, direction, flags, default_vals)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk config"));
+  }
+  if (default_vals != nullptr) {
+    delete[] default_vals;
+  }
+}
+
+NAN_METHOD(setFlagsBulk) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  if (!info[1]->IsUint32()) {
+    Nan::ThrowTypeError("flags must be an integer (Line.RequestFlags)");
+    return;
+  }
+  unsigned int flags = Nan::To<unsigned int>(info[1]).FromJust();
+  if (0 > gpiod_line_set_flags_bulk(bulk, flags)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk flags"));
   }
 }
 
