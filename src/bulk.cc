@@ -10,9 +10,8 @@ Bulk::Bulk(Chip *chip, unsigned int lines[], unsigned int count) {
 
 Bulk::Bulk(Chip *chip) {
   gpiod_line_bulk_init(&bulk);
-  int result = gpiod_chip_get_all_lines(chip->getNativeChip(), &bulk);
-  if (result < 0) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "failed to get all lines from chip"));
+  if (0 > gpiod_chip_get_all_lines(chip->getNativeChip(), &bulk)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::Bulk", "failed to get all lines from chip"));
   }
 }
 
@@ -367,6 +366,87 @@ NAN_METHOD(setFlagsBulk) {
   unsigned int flags = Nan::To<unsigned int>(info[1]).FromJust();
   if (0 > gpiod_line_set_flags_bulk(bulk, flags)) {
     Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk flags"));
+  }
+}
+
+NAN_METHOD(requestBulkInputFlags) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  if (0 > gpiod_line_request_bulk_input_flags(obj->getNativeBulk(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk input with flags"));
+}
+
+NAN_METHOD(requestBulkOutputFlags) {
+  v8::Local<v8::Context> ctx = Nan::GetCurrentContext();
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  gpiod_line_bulk *bulk = obj->getNativeBulk();
+  if (!info[1]->IsString()) {
+    Nan::ThrowTypeError("consumer must be a string");
+    return;
+  }
+  Nan::Utf8String consumer(info[1]);
+  if (!info[2]->IsUint32()) {
+    Nan::ThrowTypeError("flags must be an integer (Line.RequestFlags)");
+    return;
+  }
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  if (info[3]->IsNullOrUndefined()) {
+    if (0 > gpiod_line_request_bulk_output_flags(bulk, *consumer, flags, nullptr)) {
+      Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk output with flags"));
+    }
+    return;
+  }
+  if (!info[3]->IsArray()) {
+    Nan::ThrowTypeError("default values must be an array");
+    return;
+  }
+  v8::Local<v8::Array> arr = info[3].As<v8::Array>();
+  if (arr->Length() != bulk->num_lines) {
+    Nan::ThrowError("Array length does not match the number of lines in the bulk");
+    return;
+  }
+  std::unique_ptr<unsigned int[]> defaultValues(new unsigned int[bulk->num_lines]);
+  for (unsigned int i = 0; i < bulk->num_lines; i++) {
+    v8::Local<v8::Value> value = arr->Get(ctx, i).ToLocalChecked();
+    if (!value->IsUint32()) {
+      Nan::ThrowTypeError("Array elements must be integers");
+      return;
+    }
+    defaultValues[i] = value.As<v8::Uint32>()->Value();
+  }
+  if (0 > gpiod_line_request_bulk_output_flags(bulk, *consumer, flags, (const int *)defaultValues.get())) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk output with flags"));
+  }
+}
+
+NAN_METHOD(requestBulkRisingEdgeEventsFlags) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  if (0 > gpiod_line_request_bulk_rising_edge_events_flags(obj->getNativeBulk(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk rising edge events with flags"));
+}
+
+NAN_METHOD(requestBulkFallingEdgeEventsFlags) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  if (0 > gpiod_line_request_bulk_falling_edge_events_flags(obj->getNativeBulk(), *consumer, flags))
+    Nan::ThrowError(Nan::ErrnoException(errno, "failed to request bulk falling edge events with flags"));
+}
+
+NAN_METHOD(requestBulkBothEdgesEventsFlags) {
+  Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
+  Nan::Utf8String consumer(info[1]);
+  unsigned int flags = Nan::To<unsigned int>(info[2]).FromJust();
+  if (0 > gpiod_line_request_bulk_both_edges_events_flags(obj->getNativeBulk(), *consumer, flags)) {
+    std::string err = "failed to request bulk both edges events with flags. ";
+    err += "Consumer: ";
+    err += *consumer;
+    err += ", flags: ";
+    err += flags;
+    Nan::ThrowError(Nan::ErrnoException(errno, "::requestBulkBothEdgesEventsFlags", err.c_str()));
   }
 }
 

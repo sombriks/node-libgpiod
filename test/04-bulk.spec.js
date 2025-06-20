@@ -85,7 +85,7 @@ describe('libgpiod Bulk operations', () => {
 	it('should request both edges events from the bulk', done => {
 		const Chip0 = new Chip(0);
 		const bulk = new Bulk(Chip0, [16, 21, 22]);
-		bulk.requestBothEdgesEvents('hog1');
+		bulk.requestBothEdgesEvents();
 		const result = bulk.values;
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(3);
@@ -182,6 +182,59 @@ describe('libgpiod Bulk operations', () => {
 		expect(result2).to.be.an('array');
 		expect(result2.length).to.be.eq(3);
 		expect(result2).to.deep.equal([1, 1, 1]);
+		bulk.release();
+		done();
+	});
+
+	it('should request bulk for input passing flags', done => {
+		const Chip0 = new Chip(0);
+		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		bulk.requestInputFlags('c1', Line.RequestFlags.BIAS_DISABLE);
+		const result = bulk.values;
+		expect(result).to.be.an('array');
+		expect(result.length).to.be.eq(3);
+		expect(result).to.deep.equal([0, 0, 0]);
+		bulk.release();
+		done();
+	});
+
+	it('should request bulk for output passing flags', done => {
+		const Chip0 = new Chip(0);
+		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		bulk.requestOutputFlags('c1', Line.RequestFlags.BIAS_DISABLE, [1, 1, 1]);
+		bulk.setValues([1, 0, 1]);
+		bulk.setDirectionInput();
+		const result = bulk.values;
+		expect(result).to.be.an('array');
+		expect(result.length).to.be.eq(3);
+		expect(result).to.deep.equal([1, 0, 1]);
+		bulk.release();
+		done();
+	});
+
+	it('should request bulk for rising edge events passing flags', done => {
+		const Chip0 = new Chip(0);
+		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		bulk.requestRisingEdgeEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
+
+		bulk.release();
+		done();
+	});
+
+	it('should request bulk for falling edge events passing flags', done => {
+		const Chip0 = new Chip(0);
+		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		bulk.requestFallingEdgeEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
+
+		bulk.release();
+		done();
+	});
+
+	it('should request bulk for both edges events passing flags', done => {
+		const Chip0 = new Chip(0);
+		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		bulk.requestBothEdgesEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
+
 		bulk.release();
 		done();
 	});

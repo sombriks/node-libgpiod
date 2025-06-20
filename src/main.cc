@@ -113,6 +113,17 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("setFlagsBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setFlagsBulk)).ToLocalChecked());
 
+  Nan::Set(target, Nan::New("requestBulkInputFlags").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputFlags)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkOutputFlags").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkOutputFlags)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkRisingEdgeEventsFlags").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkRisingEdgeEventsFlags)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkFallingEdgeEventsFlags").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkFallingEdgeEventsFlags)).ToLocalChecked());
+  Nan::Set(target, Nan::New("requestBulkBothEdgesEventsFlags").ToLocalChecked(),
+           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEventsFlags)).ToLocalChecked());
+
   Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
 }
