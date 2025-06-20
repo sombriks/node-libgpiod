@@ -1,3 +1,4 @@
+export const InstantFlags: InstantFlags;
 export const version: string;
 /**
 * Get the names of all available chips
@@ -8,9 +9,11 @@ export function getChipNames(): string[];
 * Get instant line value
 * @param {number} chipNumber - The chip number
 * @param {number} lineNumber - The line number
-* @returns {number} - The current value of the line
+* @param {boolean} [activeLow] - the logical active state for this ping, default is false (active high)
+* @param {string} [consumer] - The line number
+* @returns {0|1} - The current value of the line
 */
-export function getInstantLineValue(chipNumber: number, lineNumber: number): number;
+export function getInstantLineValue(chipNumber: number, lineNumber: number, activeLow?: boolean, consumer?: string): 0 | 1;
 /**
 * Set instant line value
 * @param {number} chipNumber  - The chip number

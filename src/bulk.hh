@@ -3,7 +3,6 @@
 
 #include <gpiod.h>
 #include <nan.h>
-#include <string.h>
 
 #include "chip.hh"
 

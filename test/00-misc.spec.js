@@ -27,7 +27,8 @@ describe('libgpiod miscellaneous bindings', () => {
 		} catch (error) {
 			expect(error.errno).eq(2);
 			expect(error.code).eq('ENOENT');
-			expect(error.syscall).eq('::getInstantLineValue - Unable to get instant value');
+			expect(error.syscall).eq('::getInstantLineValue');
+			expect(error.message).to.include('Unable to get instant value');
 			done();
 		}
 	});
