@@ -1,5 +1,11 @@
 #include "misc.hh"
 
+void misc_callback(void *nanCb) {
+  Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
+  v8::Local<v8::Value> argv[] = {Nan::Null()};
+  callback->Call(1, argv);
+}
+
 NAN_METHOD(version) {
   info.GetReturnValue()
       .Set(Nan::New<v8::String>(gpiod_version_string())
@@ -31,7 +37,13 @@ NAN_METHOD(getInstantLineValue) {
   Nan::Utf8String consumer(info[3]);
   int value = gpiod_ctxless_get_value(*device, offset, active_low, *consumer);
   if (0 > value) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getInstantLineValue", "Unable to get instant value"));
+    std::string error_message = "Unable to get instant value:";
+    error_message += " chip: " + std::string(*device) +
+                     " line: " + std::to_string(offset) +
+                     " value: " + std::to_string(value) +
+                     " active_low: " + (active_low ? "true" : "false") +
+                     " consumer: '" + std::string(*consumer) + "'";
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getInstantLineValue", error_message.c_str()));
     return;
   }
   info.GetReturnValue().Set(value);
@@ -43,9 +55,18 @@ NAN_METHOD(setInstantLineValue) {
   unsigned int value = Nan::To<unsigned int>(info[2]).FromJust();
   bool active_low = Nan::To<bool>(info[3]).FromJust();
   Nan::Utf8String consumer(info[4]);
-  int result = gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL);
+  Nan::Callback callback(info[5].As<v8::Function>());
+  int result = gpiod_ctxless_set_value(
+      *device, offset, value, active_low, *consumer,
+      &misc_callback, &callback);
   if (0 > result) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", "Unable to get instant value"));
+    std::string error_message = "Unable to set instant value:";
+    error_message += " chip: " + std::string(*device) +
+                     " line: " + std::to_string(offset) +
+                     " value: " + std::to_string(value) +
+                     " active_low: " + (active_low ? "true" : "false") +
+                     " consumer: '" + std::string(*consumer) + "'";
+    Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", error_message.c_str()));
     return;
   }
   info.GetReturnValue().Set(result);

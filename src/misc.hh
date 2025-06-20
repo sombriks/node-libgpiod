@@ -3,6 +3,7 @@
 
 #include <gpiod.h>
 #include <nan.h>
+#include <string.h>
 
 NAN_METHOD(version);
 NAN_METHOD(getChipNames);

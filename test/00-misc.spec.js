@@ -43,4 +43,10 @@ describe('libgpiod miscellaneous bindings', () => {
 			}
 		}, 70);
 	});
+
+	it('should invoke callback after set instant values', done => {
+		gpiod.setInstantLineValue(0, 17, 1, false, '', () => {
+			done();
+		});
+	});
 });
