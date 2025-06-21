@@ -29,8 +29,8 @@ sudo dnf install @development-tools g++ \
 ```bash
 # openSUSE
 sudo zypper in -t pattern devel_basis
-sudo zypper in libgpiod libgpiod-devel libgpiod-utils \ 
- nodejs nodejs-devel
+sudo zypper in libgpiod libgpiod-devel libgpiod-utils
+sudo zypper in nodejs-default nodejs-devel-default
 ```
 
 ### DEB based
