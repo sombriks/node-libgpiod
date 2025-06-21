@@ -52,8 +52,15 @@
       "no-new": 0,
       "eqeqeq": 0,
       "no-undef": 0,
+      "no-bitwise": 0,
       "import/extensions": 0,
       "unicorn/prefer-module": 0
-    }
+    },
+    "ignores": [
+      "*.ts",
+      "lib/**/*.ts",
+      "test/**",
+      "**/*.spec.js"
+    ]
   }
 }

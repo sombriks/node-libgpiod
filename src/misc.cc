@@ -71,3 +71,27 @@ NAN_METHOD(setInstantLineValue) {
   }
   info.GetReturnValue().Set(result);
 }
+
+NAN_METHOD(getInstantLineValues) {
+  // gpiod_ctxless_get_value_multiple
+}
+
+NAN_METHOD(setInstantLineValues) {
+  // gpiod_ctxless_set_value_multiple
+}
+
+NAN_METHOD(getInstantLineValueFlags) {
+  // gpiod_ctxless_get_value_ext
+}
+
+NAN_METHOD(setInstantLineValueFlags) {
+  // gpiod_ctxless_set_value_ext
+}
+
+NAN_METHOD(getInstantLineValuesFlags) {
+  // gpiod_ctxless_get_value_multiple_ext
+}
+
+NAN_METHOD(setInstantLineValuesFlags) {
+  // gpiod_ctxless_set_value_multiple_ext
+}

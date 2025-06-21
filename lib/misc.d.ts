@@ -4,7 +4,7 @@ export const version: string;
 * Get the names of all available chips
 * @returns {Array<string>} - An array of chip names
 */
-export function getChipNames(): string[];
+export function getChipNames(): Array<string>;
 /**
 * Get instant line value
 * @param {number} chipNumber - The chip number
@@ -24,4 +24,4 @@ export function getInstantLineValue(chipNumber: number, lineNumber: number, acti
 * @param {function} [callback] - The callback function to call when the operation is complete
 */
 export function setInstantLineValue(chipNumber: number, lineNumber: number, value: 0 | 1, activeLow?: boolean, consumer?: string, callback?: Function): any;
-// # sourceMappingURL=misc.d.ts.map
+//# sourceMappingURL=misc.d.ts.map
