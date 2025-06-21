@@ -33,6 +33,16 @@ sudo zypper in libgpiod libgpiod-devel libgpiod-utils
 sudo zypper in nodejs-default nodejs-devel-default
 ```
 
+Note: opensuse leap might have an outdated python as default, node-gyp needs a
+newer one:
+
+```bash
+sudo zypper in python312
+ln -s /usr/bin/python3.12 $HOME/bin/python3
+```
+
+It's not recommended to upgrade python3 used by the system.
+
 ### DEB based
 
 ```bash
