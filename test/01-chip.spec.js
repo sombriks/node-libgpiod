@@ -4,7 +4,7 @@ const gpiod = require('..');
 describe('libgpiod chip bindings', () => {
 	// 54 for raspberry pi zero w, 32 for radxa rock-3c
 	const numberLines = process.env.NUM_LINES ?? 54;
-	const chipLabel = process.env.LABEL ?? 'gpio-sim.0-node0';
+	const chipLabel = process.env.LABEL ?? 'pinctrl-bcm2835';
 
 	it('should \'create\' a new chip by number', done => {
 		const chip0 = new gpiod.Chip(0);

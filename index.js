@@ -1,5 +1,5 @@
 // Entry point
-const {version, getChipNames, getInstantLineValue, setInstantLineValue} = require('./lib/misc');
+const {version, getChipNames, getInstantLineValue, setInstantLineValue, getInstantLineValues, setInstantLineValues} = require('./lib/misc');
 const {Chip} = require('./lib/chip');
 const {Bulk} = require('./lib/bulk');
 const {Line, Pin} = require('./lib/line');
@@ -13,6 +13,8 @@ module.exports = {
 	getChipNames,
 	getInstantLineValue,
 	setInstantLineValue,
+	getInstantLineValues,
+	setInstantLineValues,
 	Chip,
 	Bulk,
 	Line,

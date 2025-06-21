@@ -22,12 +22,17 @@ modprobe gpio-sim
 
 declare fakechip="/sys/kernel/config/gpio-sim/fakegpio"
 declare bank0="$fakechip/gpio-bank0"
+declare label="pinctrl-bcm2835"
 
-mkdir -p  $bank0
-echo 0  > $fakechip/live
-rm -rf    $bank0
-mkdir -p  $bank0
-echo 54 > $bank0/num_lines
+# sanity check
+mkdir      -p $bank0
+echo 0      > $fakechip/live
+e1e2e3e4
+
+rm        -rf $bank0
+mkdir      -p $bank0
+echo 54     > $bank0/num_lines
+echo $label > $bank0/label
 
 # mimic lines from raspberry pi zero w
 for i in $(seq 0 53)
