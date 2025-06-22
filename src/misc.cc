@@ -199,9 +199,56 @@ NAN_METHOD(setInstantLineValueFlags) {
 }
 
 NAN_METHOD(getInstantLineValuesFlags) {
-  // gpiod_ctxless_get_value_multiple_ext
+  Nan::Utf8String device(info[0]);
+  v8::Local<v8::Array> offsetsArray = info[1].As<v8::Array>();
+  unsigned int num_lines = offsetsArray->Length();
+  bool active_low = Nan::To<bool>(info[2]).FromJust();
+  Nan::Utf8String consumer(info[3]);
+  unsigned int flags = Nan::To<unsigned int>(info[4]).FromJust();
+  std::unique_ptr<int[]> offsets(to_native_int_array(offsetsArray));
+  std::unique_ptr<int[]> values(new int[num_lines]);
+  if (0 > gpiod_ctxless_get_value_multiple_ext(*device, (const unsigned int *)offsets.get(),
+                                               values.get(), num_lines, active_low, *consumer, flags)) {
+    std::string error_message = "Unable to get instant values:";
+    error_message += " chip: " + std::string(*device) + " offsets: ";
+    error_message += int_array_to_string(offsets.get(), num_lines);
+    error_message += " active_low: " + std::string(active_low ? "true" : "false");
+    error_message += " consumer: '" + std::string(*consumer) + "'" +
+                     " flags: " + std::to_string(flags);
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getInstantLineValues", error_message.c_str()));
+    return;
+  }
+  v8::Local<v8::Array> valuesArray = Nan::New<v8::Array>(num_lines);
+  from_native_int_array(valuesArray, values.get(), num_lines);
+  info.GetReturnValue().Set(valuesArray);
 }
 
 NAN_METHOD(setInstantLineValuesFlags) {
-  // gpiod_ctxless_set_value_multiple_ext
+  Nan::Utf8String device(info[0]);
+  v8::Local<v8::Array> offsetsArray = info[1].As<v8::Array>();
+  v8::Local<v8::Array> valuesArray = info[2].As<v8::Array>();
+  if (offsetsArray->Length() != valuesArray->Length()) {
+    Nan::ThrowTypeError("Offsets and values arrays must have the same length");
+    return;
+  }
+  std::unique_ptr<int[]> offsets(to_native_int_array(offsetsArray));
+  std::unique_ptr<int[]> values(to_native_int_array(valuesArray));
+  unsigned int num_lines = offsetsArray->Length();
+  bool active_low = Nan::To<bool>(info[3]).FromJust();
+  Nan::Utf8String consumer(info[4]);
+  Nan::Callback callback(info[5].As<v8::Function>());
+  unsigned int flags = Nan::To<unsigned int>(info[6]).FromJust();
+  if (0 > gpiod_ctxless_set_value_multiple_ext(*device, (const unsigned int *)offsets.get(),
+                                               values.get(), num_lines, active_low, *consumer,
+                                               &misc_callback, &callback, flags)) {
+    std::string error_message = "Unable to set instant values:";
+    error_message += " chip: " + std::string(*device);
+    error_message += " offsets: " + int_array_to_string(offsets.get(), num_lines);
+    error_message += " values: " + int_array_to_string(values.get(), num_lines);
+    error_message += " active_low: " + std::string(active_low ? "true" : "false");
+    error_message += " consumer: '" + std::string(*consumer) + "'" +
+                     " flags: " + std::to_string(flags);
+    Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValues", error_message.c_str()));
+    return;
+  }
 }

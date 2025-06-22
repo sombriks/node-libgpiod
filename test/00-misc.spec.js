@@ -66,4 +66,14 @@ describe('libgpiod miscellaneous bindings', () => {
 		expect(value).to.deep.equal([0, 0, 0]);
 		done();
 	});
+
+	it('should get lines instant values passing flags', done => {
+		// TODO improve signatures, too many parameters 
+		const value = gpiod.getInstantLineValuesFlags(0, [16, 20, 21], //
+			false, '', gpiod.InstantFlags.BIAS_DISABLE);
+		expect(value).to.be.an('array');
+		expect(value.length).to.eq(3);
+		expect(value).to.deep.equal([0, 0, 0]);
+		done();
+	});
 });

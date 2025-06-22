@@ -64,4 +64,25 @@ export function getInstantLineValueFlags(chipNumber: number, lineNumber: number,
  * @param {InstantFlags} [flags] - The flags to use for the operation
  */
 export function setInstantLineValueFlags(chipNumber: number, lineNumber: number, value: 0 | 1, activeLow?: boolean, consumer?: string, callback?: Function, flags?: InstantFlags): any;
+/**
+ * Get instant line values flags
+ * @param {number} chipNumber - The chip number
+ * @param {Array<number>} lineNumbers - An array of line numbers
+ * @param {boolean} [activeLow] - the logical active state for this ping, default is false (active high)
+ * @param {string} [consumer] - The consumer name
+ * @param {InstantFlags} [flags] - The flags to use for the operation
+ * @returns {Array<number>} - An array of current values for the lines
+ */
+export function getInstantLineValuesFlags(chipNumber: number, lineNumbers: Array<number>, activeLow?: boolean, consumer?: string, flags?: InstantFlags): Array<number>;
+/**
+ * Set instant line values
+ * @param {number} chipNumber - The chip number
+ * @param {Array<number>} lineNumbers - An array of line numbers
+ * @param {Array<number>} values - An array of values to set the lines to. Must be 0 or 1
+ * @param {boolean} [activeLow] - the logical active state for this ping, default is false (active high)
+ * @param {string} [consumer] - The consumer name
+ * @param {function} [callback] - The callback function to call when the operation is complete
+ * @param {InstantFlags} [flags] - The flags to use for the operation
+ */
+export function setInstantLineValuesFlags(chipNumber: number, lineNumbers: Array<number>, values: Array<number>, activeLow?: boolean, consumer?: string, callback?: Function, flags?: InstantFlags): void;
 //# sourceMappingURL=misc.d.ts.map

@@ -27,7 +27,6 @@ declare label="pinctrl-bcm2835"
 # sanity check
 mkdir      -p $bank0
 echo 0      > $fakechip/live
-e1e2e3e4
 
 rm        -rf $bank0
 mkdir      -p $bank0
