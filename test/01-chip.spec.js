@@ -1,4 +1,4 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 const gpiod = require('..');
 
 describe('libgpiod chip bindings', () => {
@@ -6,19 +6,19 @@ describe('libgpiod chip bindings', () => {
 	const numberLines = process.env.NUM_LINES ?? 54;
 	const chipLabel = process.env.LABEL ?? 'pinctrl-bcm2835';
 
-	it('should \'create\' a new chip by number', done => {
+	it('should \'create\' a new chip by number and check chip name', done => {
 		const chip0 = new gpiod.Chip(0);
 		expect('gpiochip0').eq(chip0.name);
 		done();
 	});
 
-	it('should \'create\' a new chip by name', done => {
+	it('should \'create\' a new chip by name and check number of lines', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
 		expect(chip0.numberOfLines).eq(numberLines);
 		done();
 	});
 
-	it('should \'create\' a new chip by path', done => {
+	it('should \'create\' a new chip by path and check label', done => {
 		const chip0 = new gpiod.Chip('/dev/gpiochip0');
 		expect(chip0.label).eq(chipLabel);
 		done();

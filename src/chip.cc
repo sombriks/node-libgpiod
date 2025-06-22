@@ -84,9 +84,8 @@ NAN_METHOD(getLineNames) {
   v8::Local<v8::Array> names = Nan::New<v8::Array>(bulk.num_lines);
   int i = -1;
   while (++i < bulk.num_lines) {
-    Nan::MaybeLocal<v8::String> name = Nan::New<v8::String>(gpiod_line_name(bulk.lines[i]));
-    if (!name.IsEmpty())
-      Nan::Set(names, i, name.ToLocalChecked());
+    const char *str = gpiod_line_name(bulk.lines[i]);
+    if (str) Nan::Set(names, i, Nan::New<v8::String>(str).ToLocalChecked());
   }
   gpiod_line_release_bulk(&bulk);
   info.GetReturnValue().Set(names);

@@ -254,17 +254,49 @@ NAN_METHOD(setInstantLineValuesFlags) {
 }
 
 NAN_METHOD(instantMonitorEvent) {
+  Nan::Utf8String device(info[0]);
+  unsigned int lineNumber = Nan::To<unsigned int>(info[1]).FromJust();
+  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
+  Nan::Callback callback(info[3].As<v8::Function>());
+  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  bool activeLow = Nan::To<bool>(info[5]).FromJust();
+  Nan::Utf8String consumer(info[6]);
   // gpiod_ctxless_event_monitor
 }
 
 NAN_METHOD(instantMonitorEventFlags) {
+  Nan::Utf8String device(info[0]);
+  unsigned int lineNumber = Nan::To<unsigned int>(info[1]).FromJust();
+  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
+  Nan::Callback callback(info[3].As<v8::Function>());
+  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  bool activeLow = Nan::To<bool>(info[5]).FromJust();
+  Nan::Utf8String consumer(info[6]);
+  unsigned int flags = Nan::To<unsigned int>(info[7]).FromJust();
   // gpiod_ctxless_event_monitor_ext
 }
 
 NAN_METHOD(instantMonitorEvents) {
+  Nan::Utf8String device(info[0]);
+  v8::Local<v8::Array> lineNumbers = info[1].As<v8::Array>();
+  std::unique_ptr<int[]> offsets(to_native_int_array(lineNumbers));
+  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
+  Nan::Callback callback(info[3].As<v8::Function>());
+  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  bool activeLow = Nan::To<bool>(info[5]).FromJust();
+  Nan::Utf8String consumer(info[6]);
   // gpiod_ctxless_event_monitor_multiple
 }
 
 NAN_METHOD(instantMonitorEventsFlags) {
+  Nan::Utf8String device(info[0]);
+  v8::Local<v8::Array> lineNumbers = info[1].As<v8::Array>();
+  std::unique_ptr<int[]> offsets(to_native_int_array(lineNumbers));
+  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
+  Nan::Callback callback(info[3].As<v8::Function>());
+  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  bool activeLow = Nan::To<bool>(info[5]).FromJust();
+  Nan::Utf8String consumer(info[6]);
+  unsigned int flags = Nan::To<unsigned int>(info[7]).FromJust();
   // gpiod_ctxless_event_monitor_multiple_ext
 }
