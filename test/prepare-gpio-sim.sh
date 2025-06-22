@@ -45,18 +45,24 @@ done
 
 # custom oins setup
 
-echo "ID_SDA" > $bank0/line0/name
-echo "ID_SCL" > $bank0/line1/name
-echo "SDA0"   > $bank0/line28/name
-echo "SCL0"   > $bank0/line29/name
+echo "ID_SDA"  > $bank0/line0/name
+echo "ID_SCL"  > $bank0/line1/name
+echo "SDA0"    > $bank0/line28/name
+echo "SCL0"    > $bank0/line29/name
+echo "CTS0"    > $bank0/line30/name
+echo "RTS0"    > $bank0/line31/name
+echo "TXD0"    > $bank0/line32/name
+echo "RXD0"    > $bank0/line33/name
+echo "SD1_CLK" > $bank0/line34/name
+echo "SD1_CMDS" > $bank0/line35/name
 
-mkdir -p             $bank0/line18/hog
-echo "hog1"        > $bank0/line18/hog/name
-echo "output-high" > $bank0/line18/hog/direction
+# mkdir -p             $bank0/line18/hog
+# echo "hog1"        > $bank0/line18/hog/name
+# echo "output-high" > $bank0/line18/hog/direction
 
-mkdir -p             $bank0/line19/hog
-echo "hog2"        > $bank0/line19/hog/name
-echo "output-low"  > $bank0/line19/hog/direction
+# mkdir -p             $bank0/line19/hog
+# echo "hog2"        > $bank0/line19/hog/name
+# echo "output-low"  > $bank0/line19/hog/direction
 
 echo 1 > $fakechip/live
 

@@ -3,7 +3,8 @@ const gpiod = require('..');
 
 describe('libgpiod miscellaneous bindings', () => {
 	it('should get libgpiod version', done => {
-		expect(gpiod.version).to.be.ok;
+		// TODO should we support 1.4?
+		expect(gpiod.version).to.contain("1.6");
 		done();
 	});
 
