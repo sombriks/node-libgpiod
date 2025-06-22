@@ -1,0 +1,25 @@
+System:    Host: rock-3c Kernel: 5.10.160-34-rk356x aarch64 bits: 64 Console: N/A Distro: Debian GNU/Linux 11 (bullseye) 
+Machine:   Type: ARM Device System: Radxa ROCK3 Model C details: N/A serial: fd91730856bfadd8 
+CPU:       Info: Quad Core model: N/A variant: cortex-a55 bits: 64 type: MCP 
+           Speed: 1416 MHz min/max: 408/1416 MHz Core speeds (MHz): 1: 1416 2: 1416 3: 1416 4: 1416 
+Graphics:  Device-1: display-subsystem driver: rockchip_drm v: N/A 
+           Device-2: mali-bifrost driver: mali v: N/A 
+           Device-3: rk3568-dw-hdmi driver: dwhdmi_rockchip v: N/A 
+           Display: server: X.org 1.20.11 driver: loaded: modesetting tty: 138x28 
+           Message: Advanced graphics data unavailable in console for root. 
+Audio:     Device-1: rk3568-dw-hdmi driver: dwhdmi_rockchip 
+           Device-2: simple-audio-card driver: asoc_simple_card 
+           Device-3: simple-audio-card driver: asoc_simple_card 
+           Sound Server: ALSA v: k5.10.160-34-rk356x 
+Network:   Device-1: rk3568-gmac driver: rk_gmac_dwmac 
+           IF: eth0 state: up speed: 1000 Mbps duplex: full mac: 2a:6a:50:77:be:90 
+           Device-2: wlan-platdata driver: wlan_platdata 
+Drives:    Local Storage: total: 28.87 GiB used: 4.47 GiB (15.5%) 
+           ID-1: /dev/mmcblk1 model: SD32G size: 28.87 GiB 
+Partition: ID-1: / size: 28.02 GiB used: 4.47 GiB (16.0%) fs: ext4 dev: /dev/mmcblk1p3 
+           ID-2: /boot/efi size: 299.4 MiB used: 4 KiB (0.0%) fs: vfat dev: /dev/mmcblk1p2 
+Swap:      ID-1: swap-1 type: zram size: 991.7 MiB used: 0 KiB (0.0%) dev: /dev/zram0 
+Sensors:   System Temperatures: cpu: 37.2 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 151 Uptime: 1h 23m Memory: 1.94 GiB used: 305.4 MiB (15.4%) Init: systemd runlevel: 5 Shell: Bash 
+           inxi: 3.3.01 
