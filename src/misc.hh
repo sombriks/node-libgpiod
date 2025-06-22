@@ -19,9 +19,9 @@ NAN_METHOD(setInstantLineValueFlags);
 NAN_METHOD(getInstantLineValuesFlags);
 NAN_METHOD(setInstantLineValuesFlags);
 
-// gpiod_ctxless_event_monitor
-// gpiod_ctxless_event_monitor_ext
-// gpiod_ctxless_event_monitor_multiple
-// gpiod_ctxless_event_monitor_multiple_ext
+NAN_METHOD(instantMonitorEvent);
+NAN_METHOD(instantMonitorEventFlags);
+NAN_METHOD(instantMonitorEvents);
+NAN_METHOD(instantMonitorEventsFlags);
 
 #endif  // NODE_LIBGPIOD_HH

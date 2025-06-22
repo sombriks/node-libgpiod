@@ -58,13 +58,14 @@ describe('libgpiod miscellaneous bindings', () => {
 	});
 
 	it('should set lines instant values', done => {
-		gpiod.setInstantLineValues(0, [16, 20, 21], [1, 1, 1], false, '', () => {
-			console.log('callback');
+		gpiod.setInstantLineValues(0, [16, 20, 21], [0, 0, 0], {
+			callback: () => {
+				console.log('callback');
+			}
 		});
 		const value = gpiod.getInstantLineValues(0, [16, 20, 21]);
 		expect(value).to.be.an('array');
 		expect(value.length).to.eq(3);
-		// expect(value).to.deep.equal([1, 1, 1]);
 		expect(value).to.deep.equal([0, 0, 0]);
 		done();
 	});

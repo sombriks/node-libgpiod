@@ -252,3 +252,19 @@ NAN_METHOD(setInstantLineValuesFlags) {
     return;
   }
 }
+
+NAN_METHOD(instantMonitorEvent) {
+  // gpiod_ctxless_event_monitor
+}
+
+NAN_METHOD(instantMonitorEventFlags) {
+  // gpiod_ctxless_event_monitor_ext
+}
+
+NAN_METHOD(instantMonitorEvents) {
+  // gpiod_ctxless_event_monitor_multiple
+}
+
+NAN_METHOD(instantMonitorEventsFlags) {
+  // gpiod_ctxless_event_monitor_multiple_ext
+}
