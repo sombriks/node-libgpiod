@@ -1,6 +1,5 @@
 import { InstantFlags } from "./lib/misc";
 import { version } from "./lib/misc";
-import { getChipNames } from "./lib/misc";
 import { getInstantLineValue } from "./lib/misc";
 import { setInstantLineValue } from "./lib/misc";
 import { getInstantLineValues } from "./lib/misc";

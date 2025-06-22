@@ -49,48 +49,44 @@ NAN_METHOD(Chip::New) {
 NAN_METHOD(getChipName) {
   Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *name = gpiod_chip_name(obj->getNativeChip());
-  if (!name) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getChipName() failed"));
-  } else {
+  if (!name)
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getChipName", "failed to get chip nane"));
+  else
     info.GetReturnValue().Set(Nan::New<v8::String>(name).ToLocalChecked());
-  }
 }
 
 NAN_METHOD(getChipLabel) {
   Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   const char *label = gpiod_chip_label(obj->getNativeChip());
-  if (!label) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getChipLabel() failed"));
-  } else
+  if (!label)
+    Nan::ThrowError(Nan::ErrnoException(errno, "getChipLabel", "failed to get chip label"));
+  else
     info.GetReturnValue().Set(Nan::New<v8::String>(label).ToLocalChecked());
 }
 
 NAN_METHOD(getNumberOfLines) {
   Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   int ret = gpiod_chip_num_lines(obj->getNativeChip());
-  if (-1 == ret) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getNumberOfLines() failed"));
-  } else {
+  if (-1 == ret)
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getNumberOfLines", "failed to get number of lines"));
+  else
     info.GetReturnValue().Set(ret);
-  }
 }
 
 NAN_METHOD(getLineNames) {
   Chip *obj = Nan::ObjectWrap::Unwrap<Chip>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   struct gpiod_line_bulk bulk;
   gpiod_line_bulk_init(&bulk);
-  if (gpiod_chip_get_all_lines(obj->getNativeChip(), &bulk) < 0) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineNames() failed"));
+  if (0 > gpiod_chip_get_all_lines(obj->getNativeChip(), &bulk)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "::getLineNames", "failed to get line names"));
     return;
   }
   v8::Local<v8::Array> names = Nan::New<v8::Array>(bulk.num_lines);
   int i = -1;
   while (++i < bulk.num_lines) {
-    const char *name = gpiod_line_name(bulk.lines[i]);
-    if (name) {
-      names->Set(info.GetIsolate()->GetCurrentContext(), i,  //
-                 Nan::New<v8::String>(name).ToLocalChecked());
-    }
+    Nan::MaybeLocal<v8::String> name = Nan::New<v8::String>(gpiod_line_name(bulk.lines[i]));
+    if (!name.IsEmpty())
+      Nan::Set(names, i, name.ToLocalChecked());
   }
   gpiod_line_release_bulk(&bulk);
   info.GetReturnValue().Set(names);

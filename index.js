@@ -1,14 +1,12 @@
 // Entry point
 const {
-	InstantFlags, version, getChipNames,
+	InstantFlags, version, chipNames,
 	getInstantLineValue, setInstantLineValue,
 	getInstantLineValues, setInstantLineValues,
-	getInstantLineValueFlags, setInstantLineValueFlags,
-	getInstantLineValuesFlags, setInstantLineValuesFlags,
 } = require('./lib/misc');
-const {Chip} = require('./lib/chip');
-const {Bulk} = require('./lib/bulk');
-const {Line, Pin} = require('./lib/line');
+const { Chip } = require('./lib/chip');
+const { Bulk } = require('./lib/bulk');
+const { Line, Pin } = require('./lib/line');
 
 /**
  * @module libgpiod
@@ -17,15 +15,11 @@ const {Line, Pin} = require('./lib/line');
 module.exports = {
 	InstantFlags,
 	version,
-	getChipNames,
+	chipNames,
 	getInstantLineValue,
 	setInstantLineValue,
 	getInstantLineValues,
 	setInstantLineValues,
-	getInstantLineValueFlags,
-	setInstantLineValueFlags,
-	getInstantLineValuesFlags,
-	setInstantLineValuesFlags,
 	Chip,
 	Bulk,
 	Line,
