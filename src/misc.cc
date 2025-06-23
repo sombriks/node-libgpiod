@@ -1,9 +1,22 @@
 #include "misc.hh"
 
+// callback for set value operations
 void misc_callback(void *nanCb) {
   Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
   v8::Local<v8::Value> argv[] = {Nan::Null()};
   callback->Call(1, argv);
+}
+
+// callback for event monitors
+int misc_event_callback(int event_type, unsigned int offset,
+                        const struct timespec *event_timestamp, void *nanCb) {
+  Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
+  v8::Local<v8::Value> argv[] = {
+      Nan::Null(),  // event type
+      Nan::Null(),  // line
+      Nan::Null(),  // timestamp
+  };
+  callback->Call(3, argv);
 }
 
 int *to_native_int_array(v8::Local<v8::Array> &array) {
@@ -259,9 +272,16 @@ NAN_METHOD(instantMonitorEvent) {
   unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
   Nan::Callback callback(info[3].As<v8::Function>());
   unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  struct timespec timeout_t;
+  timeout_t.tv_sec = 0;
+  timeout_t.tv_nsec = 1000 * timeout;
   bool activeLow = Nan::To<bool>(info[5]).FromJust();
   Nan::Utf8String consumer(info[6]);
-  // gpiod_ctxless_event_monitor
+  if (0 > gpiod_ctxless_event_monitor(*device, eventType, lineNumber, activeLow,
+                                      *consumer, &timeout_t, NULL,
+                                      &misc_event_callback, &callback)) {
+    Nan::ThrowError(Nan::ErrnoException(errno, "instantMonitorEvent", "failed to monitor events"));
+  }
 }
 
 NAN_METHOD(instantMonitorEventFlags) {

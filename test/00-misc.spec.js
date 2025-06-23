@@ -93,4 +93,11 @@ describe('libgpiod miscellaneous bindings', () => {
 		expect(value).to.deep.equal([0, 0, 0]);
 		done();
 	});
+
+	it('should monitor events in line 16', done => {
+		gpiod.instantMonitorEvent(0, 16, gpiod.InstantFlags.Events.BOTH_EDGES, (type, pin, milliseconds) => {
+			console.log(type, pin, milliseconds);
+			done()
+		})
+	})
 });
