@@ -47,7 +47,7 @@ It's not recommended to upgrade python3 used by the system.
 
 ```bash
 # debian and its variants
-sudo apt install build-essential gpiod libgpiod2 libgpiod-dev libnode-dev
+sudo apt install build-essential gpiod libgpiod2 libgpiod-dev libnode-dev nodejs npm
 ```
 
 Then just add it as a regular nodejs dependency:
