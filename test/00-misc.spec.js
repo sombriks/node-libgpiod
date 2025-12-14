@@ -38,7 +38,7 @@ describe('libgpiod miscellaneous bindings', () => {
 		// TODO: callback is synchronous, should be async
 		gpiod.setInstantLineValue(0, 17, 1, {
 			callback: () => {
-				console.log('callback');
+				console.log('callback line');
 			}
 		});
 		setTimeout(() => {
@@ -60,7 +60,7 @@ describe('libgpiod miscellaneous bindings', () => {
 	it('should set lines instant values', done => {
 		gpiod.setInstantLineValues(0, [16, 20, 21], [0, 0, 0], {
 			callback: () => {
-				console.log('callback');
+				console.log('callback lines');
 			}
 		});
 		const value = gpiod.getInstantLineValues(0, [16, 20, 21]);
@@ -84,7 +84,7 @@ describe('libgpiod miscellaneous bindings', () => {
 		gpiod.setInstantLineValues(0, [16, 20, 21], [0, 0, 0], {
 			flags: gpiod.InstantFlags.BIAS_DISABLE,
 			callback: () => {
-				console.log('callback');
+				console.log('callback lines flags');
 			}
 		});
 		const value = gpiod.getInstantLineValues(0, [16, 20, 21]);
@@ -95,9 +95,10 @@ describe('libgpiod miscellaneous bindings', () => {
 	});
 
 	it('should monitor events in line 16', done => {
-		gpiod.instantMonitorEvent(0, 16, gpiod.InstantFlags.Events.BOTH_EDGES, (type, pin, milliseconds) => {
-			console.log(type, pin, milliseconds);
-			done()
-		})
+		gpiod.instantMonitorEvent(0, 16, gpiod.InstantFlags.Events.BOTH_EDGES,
+			(type, pin, milliseconds) => {
+				console.log(type, pin, milliseconds);
+				done()
+			})
 	})
 });

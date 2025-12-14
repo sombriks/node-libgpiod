@@ -4,7 +4,6 @@
 void misc_callback(void *nanCb) {
   Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
   v8::Local<v8::Value> argv[] = {Nan::Null()};
-  callback->Call(1, argv);
 }
 
 // callback for event monitors
@@ -12,9 +11,9 @@ int misc_event_callback(int event_type, unsigned int offset,
                         const struct timespec *event_timestamp, void *nanCb) {
   Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
   v8::Local<v8::Value> argv[] = {
-      Nan::Null(),  // event type
-      Nan::Null(),  // line
-      Nan::Null(),  // timestamp
+      Nan::New<v8::Number>(event_type),
+      Nan::New<v8::Number>(offset),
+      Nan::New<v8::Number>(event_timestamp->tv_sec * 1000.0 + event_timestamp->tv_nsec / 1e6),
   };
   callback->Call(3, argv);
 }
@@ -277,11 +276,16 @@ NAN_METHOD(instantMonitorEvent) {
   timeout_t.tv_nsec = 1000 * timeout;
   bool activeLow = Nan::To<bool>(info[5]).FromJust();
   Nan::Utf8String consumer(info[6]);
-  if (0 > gpiod_ctxless_event_monitor(*device, eventType, lineNumber, activeLow,
-                                      *consumer, &timeout_t, NULL,
-                                      &misc_event_callback, &callback)) {
-    Nan::ThrowError(Nan::ErrnoException(errno, "instantMonitorEvent", "failed to monitor events"));
-  }
+
+  auto myLambda = [=](int event_type, unsigned int offset, const struct timespec *ts) {
+    // Seu código aqui
+  };
+
+  // if (0 > gpiod_ctxless_event_monitor(*device, eventType, lineNumber, activeLow,
+  //                                     *consumer, &timeout_t, NULL,
+  //                                     &misc_event_callback, &callback)) {
+  //   Nan::ThrowError(Nan::ErrnoException(errno, "instantMonitorEvent", "failed to monitor events"));
+  // }
 }
 
 NAN_METHOD(instantMonitorEventFlags) {
