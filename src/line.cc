@@ -96,11 +96,15 @@ NAN_METHOD(getLineActiveState) {
   info.GetReturnValue().Set(activeState);
 }
 
+#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+
 NAN_METHOD(getLineBias) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   int bias = gpiod_line_bias(obj->getNativeLine());
   info.GetReturnValue().Set(bias);
 }
+
+#endif
 
 NAN_METHOD(isLineUsed) {
   Line *obj = Nan::ObjectWrap::Unwrap<Line>(Nan::To<v8::Object>(info[0]).ToLocalChecked());

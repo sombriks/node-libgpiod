@@ -215,6 +215,8 @@ NAN_METHOD(requestBulkBothEdgesEvents) {
   }
 }
 
+#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+
 NAN_METHOD(requestBulkDirectionInput) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_bulk *bulk = obj->getNativeBulk();
@@ -253,6 +255,8 @@ NAN_METHOD(requestBulkDirectionOutput) {
     delete[] values;
   }
 }
+
+#endif
 
 NAN_METHOD(requestBulk) {
   v8::Local<v8::Context> context = Nan::GetCurrentContext();
@@ -315,6 +319,8 @@ NAN_METHOD(requestBulk) {
   }
 }
 
+#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+
 NAN_METHOD(setConfigBulk) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
   gpiod_line_bulk *bulk = obj->getNativeBulk();
@@ -368,6 +374,8 @@ NAN_METHOD(setFlagsBulk) {
     Nan::ThrowError(Nan::ErrnoException(errno, "failed to set bulk flags"));
   }
 }
+
+#endif
 
 NAN_METHOD(requestBulkInputFlags) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());

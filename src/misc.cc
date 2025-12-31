@@ -163,6 +163,8 @@ NAN_METHOD(setInstantLineValues) {
   }
 }
 
+#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+
 NAN_METHOD(getInstantLineValueFlags) {
   Nan::Utf8String device(info[0]);
   unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
@@ -264,6 +266,8 @@ NAN_METHOD(setInstantLineValuesFlags) {
     return;
   }
 }
+
+#endif
 
 NAN_METHOD(instantMonitorEvent) {
   Nan::Utf8String device(info[0]);
