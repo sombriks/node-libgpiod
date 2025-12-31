@@ -6,3 +6,4 @@ build
 .idea
 coverage
 .nyc_output
+.env
