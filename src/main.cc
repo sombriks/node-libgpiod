@@ -5,15 +5,11 @@
 
 NAN_MODULE_INIT(InitAll) {
   // misc functions
-  Nan::Set(target, Nan::New("version").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(version)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getChipNames").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getChipNames)).ToLocalChecked());
+  Nan::SetMethod(target, "version", version);
+  Nan::SetMethod(target, "getChipNames", getChipNames);
 
-  Nan::Set(target, Nan::New("getInstantLineValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValue)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setInstantLineValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValue)).ToLocalChecked());
+  Nan::SetMethod(target, "getInstantLineValue", getInstantLineValue);
+  Nan::SetMethod(target, "setInstantLineValue", setInstantLineValue);
 
   Nan::Set(target, Nan::New("getInstantLineValues").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValues)).ToLocalChecked());

@@ -28,22 +28,23 @@
     "build:dev": "node-gyp build",
     "clean": "node-gyp clean",
     "configure-gpio-sim": "sudo sh test/prepare-gpio-sim.sh",
-    "test": "mocha test/*.spec.js test/**/*.spec.js",
+    "test": "mocha -r dotenv-flow/config test/*.spec.js test/**/*.spec.js",
     "test:coverage": "nyc npm run test",
     "lint": "xo --fix",
     "types": "rm index.{d.ts,d.ts.map} lib/*.{ts,map} ; tsc"
   },
   "devDependencies": {
     "chai": "^4.4.1",
+    "dotenv-flow": "^4.1.0",
     "mocha": "10.8.2",
-    "node-gyp": "9.4.1",
     "nyc": "^15.1.0",
     "typescript": "^5.8.3",
     "xo": "^0.58.0"
   },
   "dependencies": {
     "bindings": "^1.5.0",
-    "nan": "^2.22.2"
+    "nan": "^2.22.2",
+    "node-gyp": "9.4.1"
   },
   "engines": {
     "node": ">=12"

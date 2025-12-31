@@ -5,6 +5,8 @@ describe('libgpiod chip bindings', () => {
 	// 54 for raspberry pi zero w, 32 for radxa rock-3c
 	const numberLines = process.env.NUM_LINES || 54;
 	const chipLabel = process.env.LABEL || 'pinctrl-bcm2835';
+	const pinOffset = process.env.PIN_OFFSET || 17;
+	const pinLabel = process.env.PIN_LABEL || 'GPIO17';
 
 	it('should \'create\' a new chip by number and check chip name', done => {
 		const chip0 = new gpiod.Chip(0);
@@ -14,7 +16,8 @@ describe('libgpiod chip bindings', () => {
 
 	it('should \'create\' a new chip by name and check number of lines', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
-		expect(chip0.numberOfLines).eq(numberLines);
+		// expect(chip0.numberOfLines).eq(numberLines); // fails due to type checking
+		expect(chip0.numberOfLines - 0).eq(numberLines - 0);
 		done();
 	});
 
@@ -40,8 +43,8 @@ describe('libgpiod chip bindings', () => {
 		const chip0 = new gpiod.Chip('0');
 		const result = chip0.lineNames;
 		expect(result).to.be.an('array');
-		expect(result.length).eq(numberLines);
-		expect(result[17]).to.be.eq('GPIO17');
+		expect(result.length - 0).eq(numberLines - 0);
+		expect(result[pinOffset]).to.be.eq(pinLabel);
 		done();
 	});
 
@@ -54,14 +57,14 @@ describe('libgpiod chip bindings', () => {
 		}
 
 		expect(result).to.be.an('array');
-		expect(result.length).eq(numberLines);
-		expect(result[17]).to.be.eq('GPIO17');
+		expect(result.length - 0).eq(numberLines - 0);
+		expect(result[pinOffset]).to.be.eq(pinLabel);
 		done();
 	});
 
 	it('should get line', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
-		const line17 = chip0.getLine(17);
+		const line17 = chip0.getLine(pinOffset - 0);
 		expect(line17).to.be.an('object');
 		line17.release && line17.release();
 		done();
