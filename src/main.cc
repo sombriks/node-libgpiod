@@ -11,15 +11,11 @@ NAN_MODULE_INIT(InitAll) {
   Nan::SetMethod(target, "getInstantLineValue", getInstantLineValue);
   Nan::SetMethod(target, "setInstantLineValue", setInstantLineValue);
 
-  Nan::Set(target, Nan::New("getInstantLineValues").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValues)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setInstantLineValues").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValues)).ToLocalChecked());
+  Nan::SetMethod(target, "getInstantLineValues", getInstantLineValues);
+  Nan::SetMethod(target, "setInstantLineValues", setInstantLineValues);
 
-  Nan::Set(target, Nan::New("getInstantLineValueFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValueFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setInstantLineValueFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValueFlags)).ToLocalChecked());
+  Nan::SetMethod(target, "getInstantLineValueFlags", getInstantLineValueFlags);
+  Nan::SetMethod(target, "setInstantLineValueFlags", setInstantLineValueFlags);
 
   Nan::Set(target, Nan::New("getInstantLineValuesFlags").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValuesFlags)).ToLocalChecked());
