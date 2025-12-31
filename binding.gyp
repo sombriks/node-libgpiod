@@ -18,7 +18,9 @@
                         "-lgpiod"
                     ],
                     "cflags": [
-                        "-O3"
+                        "-O3",
+                        "-DGPIOD_VERSION_MAJOR=1",
+                        "-DGPIOD_VERSION_MINOR=5"
                     ],
                     "lflags": [
                         "-flto"

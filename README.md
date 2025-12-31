@@ -9,7 +9,7 @@ Native nodejs bindings for [libgpiod][libgpiod]
 ## Requirements / Dependencies
 
 - libgpiod **1.5** minimum required (and devel headers)
-- nodejs (and devel headers)
+- nodejs 12 or newer (and devel headers)
 - linux (tested on fedora 33 running on raspberry pi model 3 B+ and rasp pi os on zero w)
 - c development tools
 

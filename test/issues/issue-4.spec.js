@@ -1,5 +1,5 @@
-const {expect} = require('chai');
-const {Chip, Line} = require('../../');
+const { expect } = require('chai');
+const { Chip, Line } = require('../../');
 
 describe('Line double-definition issue (#4)', () => {
 	it('Should fail on double definition', done => {
@@ -35,11 +35,13 @@ describe('Line double-definition issue (#4)', () => {
 		l17.setValue(1);
 		l17.release();
 
-		l17 = new Line(chip0, 17); // We must release the previous one
-		l17.requestOutputMode();
-		l17.setValue(1);
-		l17.release();
+		setTimeout(() => {
+			l17 = new Line(chip0, 17); // We must release the previous one
+			l17.requestOutputMode();
+			l17.setValue(1);
+			l17.release();
 
-		done();
+			done();
+		}, 100);
 	});
 });

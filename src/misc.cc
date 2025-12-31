@@ -163,7 +163,7 @@ NAN_METHOD(setInstantLineValues) {
   }
 }
 
-#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
 NAN_METHOD(getInstantLineValueFlags) {
   Nan::Utf8String device(info[0]);

@@ -14,22 +14,21 @@ NAN_MODULE_INIT(InitAll) {
   Nan::SetMethod(target, "getInstantLineValues", getInstantLineValues);
   Nan::SetMethod(target, "setInstantLineValues", setInstantLineValues);
 
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
+
   Nan::SetMethod(target, "getInstantLineValueFlags", getInstantLineValueFlags);
   Nan::SetMethod(target, "setInstantLineValueFlags", setInstantLineValueFlags);
 
-  Nan::Set(target, Nan::New("getInstantLineValuesFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getInstantLineValuesFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setInstantLineValuesFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setInstantLineValuesFlags)).ToLocalChecked());
+  Nan::SetMethod(target, "getInstantLineValuesFlags", getInstantLineValuesFlags);
+  Nan::SetMethod(target, "setInstantLineValuesFlags", setInstantLineValuesFlags);
 
-  Nan::Set(target, Nan::New("instantMonitorEvent").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(instantMonitorEvent)).ToLocalChecked());
-  Nan::Set(target, Nan::New("instantMonitorEventFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(instantMonitorEventFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("instantMonitorEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(instantMonitorEvents)).ToLocalChecked());
-  Nan::Set(target, Nan::New("instantMonitorEventsFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(instantMonitorEventsFlags)).ToLocalChecked());
+#endif
+
+  Nan::SetMethod(target, "instantMonitorEvent", instantMonitorEvent);
+  Nan::SetMethod(target, "instantMonitorEventFlags", instantMonitorEventFlags);
+
+  Nan::SetMethod(target, "instantMonitorEvents", instantMonitorEvent);
+  Nan::SetMethod(target, "instantMonitorEventsFlags", instantMonitorEventFlags);
 
   Chip::Init(target);
   Nan::Set(target, Nan::New("getChipName").ToLocalChecked(),
@@ -52,8 +51,14 @@ NAN_MODULE_INIT(InitAll) {
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineDirection)).ToLocalChecked());
   Nan::Set(target, Nan::New("getLineActiveState").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineActiveState)).ToLocalChecked());
+
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
+
   Nan::Set(target, Nan::New("getLineBias").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineBias)).ToLocalChecked());
+
+#endif
+
   Nan::Set(target, Nan::New("isLineUsed").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(isLineUsed)).ToLocalChecked());
   Nan::Set(target, Nan::New("isLineFree").ToLocalChecked(),
@@ -118,6 +123,8 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("requestBulkBothEdgesEvents").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEvents)).ToLocalChecked());
 
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
+
   Nan::Set(target, Nan::New("requestBulkDirectionInput").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionInput)).ToLocalChecked());
   Nan::Set(target, Nan::New("requestBulkDirectionOutput").ToLocalChecked(),
@@ -127,8 +134,11 @@ NAN_MODULE_INIT(InitAll) {
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulk)).ToLocalChecked());
   Nan::Set(target, Nan::New("setConfigBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setConfigBulk)).ToLocalChecked());
+
   Nan::Set(target, Nan::New("setFlagsBulk").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setFlagsBulk)).ToLocalChecked());
+
+#endif
 
   Nan::Set(target, Nan::New("requestBulkInputFlags").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputFlags)).ToLocalChecked());

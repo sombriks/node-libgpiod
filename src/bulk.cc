@@ -215,7 +215,7 @@ NAN_METHOD(requestBulkBothEdgesEvents) {
   }
 }
 
-#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
 NAN_METHOD(requestBulkDirectionInput) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
@@ -319,7 +319,7 @@ NAN_METHOD(requestBulk) {
   }
 }
 
-#if GPIOD_VERSION_MINOR == 1 && GPIOD_VERSION_MINOR >= 6
+#if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
 NAN_METHOD(setConfigBulk) {
   Bulk *obj = Nan::ObjectWrap::Unwrap<Bulk>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
