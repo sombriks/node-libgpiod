@@ -2,13 +2,9 @@ const { expect } = require('chai');
 const gpiod = require('..');
 
 describe('libgpiod line bindings', () => {
-	// 54 for raspberry pi zero w, 32 for radxa rock-3c
-	const numberLines = parseInt(process.env.NUM_LINES) || 54;
-	const chipLabel = process.env.LABEL || 'pinctrl-bcm2835';
 	const pinOffset = parseInt(process.env.PIN_OFFSET) || 17;
 	const pinLabel = process.env.PIN_LABEL || 'GPIO17';
 	const pinValue = parseInt(process.env.PIN_VALUE) || 0;
-
 
 	it('should get a line by number', done => {
 		const chip0 = new gpiod.Chip('gpiochip0');
