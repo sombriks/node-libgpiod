@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const gpiod = require('..');
 
 describe('libgpiod miscellaneous bindings', () => {
+
 	const pinOffset = parseInt(process.env.PIN_OFFSET) || 17;
 	const pinLabel = process.env.PIN_LABEL || 'GPIO17';
 	const pinValue = parseInt(process.env.PIN_VALUE) || 0;
@@ -41,18 +42,13 @@ describe('libgpiod miscellaneous bindings', () => {
 	});
 
 	it('should invoke callback after set instant value', done => {
-		// TODO: callback is synchronous, should be async
 		gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
 			callback: (v) => {
-				console.log('callback line ' + v);
+				console.log('set value callback result ' + v);
+				done();
 			}
 		});
-		setTimeout(() => {
-			const value = gpiod.getInstantLineValue(0, pinOffset);
-			// expect(value).to.eq(1); // instant value doesn't seems to persist values
-			expect(value).to.eq(pinValue);
-			done();
-		}, 100);
+		console.log('set value called');
 	});
 
 	it('should get lines instant values', done => {

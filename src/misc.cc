@@ -19,7 +19,10 @@ class InstantLineValueWorker : public Nan::AsyncWorker {
   }
 
   void Execute() {
-    result = gpiod_ctxless_set_value(device, offset, value, active_low, consumer, NULL, this);
+    auto dataCallback = [](void* worker) {
+      std::cout << "teste" << std::endl;
+    };
+    result = gpiod_ctxless_set_value(device, offset, value, active_low, consumer, dataCallback, this);
   }
 
   void HandleOKCallback() {
