@@ -31,128 +31,80 @@ NAN_MODULE_INIT(InitAll) {
   Nan::SetMethod(target, "instantMonitorEventsFlags", instantMonitorEventFlags);
 
   Chip::Init(target);
-  Nan::Set(target, Nan::New("getChipName").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getChipName)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getChipLabel").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getChipLabel)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getNumberOfLines").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getNumberOfLines)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLineNames").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineNames)).ToLocalChecked());
+  Nan::SetMethod(target, "getChipName", getChipName);
+  Nan::SetMethod(target, "getChipLabel", getChipLabel);
+  Nan::SetMethod(target, "getNumberOfLines", getNumberOfLines);
+  Nan::SetMethod(target, "getLineNames", getLineNames);
 
   Line::Init(target);
-  Nan::Set(target, Nan::New("getLineOffset").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineOffset)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLineName").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineName)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLineConsumer").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineConsumer)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLineDirection").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineDirection)).ToLocalChecked());
-  Nan::Set(target, Nan::New("getLineActiveState").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineActiveState)).ToLocalChecked());
+  Nan::SetMethod(target, "getLineOffset", getLineOffset);
+  Nan::SetMethod(target, "getLineName", getLineName);
+  Nan::SetMethod(target, "getLineConsumer", getLineConsumer);
+  Nan::SetMethod(target, "getLineDirection", getLineDirection);
+  Nan::SetMethod(target, "getLineActiveState", getLineActiveState);
 
 #if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
-  Nan::Set(target, Nan::New("getLineBias").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getLineBias)).ToLocalChecked());
+  Nan::SetMethod(target, "getLineBias", getLineBias);
 
 #endif
 
-  Nan::Set(target, Nan::New("isLineUsed").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(isLineUsed)).ToLocalChecked());
-  Nan::Set(target, Nan::New("isLineFree").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(isLineFree)).ToLocalChecked());
-  Nan::Set(target, Nan::New("isLineOpenDrain").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(isLineOpenDrain)).ToLocalChecked());
-  Nan::Set(target, Nan::New("isLineOpenSource").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(isLineOpenSource)).ToLocalChecked());
-  Nan::Set(target, Nan::New("update").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(update)).ToLocalChecked());
-  Nan::Set(target, Nan::New("needsUpdate").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(needsUpdate)).ToLocalChecked());
+  Nan::SetMethod(target, "isLineUsed", isLineUsed);
+  Nan::SetMethod(target, "isLineFree", isLineFree);
+  Nan::SetMethod(target, "isLineOpenDrain", isLineOpenDrain);
+  Nan::SetMethod(target, "isLineOpenSource", isLineOpenSource);
+  Nan::SetMethod(target, "update", update);
+  Nan::SetMethod(target, "needsUpdate", needsUpdate);
 
-  Nan::Set(target, Nan::New("getValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getValue)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setValue").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setValue)).ToLocalChecked());
+  Nan::SetMethod(target, "getValue", getValue);
+  Nan::SetMethod(target, "setValue", setValue);
 
-  Nan::Set(target, Nan::New("lineRequest").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(lineRequest)).ToLocalChecked());
+  Nan::SetMethod(target, "lineRequest", lineRequest);
 
-  Nan::Set(target, Nan::New("requestInputMode").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestInputMode)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestOutputMode").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestOutputMode)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestRisingEdgeEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestRisingEdgeEvents)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestFallingEdgeEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestFallingEdgeEvents)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBothEdgesEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBothEdgesEvents)).ToLocalChecked());
+  Nan::SetMethod(target, "requestInputMode", requestInputMode);
+  Nan::SetMethod(target, "requestOutputMode", requestOutputMode);
+  Nan::SetMethod(target, "requestRisingEdgeEvents", requestRisingEdgeEvents);
+  Nan::SetMethod(target, "requestFallingEdgeEvents", requestFallingEdgeEvents);
+  Nan::SetMethod(target, "requestBothEdgesEvents", requestBothEdgesEvents);
 
-  Nan::Set(target, Nan::New("requestInputModeFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestInputModeFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestOutputModeFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestOutputModeFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestRisingEdgeEventFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestRisingEdgeEventFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestFallingEdgeEventFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestFallingEdgeEventFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBothEdgesEventFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBothEdgesEventFlags)).ToLocalChecked());
+  Nan::SetMethod(target, "requestInputModeFlags", requestInputModeFlags);
+  Nan::SetMethod(target, "requestOutputModeFlags", requestOutputModeFlags);
+  Nan::SetMethod(target, "requestRisingEdgeEventFlags", requestRisingEdgeEventFlags);
+  Nan::SetMethod(target, "requestFallingEdgeEventFlags", requestFallingEdgeEventFlags);
+  Nan::SetMethod(target, "requestBothEdgesEventFlags", requestBothEdgesEventFlags);
 
-  Nan::Set(target, Nan::New("release").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(release)).ToLocalChecked());
+  Nan::SetMethod(target, "release", release);
 
   Bulk::Init(target);
-  Nan::Set(target, Nan::New("getValues").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(getValues)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setValues").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setValues)).ToLocalChecked());
+  Nan::SetMethod(target, "getValues", getValues);
+  Nan::SetMethod(target, "setValues", setValues);
 
-  Nan::Set(target, Nan::New("requestBulkInputMode").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputMode)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkOutputMode").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkOutputMode)).ToLocalChecked());
+  Nan::SetMethod(target, "requestBulkInputMode", requestBulkInputMode);
+  Nan::SetMethod(target, "requestBulkOutputMode", requestBulkOutputMode);
 
-  Nan::Set(target, Nan::New("requestBulkRisingEdgeEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkRisingEdgeEvents)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkFallingEdgeEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkFallingEdgeEvents)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkBothEdgesEvents").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEvents)).ToLocalChecked());
+  Nan::SetMethod(target, "requestBulkRisingEdgeEvents", requestBulkRisingEdgeEvents);
+  Nan::SetMethod(target, "requestBulkFallingEdgeEvents", requestBulkFallingEdgeEvents);
+  Nan::SetMethod(target, "requestBulkBothEdgesEvents", requestBulkBothEdgesEvents);
 
 #if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
-  Nan::Set(target, Nan::New("requestBulkDirectionInput").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionInput)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkDirectionOutput").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkDirectionOutput)).ToLocalChecked());
+  Nan::SetMethod(target, "requestBulkDirectionInput", requestBulkDirectionInput);
+  Nan::SetMethod(target, "requestBulkDirectionOutput", requestBulkDirectionOutput);
 
-  Nan::Set(target, Nan::New("requestBulk").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulk)).ToLocalChecked());
-  Nan::Set(target, Nan::New("setConfigBulk").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setConfigBulk)).ToLocalChecked());
+  Nan::SetMethod(target, "requestBulk", requestBulk);
+  Nan::SetMethod(target, "setConfigBulk", setConfigBulk);
 
-  Nan::Set(target, Nan::New("setFlagsBulk").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(setFlagsBulk)).ToLocalChecked());
+  Nan::SetMethod(target, "setFlagsBulk", setFlagsBulk);
 
 #endif
 
-  Nan::Set(target, Nan::New("requestBulkInputFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkInputFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkOutputFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkOutputFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkRisingEdgeEventsFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkRisingEdgeEventsFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkFallingEdgeEventsFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkFallingEdgeEventsFlags)).ToLocalChecked());
-  Nan::Set(target, Nan::New("requestBulkBothEdgesEventsFlags").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(requestBulkBothEdgesEventsFlags)).ToLocalChecked());
+  Nan::SetMethod(target, "requestBulkInputFlags", requestBulkInputFlags);
+  Nan::SetMethod(target, "requestBulkOutputFlags", requestBulkOutputFlags);
+  Nan::SetMethod(target, "requestBulkRisingEdgeEventsFlags", requestBulkRisingEdgeEventsFlags);
+  Nan::SetMethod(target, "requestBulkFallingEdgeEventsFlags", requestBulkFallingEdgeEventsFlags);
+  Nan::SetMethod(target, "requestBulkBothEdgesEventsFlags", requestBulkBothEdgesEventsFlags);
 
-  Nan::Set(target, Nan::New("releaseBulk").ToLocalChecked(),
-           Nan::GetFunction(Nan::New<v8::FunctionTemplate>(releaseBulk)).ToLocalChecked());
+  Nan::SetMethod(target, "releaseBulk", releaseBulk);
 }
 
 NODE_MODULE(NativeExtension, InitAll);
