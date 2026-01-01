@@ -88,6 +88,7 @@ NAN_METHOD(getInstantLineValue) {
   info.GetReturnValue().Set(value);
 }
 
+// TODO offload callback to async
 NAN_METHOD(setInstantLineValue) {
   Nan::Utf8String device(info[0]);
   unsigned int offset = Nan::To<unsigned int>(info[1]).FromJust();
