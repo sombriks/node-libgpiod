@@ -164,13 +164,13 @@ describe('libgpiod Bulk operations', () => {
 		const result = bulk.values;
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
-		expect(result).to.deep.equal([0]);
+		expect(result).to.deep.equal([pinValue]);
 		bulk.updateConfig(Line.RequestType.Direction.AS_IS, Line.RequestFlags.ACTIVE_LOW);
 		const result2 = bulk.values;
+		bulk.release();
 		expect(result2).to.be.an('array');
 		expect(result2.length).to.be.eq(1);
-		expect(result2).to.deep.equal([1]);
-		bulk.release();
+		expect(result2).to.deep.equal([(pinValue + 1) % 2]);
 		done();
 	});
 
@@ -181,12 +181,12 @@ describe('libgpiod Bulk operations', () => {
 		const result = bulk.values;
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
-		expect(result).to.deep.equal([0]);
+		expect(result).to.deep.equal([pinValue]);
 		bulk.updateFlags(Line.RequestFlags.ACTIVE_LOW);
 		const result2 = bulk.values;
 		expect(result2).to.be.an('array');
 		expect(result2.length).to.be.eq(1);
-		expect(result2).to.deep.equal([1]);
+		expect(result2).to.deep.equal([(pinValue + 1) % 2]);
 		bulk.release();
 		done();
 	});
@@ -196,10 +196,10 @@ describe('libgpiod Bulk operations', () => {
 		const bulk = new Bulk(Chip0, [pinOffset]);
 		bulk.requestInputFlags('c1', Line.RequestFlags.BIAS_DISABLE);
 		const result = bulk.values;
+		bulk.release();
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
-		expect(result).to.deep.equal([0]);
-		bulk.release();
+		expect(result).to.deep.equal([pinValue]);
 		done();
 	});
 
@@ -210,16 +210,16 @@ describe('libgpiod Bulk operations', () => {
 		bulk.setValues([0]);
 		bulk.setDirectionInput();
 		const result = bulk.values;
+		bulk.release();
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
-		expect(result).to.deep.equal([0]);
-		bulk.release();
+		expect(result).to.deep.equal([pinValue]);
 		done();
 	});
 
 	it('should request bulk for rising edge events passing flags', done => {
 		const Chip0 = new Chip(0);
-		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		const bulk = new Bulk(Chip0, [pinOffset]);
 		bulk.requestRisingEdgeEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
 
 		bulk.release();
@@ -228,7 +228,7 @@ describe('libgpiod Bulk operations', () => {
 
 	it('should request bulk for falling edge events passing flags', done => {
 		const Chip0 = new Chip(0);
-		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		const bulk = new Bulk(Chip0, [pinOffset]);
 		bulk.requestFallingEdgeEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
 
 		bulk.release();
@@ -237,7 +237,7 @@ describe('libgpiod Bulk operations', () => {
 
 	it('should request bulk for both edges events passing flags', done => {
 		const Chip0 = new Chip(0);
-		const bulk = new Bulk(Chip0, [16, 20, 21]);
+		const bulk = new Bulk(Chip0, [pinOffset]);
 		bulk.requestBothEdgesEventsFlags('c1', Line.RequestFlags.BIAS_DISABLE);
 
 		bulk.release();
