@@ -20,7 +20,7 @@ class InstantLineValueWorker : public Nan::AsyncWorker {
 
   void Execute() {
     auto dataCallback = [](void* worker) {
-      std::cout << "teste" << std::endl;
+      // TODO what to return for a more detailed result?
     };
     result = gpiod_ctxless_set_value(device, offset, value, active_low, consumer, dataCallback, this);
   }
@@ -28,6 +28,7 @@ class InstantLineValueWorker : public Nan::AsyncWorker {
   void HandleOKCallback() {
     Nan::HandleScope scope;
     v8::Local<v8::Value> argv[] = {Nan::New(result)};
+    // TODO what to return for a more detailed result?
     callback->Call(1, argv, async_resource);
   }
 
@@ -154,6 +155,7 @@ NAN_METHOD(setInstantLineValue) {
       Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", error_message.c_str()));
       return;
     }
+    // TODO what could be a more detailed result?
     info.GetReturnValue().Set(result);
   }
 }

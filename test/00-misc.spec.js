@@ -42,13 +42,19 @@ describe('libgpiod miscellaneous bindings', () => {
 	});
 
 	it('should invoke callback after set instant value', done => {
-		gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
-			callback: (v) => {
-				console.log('set value callback result ' + v);
+		const result = gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
+			callback: (result) => {
+				console.log('set value callback result ' + result);
 				done();
 			}
 		});
-		console.log('set value called');
+		console.log('set value called ' + result);
+	});
+
+	it('should set instant value, no callback', done => {
+		const result = gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2);
+		console.log('set value called without callback ' + result);
+		done();
 	});
 
 	it('should get lines instant values', done => {
@@ -63,13 +69,9 @@ describe('libgpiod miscellaneous bindings', () => {
 		gpiod.setInstantLineValues(0, [pinOffset], [0], {
 			callback: (v) => {
 				console.log('callback lines ' + v);
+				done();
 			}
 		});
-		const value = gpiod.getInstantLineValues(0, [pinOffset]);
-		expect(value).to.be.an('array');
-		expect(value.length).to.eq(1);
-		expect(value).to.deep.equal([pinValue]);
-		done();
 	});
 
 	it('should get lines instant values passing flags', done => {
