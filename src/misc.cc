@@ -1,15 +1,52 @@
 #include "misc.hh"
 
+class InstantLineValueWorker : public Nan::AsyncWorker {
+ public:
+  InstantLineValueWorker(
+      const char* device,
+      unsigned int offset,
+      unsigned int value,
+      bool active_low,
+      const char* consumer,
+      Nan::Callback* callback)
+      : Nan::AsyncWorker(callback) {
+    this->device = device;
+    this->offset = offset;
+    this->value = value;
+    this->active_low = active_low;
+    this->consumer = consumer;
+    result = -1;
+  }
+
+  void Execute() {
+    result = gpiod_ctxless_set_value(device, offset, value, active_low, consumer, NULL, this);
+  }
+
+  void HandleOKCallback() {
+    Nan::HandleScope scope;
+    v8::Local<v8::Value> argv[] = {Nan::New(result)};
+    callback->Call(1, argv, async_resource);
+  }
+
+ private:
+  const char* device;
+  unsigned int offset;
+  unsigned int value;
+  bool active_low;
+  const char* consumer;
+  int result;
+};
+
 // callback for set value operations
-void misc_callback(void *nanCb) {
-  Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
+void misc_callback(void* nanCb) {
+  Nan::Callback* callback = static_cast<Nan::Callback*>(nanCb);
   v8::Local<v8::Value> argv[] = {Nan::Null()};
 }
 
 // callback for event monitors
 int misc_event_callback(int event_type, unsigned int offset,
-                        const struct timespec *event_timestamp, void *nanCb) {
-  Nan::Callback *callback = static_cast<Nan::Callback *>(nanCb);
+                        const struct timespec* event_timestamp, void* nanCb) {
+  Nan::Callback* callback = static_cast<Nan::Callback*>(nanCb);
   v8::Local<v8::Value> argv[] = {
       Nan::New<v8::Number>(event_type),
       Nan::New<v8::Number>(offset),
@@ -18,9 +55,9 @@ int misc_event_callback(int event_type, unsigned int offset,
   callback->Call(3, argv);
 }
 
-int *to_native_int_array(v8::Local<v8::Array> &array) {
+int* to_native_int_array(v8::Local<v8::Array>& array) {
   int size = array->Length();
-  int *native_array = new int[size];
+  int* native_array = new int[size];
   for (unsigned int i = 0; i < size; ++i) {
     v8::Local<v8::Value> value = Nan::Get(array, i).ToLocalChecked();
     native_array[i] = Nan::To<int32_t>(value).FromJust();
@@ -28,7 +65,7 @@ int *to_native_int_array(v8::Local<v8::Array> &array) {
   return native_array;
 }
 
-void from_native_int_array(v8::Local<v8::Array> &array, int native_array[], int size) {
+void from_native_int_array(v8::Local<v8::Array>& array, int native_array[], int size) {
   for (int i = 0; i < size; ++i) {
     Nan::Set(array, i, Nan::New(native_array[i]));
   }
@@ -53,12 +90,12 @@ NAN_METHOD(version) {
 
 NAN_METHOD(getChipNames) {
   v8::Local<v8::Array> chipNames = Nan::New<v8::Array>();
-  gpiod_chip_iter *iter = gpiod_chip_iter_new();
+  gpiod_chip_iter* iter = gpiod_chip_iter_new();
   if (!iter) {
     Nan::ThrowError(Nan::ErrnoException(errno, "::getChipNames", "Unable to get chip names"));
     return;
   }
-  struct gpiod_chip *chip;
+  struct gpiod_chip* chip;
   unsigned int i = 0;
   gpiod_foreach_chip_noclose(iter, chip) {
     chipNames->Set(
@@ -95,22 +132,27 @@ NAN_METHOD(setInstantLineValue) {
   unsigned int value = Nan::To<unsigned int>(info[2]).FromJust();
   bool active_low = Nan::To<bool>(info[3]).FromJust();
   Nan::Utf8String consumer(info[4]);
-  Nan::Callback callback(info[5].As<v8::Function>());
-  int result = gpiod_ctxless_set_value(
-      *device, offset, value, active_low, *consumer,
-      &misc_callback, &callback);
-  if (0 > result) {
-    std::string error_message = "Unable to set instant value:";
-    error_message += " chip: " + std::string(*device) +
-                     " line: " + std::to_string(offset) +
-                     " value: " + std::to_string(value) +
-                     " active_low: " + (active_low ? "true" : "false") +
-                     " consumer: '" + std::string(*consumer) + "'" +
-                     " result: " + std::to_string(result);
-    Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", error_message.c_str()));
-    return;
+  // if there is a callback, let's go async
+  if (info[5]->IsFunction()) {
+    v8::Local<v8::Function> cb = info[5].As<v8::Function>();
+    Nan::Callback* callback = new Nan::Callback(cb);
+    InstantLineValueWorker* worker = new InstantLineValueWorker(*device, offset, value, active_low, *consumer, callback);
+    Nan::AsyncQueueWorker(worker);
+  } else {
+    int result = gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL);
+    if (0 > result) {
+      std::string error_message = "Unable to set instant value:";
+      error_message += " chip: " + std::string(*device) +
+                       " line: " + std::to_string(offset) +
+                       " value: " + std::to_string(value) +
+                       " active_low: " + (active_low ? "true" : "false") +
+                       " consumer: '" + std::string(*consumer) + "'" +
+                       " result: " + std::to_string(result);
+      Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", error_message.c_str()));
+      return;
+    }
+    info.GetReturnValue().Set(result);
   }
-  info.GetReturnValue().Set(result);
 }
 
 NAN_METHOD(getInstantLineValues) {
@@ -121,7 +163,7 @@ NAN_METHOD(getInstantLineValues) {
   Nan::Utf8String consumer(info[3]);
   std::unique_ptr<int[]> offsets(to_native_int_array(offsetsArray));
   std::unique_ptr<int[]> values(new int[num_lines]);
-  if (0 > gpiod_ctxless_get_value_multiple(*device, (const unsigned int *)offsets.get(),
+  if (0 > gpiod_ctxless_get_value_multiple(*device, (const unsigned int*)offsets.get(),
                                            values.get(), num_lines, active_low, *consumer)) {
     std::string error_message = "Unable to get instant values:";
     error_message += " chip: " + std::string(*device) + " offsets: ";
@@ -150,7 +192,7 @@ NAN_METHOD(setInstantLineValues) {
   bool active_low = Nan::To<bool>(info[3]).FromJust();
   Nan::Utf8String consumer(info[4]);
   Nan::Callback callback(info[5].As<v8::Function>());
-  if (0 > gpiod_ctxless_set_value_multiple(*device, (const unsigned int *)offsets.get(),
+  if (0 > gpiod_ctxless_set_value_multiple(*device, (const unsigned int*)offsets.get(),
                                            values.get(), num_lines, active_low, *consumer,
                                            &misc_callback, &callback)) {
     std::string error_message = "Unable to set instant values:";
@@ -222,7 +264,7 @@ NAN_METHOD(getInstantLineValuesFlags) {
   unsigned int flags = Nan::To<unsigned int>(info[4]).FromJust();
   std::unique_ptr<int[]> offsets(to_native_int_array(offsetsArray));
   std::unique_ptr<int[]> values(new int[num_lines]);
-  if (0 > gpiod_ctxless_get_value_multiple_ext(*device, (const unsigned int *)offsets.get(),
+  if (0 > gpiod_ctxless_get_value_multiple_ext(*device, (const unsigned int*)offsets.get(),
                                                values.get(), num_lines, active_low, *consumer, flags)) {
     std::string error_message = "Unable to get instant values:";
     error_message += " chip: " + std::string(*device) + " offsets: ";
@@ -253,7 +295,7 @@ NAN_METHOD(setInstantLineValuesFlags) {
   Nan::Utf8String consumer(info[4]);
   Nan::Callback callback(info[5].As<v8::Function>());
   unsigned int flags = Nan::To<unsigned int>(info[6]).FromJust();
-  if (0 > gpiod_ctxless_set_value_multiple_ext(*device, (const unsigned int *)offsets.get(),
+  if (0 > gpiod_ctxless_set_value_multiple_ext(*device, (const unsigned int*)offsets.get(),
                                                values.get(), num_lines, active_low, *consumer,
                                                &misc_callback, &callback, flags)) {
     std::string error_message = "Unable to set instant values:";
@@ -282,7 +324,7 @@ NAN_METHOD(instantMonitorEvent) {
   bool activeLow = Nan::To<bool>(info[5]).FromJust();
   Nan::Utf8String consumer(info[6]);
 
-  auto myLambda = [=](int event_type, unsigned int offset, const struct timespec *ts) {
+  auto myLambda = [=](int event_type, unsigned int offset, const struct timespec* ts) {
     // Seu código aqui
   };
 
