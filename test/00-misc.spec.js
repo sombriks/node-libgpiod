@@ -65,7 +65,7 @@ describe('libgpiod miscellaneous bindings', () => {
 		done();
 	});
 
-	it('should set lines instant values', done => {
+	it('should callback after set lines instant values', done => {
 		gpiod.setInstantLineValues(0, [pinOffset], [0], {
 			callback: (v) => {
 				console.log('callback lines ' + v);
