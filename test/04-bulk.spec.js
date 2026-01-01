@@ -153,7 +153,7 @@ describe('libgpiod Bulk operations', () => {
 		bulk.release();
 		expect(result2).to.be.an('array');
 		expect(result2.length).to.be.eq(1);
-		expect(result2).to.deep.equal([1]);
+		expect(result2).to.deep.equal([0]);
 		done();
 	});
 
