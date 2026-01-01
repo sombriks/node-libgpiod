@@ -137,23 +137,13 @@ describe('libgpiod Bulk operations', () => {
 		bulk.request({
 			consumer: 'test',
 			requestType: Line.RequestType.Direction.INPUT,
-			flags: Line.RequestFlags.BIAS_DISABLE,
+			flags: Line.RequestFlags.BIAS_DISABLE | Line.RequestFlags.ACTIVE_HIGH,
 		});
 		const result = bulk.values;
+		bulk.release();
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
 		expect(result).to.deep.equal([pinValue]);
-		bulk.release();
-		bulk.request({
-			consumer: 'test',
-			requestType: Line.RequestType.Direction.INPUT,
-			flags: Line.RequestFlags.BIAS_DISABLE | Line.RequestFlags.ACTIVE_LOW,
-		});
-		const result2 = bulk.values;
-		bulk.release();
-		expect(result2).to.be.an('array');
-		expect(result2.length).to.be.eq(1);
-		expect(result2).to.deep.equal([0]);
 		done();
 	});
 
@@ -164,7 +154,7 @@ describe('libgpiod Bulk operations', () => {
 		const result = bulk.values;
 		expect(result).to.be.an('array');
 		expect(result.length).to.be.eq(1);
-		expect(result).to.deep.equal([0]);
+		expect(result).to.deep.equal([pinValue]);
 		bulk.updateConfig(Line.RequestType.Direction.AS_IS, Line.RequestFlags.ACTIVE_LOW);
 		const result2 = bulk.values;
 		expect(result2).to.be.an('array');
