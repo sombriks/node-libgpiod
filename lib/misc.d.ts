@@ -24,13 +24,13 @@ export function getInstantLineValue(chipNumber: number, lineNumber: number, { ac
  * @param {Object} [options] - Additional options
  * @param {boolean} [options.activeLow] - the logical active state for this ping, default is false (active high)
  * @param {string} [options.consumer] - The line number
- * @param {function} [options.callback] - The callback function to call when the operation is complete
+ * @param {function?} [options.callback] - The callback function to call when the operation is complete
  * @param {InstantFlags} [options.flags] - The flags to use for the operation
  */
 export function setInstantLineValue(chipNumber: number, lineNumber: number, value: 0 | 1, { activeLow, consumer, callback, flags }?: {
     activeLow?: boolean;
     consumer?: string;
-    callback?: Function;
+    callback?: Function | null;
     flags?: InstantFlags;
 }): any;
 /**
@@ -64,7 +64,7 @@ export function setInstantLineValues(chipNumber: number, lineNumbers: Array<numb
     consumer?: string;
     callback?: Function;
     flags?: InstantFlags;
-}): void;
+}): any;
 /**
  * Instant monitor events on a single line
  *
@@ -73,7 +73,7 @@ export function setInstantLineValues(chipNumber: number, lineNumbers: Array<numb
  * @param {InstantFlags.Events} eventType - type of event to watch for
  * @param {function} callback - callback to receive the event
  * @param {object} [options] - additional options to the monitor
- * @param {number} [options.timeout] - timeout to the monitor
+ * @param {number} [options.timeout] - timeout for the monitor, in milliseconds. default is 1000.
  * @param {boolean} [options.activeLow] - true if logical active state is low. default is false (active-high)
  * @param {string} [options.consumer] - consumer name
  * @param {InstantFlags} [options.flags] - flags for the monitor
@@ -85,14 +85,14 @@ export function instantMonitorEvent(device: string | number, lineNumber: number,
     flags?: InstantFlags;
 }): void;
 /**
- * Instant monitor events on a single line
+ * Instant monitor events on a several lines
  *
  * @param {string|number} device - device identification
  * @param {number} lineNumbers - line numbers to monitor
  * @param {InstantFlags.Events} eventType - type of event to watch for
  * @param {function} callback - callback to receive the event
  * @param {object} [options] - additional options to the monitor
- * @param {number} [options.timeout] - timeout to the monitor
+ * @param {number} [options.timeout] - timeout for the monitor, in milliseconds. default is 1000.
  * @param {boolean} [options.activeLow] - true if logical active state is low. default is false (active-high)
  * @param {string} [options.consumer] - consumer name
  * @param {InstantFlags} [options.flags] - flags for the monitor

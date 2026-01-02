@@ -2,6 +2,21 @@
 
 Noteworthy changes
 
+## 2026-01-02
+
+Finally offloaded callback works.
+
+On some context-less operations, it is possible to provide a callback, but
+previous implementation of that wasn't async at all.
+
+Mow it is.
+
+Event monitoring, however, can't be easily implemented using just v8 + nan.
+To deliver true callback monitoring will demand migration to napi.
+
+It worths a minor release anyway, and 2.x version will born in napi to get it
+solved properly.
+
 ## 2025-06-14
 
 Finally a decent and more realistic autocomplete is implemented. I've got the
