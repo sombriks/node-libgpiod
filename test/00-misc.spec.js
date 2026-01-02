@@ -41,7 +41,25 @@ describe('libgpiod miscellaneous bindings', () => {
 		}
 	});
 
-	it('should invoke callback after set instant value', done => {
+	it('should get lines instant values', done => {
+		const value = gpiod.getInstantLineValues(0, [pinOffset]);
+		expect(value).to.be.an('array');
+		expect(value.length).to.eq(1);
+		expect(value).to.deep.equal([pinValue]);
+		done();
+	});
+
+	it('should get lines instant values passing flags', done => {
+		const value = gpiod.getInstantLineValues(0, [pinOffset], {
+			flags: gpiod.InstantFlags.BIAS_DISABLE
+		});
+		expect(value).to.be.an('array');
+		expect(value.length).to.eq(1);
+		expect(value).to.deep.equal([pinValue]);
+		done();
+	});
+
+	it('should set instant value then callback', done => {
 		const result = gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
 			callback: (result) => {
 				console.log('set value callback result ' + result);
@@ -57,30 +75,19 @@ describe('libgpiod miscellaneous bindings', () => {
 		done();
 	});
 
-	it('should get lines instant values', done => {
-		const value = gpiod.getInstantLineValues(0, [pinOffset]);
-		expect(value).to.be.an('array');
-		expect(value.length).to.eq(1);
-		expect(value).to.deep.equal([pinValue]);
-		done();
-	});
-
-	it('should callback after set lines instant values', done => {
+	it('should set lines instant values, then callback', done => {
 		gpiod.setInstantLineValues(0, [pinOffset], [0], {
 			callback: (v) => {
 				console.log('callback lines ' + v);
 				done();
 			}
 		});
+		console.log("set lines called");
 	});
 
-	it('should get lines instant values passing flags', done => {
-		const value = gpiod.getInstantLineValues(0, [pinOffset], {
-			flags: gpiod.InstantFlags.BIAS_DISABLE
-		});
-		expect(value).to.be.an('array');
-		expect(value.length).to.eq(1);
-		expect(value).to.deep.equal([pinValue]);
+	it('should set lines instant values, no callback', done => {
+		const value = gpiod.setInstantLineValues(0, [pinOffset], [0]);
+		console.log("set lines called, no callback " + value);
 		done();
 	});
 

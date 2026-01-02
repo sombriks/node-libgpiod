@@ -1,5 +1,9 @@
 #include "misc.hh"
 
+/**
+ * @brief class to offload set value callbacks, single values
+ *
+ */
 class InstantLineValueWorker : public Nan::AsyncWorker {
  public:
   InstantLineValueWorker(
@@ -15,43 +19,18 @@ class InstantLineValueWorker : public Nan::AsyncWorker {
     this->value = value;
     this->active_low = active_low;
     this->consumer = consumer;
+    this->flags = -1;
     result = -1;
   }
 
-  void Execute() {
-    auto dataCallback = [](void* worker) {
-      // TODO what to return for a more detailed result?
-    };
-    result = gpiod_ctxless_set_value(device, offset, value, active_low, consumer, dataCallback, this);
-  }
-
-  void HandleOKCallback() {
-    Nan::HandleScope scope;
-    v8::Local<v8::Value> argv[] = {Nan::New(result)};
-    // TODO what to return for a more detailed result?
-    callback->Call(1, argv, async_resource);
-  }
-
- private:
-  const char* device;
-  unsigned int offset;
-  unsigned int value;
-  bool active_low;
-  const char* consumer;
-  int result;
-};
-
-// TODO keep two veersions or merge those?
-class InstantLineValueFlagsWorker : public Nan::AsyncWorker {
- public:
-  InstantLineValueFlagsWorker(
+  InstantLineValueWorker(
       const char* device,
       unsigned int offset,
       unsigned int value,
       bool active_low,
       const char* consumer,
       Nan::Callback* callback,
-      unsigned int flags)
+      int flags)
       : Nan::AsyncWorker(callback) {
     this->device = device;
     this->offset = offset;
@@ -63,10 +42,19 @@ class InstantLineValueFlagsWorker : public Nan::AsyncWorker {
   }
 
   void Execute() {
-    auto dataCallback = [](void* worker) {
+    auto dataCallback = [](void* data) {
       // TODO what to return for a more detailed result?
+      InstantLineValueWorker* worker =
+          static_cast<InstantLineValueWorker*>(data);
     };
-    result = gpiod_ctxless_set_value_ext(device, offset, value, active_low, consumer, dataCallback, this, flags);
+    if (flags > -1)
+      result = gpiod_ctxless_set_value_ext(
+          device, offset, value, active_low,
+          consumer, dataCallback, this, flags);
+    else
+      result = gpiod_ctxless_set_value(
+          device, offset, value, active_low,
+          consumer, dataCallback, this);
   }
 
   void HandleOKCallback() {
@@ -82,7 +70,86 @@ class InstantLineValueFlagsWorker : public Nan::AsyncWorker {
   unsigned int value;
   bool active_low;
   const char* consumer;
-  unsigned int flags;
+  int flags;
+  int result;
+};
+
+/**
+ * @brief class to offload set values callbacks, multiple values
+ *
+ */
+class InstantLineValuesWorker : public Nan::AsyncWorker {
+ public:
+  InstantLineValuesWorker(
+      const char* device,
+      int* _offsets,
+      int* _values,
+      int size,
+      bool active_low,
+      const char* consumer,
+      Nan::Callback* callback)
+      : Nan::AsyncWorker(callback),
+        offsets(_offsets),
+        values(_values) {
+    this->device = device;
+    this->size = size;
+    this->active_low = active_low;
+    this->consumer = consumer;
+    this->flags = -1;
+    result = -1;
+  }
+
+  InstantLineValuesWorker(
+      const char* device,
+      int* _offsets,
+      int* _values,
+      int size,
+      bool active_low,
+      const char* consumer,
+      Nan::Callback* callback,
+      int flags)
+      : Nan::AsyncWorker(callback),
+        offsets(_offsets),
+        values(_values) {
+    this->device = device;
+    this->size = size;
+    this->active_low = active_low;
+    this->consumer = consumer;
+    this->flags = flags;
+    result = -1;
+  }
+
+  void Execute() {
+    auto dataCallback = [](void* data) {
+      // TODO what to return for a more detailed result?
+      InstantLineValuesWorker* worker =
+          static_cast<InstantLineValuesWorker*>(data);
+    };
+    if (flags > -1)
+      result = gpiod_ctxless_set_value_multiple_ext(
+          device, (const unsigned int*)offsets.get(), values.get(),
+          size, active_low, consumer, dataCallback, this, flags);
+    else
+      result = gpiod_ctxless_set_value_multiple(
+          device, (const unsigned int*)offsets.get(), values.get(),
+          size, active_low, consumer, dataCallback, this);
+  }
+
+  void HandleOKCallback() {
+    Nan::HandleScope scope;
+    v8::Local<v8::Value> argv[] = {Nan::New(result)};
+    // TODO what to return for a more detailed result?
+    callback->Call(1, argv, async_resource);
+  }
+
+ private:
+  const char* device;
+  std::unique_ptr<int[]> offsets;
+  std::unique_ptr<int[]> values;
+  int size;
+  bool active_low;
+  const char* consumer;
+  int flags;
   int result;
 };
 
@@ -196,6 +263,7 @@ NAN_METHOD(getInstantLineValues) {
   from_native_int_array(valuesArray, values.get(), num_lines);
   info.GetReturnValue().Set(valuesArray);
 }
+
 #if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
 
 NAN_METHOD(getInstantLineValueFlags) {
@@ -256,10 +324,12 @@ NAN_METHOD(setInstantLineValue) {
   if (info[5]->IsFunction()) {
     v8::Local<v8::Function> cb = info[5].As<v8::Function>();
     Nan::Callback* callback = new Nan::Callback(cb);
-    InstantLineValueWorker* worker = new InstantLineValueWorker(*device, offset, value, active_low, *consumer, callback);
+    InstantLineValueWorker* worker = new InstantLineValueWorker(
+        *device, offset, value, active_low, *consumer, callback);
     Nan::AsyncQueueWorker(worker);
   } else {
-    int result = gpiod_ctxless_set_value(*device, offset, value, active_low, *consumer, NULL, NULL);
+    int result = gpiod_ctxless_set_value(
+        *device, offset, value, active_low, *consumer, NULL, NULL);
     if (0 > result) {
       std::string error_message = "Unable to set instant value:";
       error_message += " chip: " + std::string(*device) +
@@ -289,14 +359,20 @@ NAN_METHOD(setInstantLineValues) {
   Nan::Utf8String consumer(info[4]);
 
   // if there is a callback, go async
-  if (info[5]->IsFunction()) { 
-
+  if (info[5]->IsFunction()) {
+    v8::Local<v8::Function> cb = info[5].As<v8::Function>();
+    Nan::Callback* callback = new Nan::Callback(cb);    
+    InstantLineValuesWorker* worker = new InstantLineValuesWorker(
+        *device, to_native_int_array(offsetsArray), 
+        to_native_int_array(valuesArray) ,num_lines,
+        active_low, *consumer, callback);
+    Nan::AsyncQueueWorker(worker);
   } else {
     std::unique_ptr<int[]> offsets(to_native_int_array(offsetsArray));
     std::unique_ptr<int[]> values(to_native_int_array(valuesArray));
     int result = gpiod_ctxless_set_value_multiple(
-      *device, (const unsigned int*)offsets.get(), 
-      values.get(), num_lines, active_low, *consumer, NULL, NULL);
+        *device, (const unsigned int*)offsets.get(),
+        values.get(), num_lines, active_low, *consumer, NULL, NULL);
     if (0 > result) {
       std::string error_message = "Unable to set instant values:";
       error_message += " chip: " + std::string(*device);
@@ -309,7 +385,7 @@ NAN_METHOD(setInstantLineValues) {
     }
     // TODO what could be a more detailed result?
     info.GetReturnValue().Set(result);
-  }  
+  }
 }
 
 #if GPIOD_VERSION_MAJOR == 1 && GPIOD_VERSION_MINOR >= 5
@@ -320,24 +396,30 @@ NAN_METHOD(setInstantLineValueFlags) {
   unsigned int value = Nan::To<unsigned int>(info[2]).FromJust();
   bool active_low = Nan::To<bool>(info[3]).FromJust();
   Nan::Utf8String consumer(info[4]);
-  unsigned int flags = Nan::To<unsigned int>(info[6]).FromJust();
-  Nan::Callback callback(info[5].As<v8::Function>());
-  int result = gpiod_ctxless_set_value_ext(
-      *device, offset, value, active_low, *consumer,
-      &misc_callback, &callback, flags);
-  if (0 > result) {
-    std::string error_message = "Unable to set instant value:";
-    error_message += " chip: " + std::string(*device) +
-                     " line: " + std::to_string(offset) +
-                     " value: " + std::to_string(value) +
-                     " active_low: " + (active_low ? "true" : "false") +
-                     " consumer: '" + std::string(*consumer) + "'" +
-                     " flags: " + std::to_string(flags) +
-                     " result: " + std::to_string(result);
-    Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValueFlags", error_message.c_str()));
-    return;
+  int flags = Nan::To<unsigned int>(info[6]).FromJust();
+  // if there is a callback, let's go async
+  if (info[5]->IsFunction()) {
+    v8::Local<v8::Function> cb = info[5].As<v8::Function>();
+    Nan::Callback* callback = new Nan::Callback(cb);
+    InstantLineValueWorker* worker = new InstantLineValueWorker(*device, offset, value, active_low, *consumer, callback, flags);
+    Nan::AsyncQueueWorker(worker);
+  } else {
+    int result = gpiod_ctxless_set_value_ext(*device, offset, value, active_low, *consumer, NULL, NULL, flags);
+    if (0 > result) {
+      std::string error_message = "Unable to set instant value:";
+      error_message += " chip: " + std::string(*device) +
+                       " line: " + std::to_string(offset) +
+                       " value: " + std::to_string(value) +
+                       " active_low: " + (active_low ? "true" : "false") +
+                       " consumer: '" + std::string(*consumer) + "'" +
+                       " flags: '" + std::to_string(flags) + "'" +
+                       " result: " + std::to_string(result);
+      Nan::ThrowError(Nan::ErrnoException(errno, "::setInstantLineValue", error_message.c_str()));
+      return;
+    }
+    // TODO what could be a more detailed result?
+    info.GetReturnValue().Set(result);
   }
-  info.GetReturnValue().Set(result);
 }
 
 NAN_METHOD(setInstantLineValuesFlags) {
