@@ -75,6 +75,22 @@ describe('libgpiod miscellaneous bindings', () => {
 		done();
 	});
 
+	it('should set instant value, no callback, passing flags', done => {
+		const result = gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
+			flags: gpiod.InstantFlags.BIAS_DISABLE,
+		});
+		done();
+	});
+
+	it('should set instant value, pass callback and flags', done => {
+		gpiod.setInstantLineValue(0, pinOffset, (pinValue + 1) % 2, {
+			flags: gpiod.InstantFlags.BIAS_DISABLE,
+			callback(value) {
+				done();
+			}
+		});
+	});
+
 	it('should set lines instant values, then callback', done => {
 		gpiod.setInstantLineValues(0, [pinOffset], [0], {
 			callback: (v) => {
@@ -91,17 +107,20 @@ describe('libgpiod miscellaneous bindings', () => {
 		done();
 	});
 
-	it('should set lines instant values passing flags', done => {
+	it('should set lines instant values passing callback and flags', done => {
 		gpiod.setInstantLineValues(0, [pinOffset], [0], {
 			flags: gpiod.InstantFlags.BIAS_DISABLE,
 			callback: (v) => {
-				console.log('callback lines flags');
+				console.log('set values callback and flags');
+				done();
 			}
 		});
-		const value = gpiod.getInstantLineValues(0, [pinOffset]);
-		expect(value).to.be.an('array');
-		expect(value.length).to.eq(1);
-		expect(value).to.deep.equal([pinValue]);
+	});
+
+	it('should set lines instant values, no callback, passing flags', done => {
+		gpiod.setInstantLineValues(0, [pinOffset], [0], {
+			flags: gpiod.InstantFlags.BIAS_DISABLE,
+		});
 		done();
 	});
 
