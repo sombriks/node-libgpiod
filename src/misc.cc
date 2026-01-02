@@ -450,7 +450,7 @@ NAN_METHOD(setInstantLineValuesFlags) {
     std::unique_ptr<int[]> values(to_native_int_array(valuesArray));
     int result = gpiod_ctxless_set_value_multiple_ext(
         *device, (const unsigned int*)offsets.get(),
-        values.get(), num_lines, active_low, *consumer, NULL, NULL,flags);
+        values.get(), num_lines, active_low, *consumer, NULL, NULL, flags);
     if (0 > result) {
       std::string error_message = "Unable to set instant values:";
       error_message += " chip: " + std::string(*device);
@@ -480,27 +480,11 @@ NAN_METHOD(instantMonitorEvent) {
   bool activeLow = Nan::To<bool>(info[5]).FromJust();
   Nan::Utf8String consumer(info[6]);
 
-  auto myLambda = [=](int event_type, unsigned int offset, const struct timespec* ts) {
-    // Seu código aqui
-  };
-
   // if (0 > gpiod_ctxless_event_monitor(*device, eventType, lineNumber, activeLow,
   //                                     *consumer, &timeout_t, NULL,
   //                                     &misc_event_callback, &callback)) {
   //   Nan::ThrowError(Nan::ErrnoException(errno, "instantMonitorEvent", "failed to monitor events"));
   // }
-}
-
-NAN_METHOD(instantMonitorEventFlags) {
-  Nan::Utf8String device(info[0]);
-  unsigned int lineNumber = Nan::To<unsigned int>(info[1]).FromJust();
-  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
-  Nan::Callback callback(info[3].As<v8::Function>());
-  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
-  bool activeLow = Nan::To<bool>(info[5]).FromJust();
-  Nan::Utf8String consumer(info[6]);
-  unsigned int flags = Nan::To<unsigned int>(info[7]).FromJust();
-  // gpiod_ctxless_event_monitor_ext
 }
 
 NAN_METHOD(instantMonitorEvents) {
@@ -513,6 +497,18 @@ NAN_METHOD(instantMonitorEvents) {
   bool activeLow = Nan::To<bool>(info[5]).FromJust();
   Nan::Utf8String consumer(info[6]);
   // gpiod_ctxless_event_monitor_multiple
+}
+
+NAN_METHOD(instantMonitorEventFlags) {
+  Nan::Utf8String device(info[0]);
+  unsigned int lineNumber = Nan::To<unsigned int>(info[1]).FromJust();
+  unsigned int eventType = Nan::To<unsigned int>(info[2]).FromJust();
+  Nan::Callback callback(info[3].As<v8::Function>());
+  unsigned int timeout = Nan::To<unsigned int>(info[4]).FromJust();
+  bool activeLow = Nan::To<bool>(info[5]).FromJust();
+  Nan::Utf8String consumer(info[6]);
+  unsigned int flags = Nan::To<unsigned int>(info[7]).FromJust();
+  // gpiod_ctxless_event_monitor_ext
 }
 
 NAN_METHOD(instantMonitorEventsFlags) {
