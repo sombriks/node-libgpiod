@@ -44,7 +44,7 @@
   "dependencies": {
     "bindings": "^1.5.0",
     "nan": "^2.22.2",
-    "node-gyp": "9.4.1"
+    "node-gyp": "12.1.0"
   },
   "engines": {
     "node": ">=12"
