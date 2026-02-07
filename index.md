@@ -27,13 +27,15 @@ features:
       to help you! There is also an extensive test suite which samples how the
       library works, and sample projects available as well.
 ---
+# info
 
-|      |          |              |
-| ---  | --- | --- |
-| [![npm][shield-npm]][npm] | ![Build status][shield-test] | [![MIT][shield-mit]][mit] |
+|                           |                              |                           |                    |
+| ------------------------- | ---------------------------- | ------------------------- | ------------------ |
+| [![npm][shield-npm]][npm] | ![Build status][shield-test] | [![MIT][shield-mit]][mit] | ![downloads][down] |
 
 [shield-npm]: https://img.shields.io/npm/v/node-libgpiod?style=plastic
 [npm]: https://www.npmjs.com/package/node-libgpiod
 [shield-test]: https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg
 [shield-mit]: https://img.shields.io/badge/license-MIT-blue
 [mit]: https://github.com/sombriks/node-libgpiod/LICENSE
+[down]: https://img.shields.io/npm/dt/node-libgpiod.svg

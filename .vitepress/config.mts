@@ -15,7 +15,7 @@ export default defineConfig({
       {
         text: 'User Guide',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
+          { text: 'Overview', link: '/docs/' },
           { text: 'Runtime API Examples', link: '/api-examples' }
         ]
       },
