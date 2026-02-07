@@ -3,6 +3,8 @@ main.o
 node_modules
 build
 cache
+dist
+logs
 *~
 .idea
 coverage
