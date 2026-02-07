@@ -10,8 +10,9 @@ to make yur SBC rig blink things with ease using [node.js][node].
 You need, to get started:
 
 - An [SBC running a modern linux][sbc]
-- Node.js installed with devel headers
-- Linux [libgpiod][libgpiod] installed with devel headers
+- Node.js (version **12** or newer) installed with devel headers
+- Linux [libgpiod][libgpiod] (version **1.5** or **1.6**) installed with devel
+  headers
 - C++ and Python tooling installed
 
 [sbc]: https://en.wikipedia.org/wiki/Single-board_computer
@@ -76,3 +77,7 @@ while(led.used){
 }
 clearInterval(interval)
 ```
+
+## Further steps
+
+For more details, check out the rest of the docs.

@@ -10,43 +10,39 @@ export default defineConfig({
     nav: [
       { text: 'Documentation', link: '/docs/' }
     ],
-
     sidebar: [
       {
         text: 'User Guide',
         items: [
           { text: 'Overview', link: '/docs/' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Tested hardware', link: '/docs/01-user-guide/tested-sbc' },
+          { text: 'Environment configuration', link: '/docs/01-user-guide/environment-configuration' },
+          { text: 'Chips and lines', link: '/docs/01-user-guide/chips-and-lines' },
+          { text: 'Process lifecycle', link: '/docs/01-user-guide/process-lifecycle' },
         ]
       },
       {
         text: 'Covered API',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'libgpiod 1.x', link: '/docs/02-api/libgpiod-1x' },
+          { text: 'libgpiod 2.x', link: '/docs/02-api/libgpiod-2x' }
+        ]
+      },      
+      {
+        text: 'Support',
+        items: [
+          { text: 'FAQ', link: '/docs/04-support/faq' },
+          { text: 'Hardware information', link: '/docs/04-support/hardware-information' },
+          { text: 'Support me!', link: '/docs/04-support/support-me' },
         ]
       },
       {
         text: 'Developing',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Changelog', link: '/docs/03-develop/CHANGELOG' },
+          { text: 'DevLog', link: '/docs/03-develop/DEVELOPMENT' },
         ]
       },
-      {
-        text: 'Dev Log',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      },
-      {
-        text: 'Support',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
     ],
 
     socialLinks: [
