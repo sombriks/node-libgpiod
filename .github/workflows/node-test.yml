@@ -10,7 +10,7 @@ jobs:
     container: fedora:38
     strategy:
       matrix:
-        version: ['12.x','16.x', '20.x', '24.x']
+        version: ['16.x', '20.x', '24.x']
     steps:
       - run: | 
           dnf install libgpiod libgpiod-devel libgpiod-utils \
