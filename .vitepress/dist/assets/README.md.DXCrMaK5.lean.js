@@ -1,0 +1,1 @@
+import{_ as s,o as a,c as t,ai as n}from"./chunks/framework.B-VUnR03.js";const o=JSON.parse('{"title":"node-libgpiod","description":"","frontmatter":{},"headers":[],"relativePath":"README.md","filePath":"README.md"}'),e={name:"README.md"};function l(h,i,p,k,d,r){return a(),t("div",null,[...i[0]||(i[0]=[n("",50)])])}const E=s(e,[["render",l]]);export{o as __pageData,E as default};

@@ -31,7 +31,10 @@
     "test": "mocha -r dotenv-flow/config test/*.spec.js test/**/*.spec.js",
     "test:coverage": "nyc npm run test",
     "lint": "xo --fix",
-    "types": "rm index.{d.ts,d.ts.map} lib/*.{ts,map} ; tsc"
+    "types": "rm index.{d.ts,d.ts.map} lib/*.{ts,map} ; tsc",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
   },
   "devDependencies": {
     "chai": "^4.4.1",
@@ -39,6 +42,7 @@
     "mocha": "10.8.2",
     "nyc": "^15.1.0",
     "typescript": "^5.8.3",
+    "vitepress": "^2.0.0-alpha.16",
     "xo": "^0.58.0"
   },
   "dependencies": {
