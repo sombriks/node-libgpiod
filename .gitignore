@@ -2,6 +2,7 @@ gpio
 main.o
 node_modules
 build
+cache
 *~
 .idea
 coverage
