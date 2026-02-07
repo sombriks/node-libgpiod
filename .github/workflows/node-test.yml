@@ -1,37 +1,26 @@
 ---
-# CI workflow for node projects
 name: Run Tests
-
 on:
   push:
     branches: [ "main-1x" ]
   workflow_dispatch: 
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-22.04
     container: fedora:38
     strategy:
       matrix:
-        # removing '14.x' and '24.x', for now
-        version: ['16.x', '18.x', '20.x', '22.x']
+        version: ['12.x','16.x', '20.x', '24.x']
     steps:
-      - name: Install libgpiod and other system dependencies
-        run: | 
+      - run: | 
           dnf install libgpiod libgpiod-devel libgpiod-utils \
             nodejs-devel make g++ kmod kernel-modules-core -y
-          
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configure Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.version }}
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Run tests against the simulator
-        run: |
+      - run: |
           npm ci
           npm run build
           # npm run configure-gpio-sim

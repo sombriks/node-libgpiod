@@ -1,5 +1,4 @@
 ---
-# CI/CD for npm packages
 name: Publish npm package
 on:
   push:
