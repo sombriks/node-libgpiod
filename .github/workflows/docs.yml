@@ -16,7 +16,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    container: fedora:38
     steps:
+      - run: | 
+          dnf install libgpiod libgpiod-devel libgpiod-utils \
+            nodejs-devel make g++ kmod kernel-modules-core -y
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
