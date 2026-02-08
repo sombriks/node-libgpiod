@@ -59,23 +59,26 @@ Do the hello world:
 
 ```javascript
 // blink.js
-import { Chip } from 'node-libgpiod'
+import gpio from 'node-libgpiod'
 
-const chip = new Chip(0)
-const led = chip.getLine(21)
+const chip = new gpio.Chip(0)
+const led = chip.getLine(20)
 
 led.requestOutputMode()
 
 let count = 5
 
 const interval = setInterval(() => {
-  if(count > 0) led.setValue(count-- % 2)
-  else led.release() 
+  if(count > 0) {
+    const v = count-- % 2
+    led.setValue(v)
+    console.log(`blink ${v}!`)
+  } else {
+  led.setValue(0)
+    led.release() 
+    clearInterval(interval)
+  } 
 }, 1000)
-while(led.used){
-  // console.log('hardware resources still being used')
-}
-clearInterval(interval)
 ```
 
 ## Further steps
