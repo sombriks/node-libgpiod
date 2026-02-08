@@ -2,12 +2,19 @@
 
 Native nodejs bindings for [libgpiod][libgpiod]
 
-[![npm](https://img.shields.io/npm/v/node-libgpiod?style=plastic)][npm]
-![Build status](https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg)
-[![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-![downloads][down]
+|                           |                                       |                           |
+| ------------------------- | ------------------------------------- | ------------------------- |
+| [![npm][shield-npm]][npm] | ![Build status][shield-test]          | [![MIT][shield-mit]][mit] |
+| ![downloads][down]        | [![Sponsor][shield-sponsor]][sponsor] |                           |
 
+[shield-npm]: https://img.shields.io/npm/v/node-libgpiod?style=plastic
+[npm]: https://www.npmjs.com/package/node-libgpiod
+[shield-test]: https://github.com/sombriks/node-libgpiod/actions/workflows/node-test.yml/badge.svg
+[shield-mit]: https://img.shields.io/badge/license-MIT-blue
+[mit]: https://github.com/sombriks/node-libgpiod/LICENSE
 [down]: https://img.shields.io/npm/dt/node-libgpiod.svg
+[sponsor]: https://github.com/sponsors/sombriks
+[shield-sponsor]: https://img.shields.io/github/sponsors/sombriks?label=Sponsor&logo=GitHub&color=ff69b4
 
 ## Requirements / Dependencies
 
@@ -307,7 +314,6 @@ This is open source, i am willing to evaluate PR's :sunglasses:
 
 [repo]: https://github.com/sombriks/node-libgpiod
 [libgpiod]: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
-[npm]: https://www.npmjs.com/package/node-libgpiod
 [node-gyp]: https://www.npmjs.com/package/node-gyp
 [rpi3b+]: https://www.raspberrypi.com/products/raspberry-pi-3-model-b-plus/
 [rpi3zw]: https://www.raspberrypi.com/products/raspberry-pi-zero-w/

@@ -27,13 +27,14 @@ export default defineConfig({
           { text: 'Environment configuration', link: '/docs/01-user-guide/environment-configuration' },
           { text: 'Chips and lines', link: '/docs/01-user-guide/chips-and-lines' },
           { text: 'Process lifecycle', link: '/docs/01-user-guide/process-lifecycle' },
+          { text: 'Examples', link: '/docs/01-user-guide/examples' },
         ]
       },   
       {
         text: 'Support',
         items: [
           { text: 'FAQ', link: '/docs/04-support/faq' },
-          { text: 'Hardware information', link: '/docs/04-support/hardware-information' },
+          { text: 'Community support', link: '/docs/04-support/community' },
           { text: 'Support me!', link: '/docs/04-support/support-me' },
         ]
       },

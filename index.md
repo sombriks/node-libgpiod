@@ -11,7 +11,7 @@ hero:
       link: /docs/
     - theme: alt
       text: API Overview
-      link: /docs/
+      link: /docs/02-api/libgpiod-1x
 features:
   - title: Built on top of industry standards
     details: |
@@ -27,11 +27,12 @@ features:
       to help you! There is also an extensive test suite which samples how the
       library works, and sample projects available as well.
 ---
-# info
+# status
 
-|                           |                              |                           |                    |
-| ------------------------- | ---------------------------- | ------------------------- | ------------------ |
-| [![npm][shield-npm]][npm] | ![Build status][shield-test] | [![MIT][shield-mit]][mit] | ![downloads][down] |
+|                           |                                       |                           |
+| ------------------------- | ------------------------------------- | ------------------------- |
+| [![npm][shield-npm]][npm] | ![Build status][shield-test]          | [![MIT][shield-mit]][mit] |
+| ![downloads][down]        | [![Sponsor][shield-sponsor]][sponsor] |                           |
 
 [shield-npm]: https://img.shields.io/npm/v/node-libgpiod?style=plastic
 [npm]: https://www.npmjs.com/package/node-libgpiod
@@ -39,3 +40,5 @@ features:
 [shield-mit]: https://img.shields.io/badge/license-MIT-blue
 [mit]: https://github.com/sombriks/node-libgpiod/LICENSE
 [down]: https://img.shields.io/npm/dt/node-libgpiod.svg
+[sponsor]: https://github.com/sponsors/sombriks
+[shield-sponsor]: https://img.shields.io/github/sponsors/sombriks?label=Sponsor&logo=GitHub&color=ff69b4
