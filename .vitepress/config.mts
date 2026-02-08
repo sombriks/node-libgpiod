@@ -7,8 +7,16 @@ export default defineConfig({
   ignoreDeadLinks: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+     search: {
+      provider: 'local'
+    },
     nav: [
       { text: 'Documentation', link: '/docs/' }
+    ],
+    socialLinks: [
+    { icon: 'github', link: 'https://github.com/sombriks/node-libgpiod' },
+      { icon: 'npm', link: 'https://www.npmjs.com/package/node-libgpiod' },
+      { icon: 'bluesky', link: 'https://bsky.app/profile/sombriks.com.br'}
     ],
     sidebar: [
       {
@@ -20,20 +28,20 @@ export default defineConfig({
           { text: 'Chips and lines', link: '/docs/01-user-guide/chips-and-lines' },
           { text: 'Process lifecycle', link: '/docs/01-user-guide/process-lifecycle' },
         ]
-      },
-      {
-        text: 'Covered API',
-        items: [
-          { text: 'libgpiod 1.x', link: '/docs/02-api/libgpiod-1x' },
-          { text: 'libgpiod 2.x', link: '/docs/02-api/libgpiod-2x' }
-        ]
-      },      
+      },   
       {
         text: 'Support',
         items: [
           { text: 'FAQ', link: '/docs/04-support/faq' },
           { text: 'Hardware information', link: '/docs/04-support/hardware-information' },
           { text: 'Support me!', link: '/docs/04-support/support-me' },
+        ]
+      },
+      {
+        text: 'Covered API',
+        items: [
+          { text: 'libgpiod 1.x', link: '/docs/02-api/libgpiod-1x' },
+          { text: 'libgpiod 2.x', link: '/docs/02-api/libgpiod-2x' }
         ]
       },
       {
@@ -44,11 +52,5 @@ export default defineConfig({
         ]
       },
     ],
-
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/sombriks/node-libgpiod' },
-      { icon: 'npm', link: 'https://www.npmjs.com/package/node-libgpiod' },
-      { icon: 'bluesky', link: 'https://bsky.app/profile/sombriks.com.br'}
-    ]
   }
 })
