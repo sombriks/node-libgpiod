@@ -83,4 +83,4 @@ const interval = setInterval(() => {
 
 ## Further steps
 
-For more details, check out the rest of the docs.
+For more, check out the examples of the api.
