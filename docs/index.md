@@ -83,4 +83,7 @@ const interval = setInterval(() => {
 
 ## Further steps
 
-For more, check out the examples of the api.
+For more, check out the [examples[examples]] and the [api][api].
+
+[examples]: 01-user-guide/examples.md
+[api]: 02-api/libgpiod-1x.md
