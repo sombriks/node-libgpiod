@@ -100,7 +100,25 @@ app.listen(3000, () => {
 There, a simple web interface using [modern javascript](https://alpinejs.dev),
 simple like that.
 
-## Device web ui
+## Device ui
+
+Another cool example is this web ui for all device details.
+
+It's like `gpioinfo`, `gpioget` and `gpioset` but served over the network.
+
+```bash
+mkdir device-ui
+cd device-ui
+npm init -y
+# use 'express@4' for older node versions
+npm i express pug htmx.org bulma
+mkdir -p views/{pages,layouts,components,controls}
+touch index.js
+touch views/layouts/base.pug
+touch views/pages/index.pug
+touch views/components/gpio-header.pug
+touch views/controls/gpio-pin.pug
+```
 
 ## Sensor message queue
 

@@ -54,7 +54,9 @@
   "cSpell.words": [
     "ctxless",
     "gpiodetect",
+    "gpioget",
     "gpioinfo",
+    "gpioset",
     "libpiod",
     "noctarius",
     "opensuse",
