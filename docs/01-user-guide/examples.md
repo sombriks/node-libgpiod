@@ -112,13 +112,81 @@ cd device-ui
 npm init -y
 # use 'express@4' for older node versions
 npm i express pug htmx.org bulma node-libgpiod
-mkdir -p views/{pages,layouts,components,controls}
+mkdir -p views/{layouts,pages,partials,components,controls}
 touch index.js
 touch views/layouts/base.pug
 touch views/pages/index.pug
-touch views/components/gpio-header.pug
-touch views/controls/gpio-pin.pug
+touch views/pages/chip.pug
+touch views/partials/pin.pug
+touch views/components/gpio-chip.pug
+touch views/controls/pin-active-state.pug
+touch views/controls/pin-consumer.pug
+touch views/controls/pin-direction.pug
 ```
+
+[Bulma][bulma] CSS framework provides a nice and modern look and feel,
+[htmx][htmx] gives dynamic behavior in a declarative way and [pug][pug] eases
+the creation of interface components.
+
+[bulma]: https://bulma.io/
+[htmx]: https://htmx.org/
+[pug]: https://pugjs.org/api/getting-started.html
+
+For example, this pug template renders the chip details page:
+
+```pug
+//- pages/chip.pug
+
+extends ../layouts/base
+
+include ../components/gpio-pin
+
+block content
+  .section
+    a(href="/") Back
+    h1= `${chip.name} details` 
+    h2= `Label: ${chip.label}, Lines: ${chip.lines.length}`
+    .is-flex.is-flex-wrap-wrap.is-gap-4
+      each line in chip.lines
+        .is-flex
+          +gpio-pin(line)
+    a(href="/") Back
+```
+
+The backend [express][express] handler providing the chip details follows:
+
+[express]: https://expressjs.com/
+
+```javascript
+//...
+app.get('/chip/:name', (req, res) => {
+  const chip = new gpio.Chip(req.params.name)
+  const lines = []
+  for (let i = 0; i < chip.numberOfLines; i++) {
+    const line = chip.getLine(i)
+    lines.push({
+      chipName: chip.name,
+      offset: line.offset,
+      name: line.name,
+      value: line.value,
+      consumer: line.consumer,
+      direction: line.direction,
+      activeState: line.activeState
+    })
+  }
+  res.render('pages/chip', { 
+    chip: { name: chip.name, label: chip.label, lines } 
+  })
+})
+```
+
+The resulting page looks like this:
+
+![device ui](example-device-ui.png)
+
+Check out the [complete sample][deviceui]
+
+[deviceui]: https://github.com/sombriks/node-libgpiod-examples/tree/main/device-ui
 
 ## Sensor message queue
 
