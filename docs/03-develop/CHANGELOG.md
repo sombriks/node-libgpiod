@@ -2,6 +2,14 @@
 
 Noteworthy changes
 
+## 2026-02-17
+
+New documentation almost complete. Once it's done, i'll finally clean up the
+main README file.
+
+The 2.x series will be (re)started soon. I am still deciding how to properly
+host it. maybe publishing both 1.x and 2.x in the same npm repo.
+
 ## 2026-01-02
 
 Finally offloaded callback works.
