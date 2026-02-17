@@ -111,7 +111,7 @@ mkdir device-ui
 cd device-ui
 npm init -y
 # use 'express@4' for older node versions
-npm i express pug htmx.org bulma
+npm i express pug htmx.org bulma node-libgpiod
 mkdir -p views/{pages,layouts,components,controls}
 touch index.js
 touch views/layouts/base.pug
