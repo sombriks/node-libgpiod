@@ -35,7 +35,7 @@ You need, to get started:
 
 Install the dependencies on your system:
 
-::: code-group
+### Fedora
 
 ```bash [Fedora/RHEL-based]
 sudo dnf install @development-tools g++ \
@@ -43,18 +43,20 @@ sudo dnf install @development-tools g++ \
  nodejs nodejs-devel
 ```
 
+### OpenSUSE
+
 ```bash [openSUSE]
 sudo zypper in -t pattern devel_basis
 sudo zypper in libgpiod libgpiod-devel libgpiod-utils
 sudo zypper in nodejs-default nodejs-devel-default
 ```
 
+### Debian
+
 ```bash [debina/ubuntu-based]
 sudo apt install build-essential gpiod libgpiod2 \
  libgpiod-dev libnode-dev nodejs npm
 ```
-
-:::
 
 ## Install the npm dependency
 

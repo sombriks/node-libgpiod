@@ -70,8 +70,40 @@ number instead of a line name.
 
 ## Line
 
-| C API              | Node.js API                 | Description              |
-| -                  | -                           | -                        |
+Line represents the physical pin in the board.
+
+The simplest way to get a line is after get
+ a chip:
+
+```javascript
+// import gpio from "node-libgpiod"
+const gpio = require("node-libgpiod")
+// assuming that there is at least one chip
+const chip = new gpio.Chip(0)
+// get the line either by offset or by name
+const line = chip.getLine("PIN_7")
+```
+
+| C API                                   | Node.js API                    | Description                        |
+| -                                       | -                              | -                                  |
+| gpiod_line_offset()                     | line.offset                    | get line offset (line number)      |
+| gpiod_line_name()                       | line.name                      | get line name                      |
+| gpiod_line_consumer()                   | line.consumer                  | get the line consumer, if any      |
+| gpiod_line_direction()                  | line.direction                 | get line direction                 |
+| gpiod_line_active_state()               | line.activeState               | if line is active on low or high   |
+| gpiod_line_bias()                       | line.bias                      | line bias                          |
+| gpiod_line_is_used()                    | line.used                      | if the line is being used          |
+| gpiod_line_is_free()                    | line.free                      | if the line is not being used      |
+| gpiod_line_is_open_drain()              | line.openDrain                 | if it's open drain                 |
+| gpiod_line_is_open_source()             | line.openSource                | if it's open source                |
+| gpiod_line_update()                     | line.update()                  | refresh line state                 |
+| gpiod_line_needs_update()               | line.needsUpdate               | if the line needs update           |
+| gpiod_line_get_value()                  | line.getValue()                | get current line value             |
+| gpiod_line_set_value()                  | line.setValue()                | set line value                     |
+| gpiod_line_request()                    | line.lineRequest()             | request line passing configuration |
+| gpiod_line_request_input()              | line.requestInputMode()        | request line for input (read)      |
+| gpiod_line_request_output()             | line.requestOutputMode()       | request line for output (write)    |
+| gpiod_line_request_rising_edge_events() | line.requestRisingEdgeEvents() | rising edge events                 |
 
 ## Bulk
 
