@@ -25,7 +25,7 @@ me or to others so we can run your sample and sort it out.
 This is a open source project made by leve in free time. One day it might get
 traction and more attention, but for now it's unrealistic talk about deadlines.
 
-## I fund a bug
+## I found a bug
 
 Please [report an issue][issue] so i can tackle it.
 
